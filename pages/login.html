@@ -53,6 +53,7 @@
                         </div>
                         <br />
                         <div id="auth-container" style="display:none;">
+                            <p><i>Our discord bot has sent you a 6-digit pin</i></p>
                             <div class="form-group">
                                 <center>
                                 <input class="form-control" name="accessCode" id="access-code">
@@ -90,6 +91,7 @@
 <script>
     $(function() {
      if (getCookie("token")) {
+      window.stop();
       window.location.href = ".."
      }
     })

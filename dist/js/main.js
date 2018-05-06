@@ -8,7 +8,8 @@ $(function() {
 });
 
 var appData = {
-  username: "unknown"
+  username: "unknown",
+  homeDeckList: [],
 }
 
 //Loads the correct sidebar on window load,
@@ -52,16 +53,6 @@ $(function() {
             break;
         }
     }
-
-    $('#access-code').pincodeInput({
-      hideDigits:false,
-      inputs:6,
-      // callback when all inputs are filled in (keyup event)
-      complete:function(value, e, errorElement) {
-        authAttempt()
-      }
-    });
-
 });
 
 var getCookie = function(cname) {
@@ -132,6 +123,15 @@ var authRequest = function() {
     contentType: "application/json",
     success: function(data) {
       $("#auth-container").slideDown()
+      $('#access-code').pincodeInput({
+        hideDigits:false,
+        keydown : function(e){console.log(e)},
+        inputs:6,
+        // callback when all inputs are filled in (keyup event)
+        complete:function(value, e, errorElement) {
+          authAttempt()
+        }
+      });
       $("#token-req-button").addClass("btn-primary").removeClass("btn-success").val("Token Sent").prop('disabled', true)
       $("#token-loading").css("opacity", "0")
       console.log(data.request)
@@ -147,11 +147,29 @@ var authRequest = function() {
         toastr.error("User not found.<br>Note that you must have used MTGATracker to track at least one game in order to log in!")
       } else if (xhr.responseJSON.error.includes("discord mapping not found")) {
         $("#token-req-button").addClass("btn-primary").removeClass("btn-success").val("Redirecting...").prop('disabled', true)
+        window.stop()
         window.location.href = 'https://github.com/shawkinsl/mtga-tracker/blob/user/shawkins/inspector/logging_in.md';
       } else {
         $("#token-req-button").removeClass("btn-primary").addClass("btn-success").val("Request Token").prop('disabled', false)
         toastr.error("An unknown error occurred, please try again")
       }
+    }
+  })
+}
+
+var getDecks = function() {
+  $("#decks-loading").css("display", "block")
+  token = getCookie("token")
+  if (!token) return
+  $.ajax({
+    url: "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/decks",
+    headers: {token: token},
+    success: function(data) {
+      $("#decks-loading").css("display", "none")
+      appData.homeDeckList = []
+      $.each(data, function(key, value){
+        appData.homeDeckList.push(value)
+      })
     }
   })
 }

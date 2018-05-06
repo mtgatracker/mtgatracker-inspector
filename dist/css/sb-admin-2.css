@@ -30,6 +30,12 @@ body {
   background-color: #c1c1c1;
   border-color: #c1c1c1;
 }
+.green {
+  color: #0c7b21;
+}
+.red {
+  color: #c11d1d;
+}
 .navbar-top-links {
   margin-right: 0;
 }
