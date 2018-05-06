@@ -161,7 +161,7 @@ var authRequest = function() {
       } else if (xhr.responseJSON.error.includes("discord mapping not found")) {
         $("#token-req-button").addClass("btn-primary").removeClass("btn-success").val("Redirecting...").prop('disabled', true)
         window.stop()
-        window.location.href = 'https://github.com/shawkinsl/mtga-tracker/blob/user/shawkins/inspector/logging_in.md';
+        window.location.href = 'https://github.com/shawkinsl/mtga-tracker/blob/master/logging_in.md';
       } else {
         $("#token-req-button").removeClass("btn-primary").addClass("btn-success").val("Request Token").prop('disabled', false)
         toastr.error("An unknown error occurred, please try again")
