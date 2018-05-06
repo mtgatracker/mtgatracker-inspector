@@ -128,7 +128,7 @@
                                     <div class="timeline-panel">
                                         <div class="timeline-heading">
                                             <h4 class="timeline-title">{ game.heroDeckName }</h4>
-                                            <p><small class="text-muted"><i class="fa fa-clock-o"></i> { game.timeago }</small>
+                                            <p><small class="text-muted"><a rv-href="game.link"><i class="fa fa-clock-o"></i> { game.timeago }</a></small>
                                         </div>
                                         <div class="timeline-body">
                                             <p>{ game.hero } vs { game.opponent } - <i>Winner: { game.winner }</i></p>
@@ -152,7 +152,7 @@
                         <div class="panel-body">
                             <img id="decks-loading" src="../loading.gif">
                             <div class="list-group">
-                                <a rv-each-deck="data.homeDeckList" class="list-group-item">
+                                <a rv-each-deck="data.homeDeckList" rv-href="deck.link" class="list-group-item">
                                     <i class="fa fa-leanpub fa-fw"></i> { deck.deckName }
                                     <span class="pull-right text-muted small"><em> { deck.wins } <i class="fa fa-caret-up fa-fw green"></i> / { deck.losses} <i class="fa fa-caret-down fa-fw red"></i></em>
                                     </span>
@@ -189,7 +189,7 @@
     <script src="../data/morris-data.js?v=8b8aa49ae4db6905f614d0d7b0b60adb"></script>
 
     <!-- Custom Theme JavaScript -->
-    <script src="../dist/js/main.js?v=96b7cfe46ce67dc8375477063500c19b"></script>
+    <script src="../dist/js/main.js?v=e0a07f758e9beaaa9f4371c4613a238d"></script>
     <script>
         $(function() {
          if (!getCookie("token")) {

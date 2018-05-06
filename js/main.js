@@ -183,6 +183,17 @@ var getDecks = function() {
       $.each(data, function(key, value){
         appData.homeDeckList.push(value)
       })
+    },
+    error: function(err) {
+      if (err.responseJSON.error && err.responseJSON.error == "your account has been locked") {
+        appData.homeDeckList.push({
+          deckName: "Your account has been locked!",
+          wins: "?",
+          losses: "?",
+          link: "https://github.com/shawkinsl/mtga-tracker/blob/master/logging_in.md#inspector-says-my-account-is-locked-what-gives",
+        })
+      }
+      $("#decks-loading").css("display", "none")
     }
   })
 }
@@ -212,6 +223,19 @@ var getGames = function(page) {
 
         appData.homeGameList.push(newVal)
       })
+    },
+    error: function(err) {
+      if (err.responseJSON.error && err.responseJSON.error == "your account has been locked") {
+        appData.homeGameList.push({
+          heroDeckName: "Your account has been locked!",
+          timeago: "Click here for more info",
+          hero: "unknown",
+          opponent: "unknown",
+          winner: "unknown",
+          link: "https://github.com/shawkinsl/mtga-tracker/blob/master/logging_in.md#inspector-says-my-account-is-locked-what-gives",
+        })
+      }
+      $("#timeline-loading").css("display", "none")
     }
   })
 }
