@@ -5,6 +5,20 @@ $(function() {
 var appData = {
   username: "unknown",
   homeDeckList: [],
+  homeGameList: [],
+}
+
+rivets.binders.linegame = function(el, val) {
+  console.log(val.won)
+  $(el).removeClass("danger").removeClass("success")
+  console.log($(el))
+  if (!val.won) {
+    $(el).addClass("danger")
+    el.innerHTML = '<i class="fa fa-exclamation-circle"></i>'
+  } else {
+    $(el).addClass("success")
+    el.innerHTML = '<i class="fa fa-check-circle"></i>'
+  }
 }
 
 //Loads the correct sidebar on window load,
@@ -165,6 +179,34 @@ var getDecks = function() {
       $.each(data, function(key, value){
         appData.homeDeckList.push(value)
       })
+    }
+  })
+}
+
+var getGames = function(page) {
+  if (page === undefined) page = 1;
+  $("#timeline-loading").css("display", "block")
+  token = getCookie("token")
+  if (!token) return
+  $.ajax({
+    url: "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/games?page="+page,
+    headers: {token: token},
+    success: function(data) {
+      $("#timeline-loading").css("display", "none")
+      formattedGames = []
+      $.each(data.docs, function(idx, val) {
+        newVal = {}
+        newVal.hero = val.hero
+        newVal.opponent = val.opponent
+        newVal.heroDeckName = val.players[0].deck.poolName
+        newVal.opponentDeckName = val.players[1].deck.poolName
+        newVal.timeago = timeago().format(val.date)
+        newVal.won = val.winner == val.hero
+        newVal.winner = val.winner
+
+        formattedGames.push(newVal)
+      })
+      appData.homeGameList = formattedGames;
     }
   })
 }

@@ -28,6 +28,8 @@
 
     <script src="../vendor/rivets/rivets.bundled.min.js"></script>
 
+    <script src="../vendor/timeago.js/timeago.min.js"></script>
+
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -119,7 +121,22 @@
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
+                            <img id="timeline-loading" src="../loading.gif">
                             <ul class="timeline">
+                                <li rv-each-game="data.homeGameList" rv-class-timeline-inverted="game.won">
+                                    <div class="timeline-badge" rv-linegame="game"></div>
+                                    <!--<div class="timeline-badge danger"><i class="fa fa-exclamation-circle"></i></div>-->
+                                    <div class="timeline-panel">
+                                        <div class="timeline-heading">
+                                            <h4 class="timeline-title">{ game.heroDeckName }</h4>
+                                            <p><small class="text-muted"><i class="fa fa-clock-o"></i> { game.timeago }</small>
+                                        </div>
+                                        <div class="timeline-body">
+                                            <p>{ game.hero } vs { game.opponent } - Winner: { game.winner }</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!--
                                 <li class="timeline-inverted">
                                     <div class="timeline-badge success"><i class="fa fa-check-circle"></i>
                                     </div>
@@ -147,6 +164,7 @@
                                         </div>
                                     </div>
                                 </li>
+                                -->
                             </ul>
                         </div>
                         <!-- /.panel-body -->
@@ -208,6 +226,7 @@
           window.location.href = "login.html"
          } else {
           getDecks()
+          getGames()
          }
         })
     </script>
