@@ -137,17 +137,19 @@ var authRequest = function() {
       console.log(data.request)
     },
     error: function(xhr, status, err) {
-      $("#token-req-button").removeClass("btn-primary").addClass("btn-success").val("Request Token").prop('disabled', false)
       $("#token-loading").css("opacity", "0")
       console.log("error! " + status)
       console.log(xhr)
       console.log(status)
       console.log(err)
       if (xhr.responseJSON.error.includes("no user found")) {
+        $("#token-req-button").removeClass("btn-primary").addClass("btn-success").val("Request Token").prop('disabled', false)
         toastr.error("User not found.<br>Note that you must have used MTGATracker to track at least one game in order to log in!")
       } else if (xhr.responseJSON.error.includes("discord mapping not found")) {
+        $("#token-req-button").addClass("btn-primary").removeClass("btn-success").val("Redirecting...").prop('disabled', true)
         window.location.href = 'https://github.com/shawkinsl/mtga-tracker/blob/user/shawkins/inspector/logging_in.md';
       } else {
+        $("#token-req-button").removeClass("btn-primary").addClass("btn-success").val("Request Token").prop('disabled', false)
         toastr.error("An unknown error occurred, please try again")
       }
     }
