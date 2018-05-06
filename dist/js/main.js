@@ -124,11 +124,11 @@ var authAttempt = function() {
   })
 }
 
+
 var authRequest = function() {
   $("#token-loading").css("opacity", "1")
   $("#token-req-button").addClass("btn-primary").removeClass("btn-success").val("Sending token...").prop('disabled', true)
   username = $("#username").val()
-  document.cookie = "username = " + username;
   console.log(username)
   $.ajax({
     url: "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/public-api/auth-request",
@@ -137,6 +137,8 @@ var authRequest = function() {
     dataType: "json",
     contentType: "application/json",
     success: function(data) {
+      $("#username").val(data.username)
+      document.cookie = "username = " + data.username;
       $("#auth-container").slideDown()
       $('#access-code').pincodeInput({
         hideDigits:false,
@@ -149,6 +151,7 @@ var authRequest = function() {
       });
       $("#token-req-button").addClass("btn-primary").removeClass("btn-success").val("Token Sent").prop('disabled', true)
       $("#token-loading").css("opacity", "0")
+
       console.log(data.request)
     },
     error: function(xhr, status, err) {
