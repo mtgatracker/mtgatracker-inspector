@@ -240,7 +240,13 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/main.js"></script>
-
+    <script>
+        $(function() {
+         if (!getCookie("token")) {
+          window.location.href = "login.html"
+         }
+        })
+    </script>
 </body>
 
 </html>
