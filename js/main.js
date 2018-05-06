@@ -6,6 +6,7 @@ var appData = {
   username: "unknown",
   homeDeckList: [],
   homeGameList: [],
+  homeGameListPage: 1,
 }
 
 rivets.binders.linegame = function(el, val) {
@@ -184,16 +185,18 @@ var getDecks = function() {
 }
 
 var getGames = function(page) {
+  console.log("getting games...")
+  $("#more-games-button").removeClass("btn-info").addClass("btn-primary").val("Loading games...").prop('disabled', true)
+  appData.homeGameListPage += 1;
   if (page === undefined) page = 1;
-  $("#timeline-loading").css("display", "block")
   token = getCookie("token")
   if (!token) return
   $.ajax({
     url: "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/games?page="+page,
     headers: {token: token},
     success: function(data) {
+      $("#more-games-button").removeClass("btn-primary").addClass("btn-info").val("Load more games").prop('disabled', false)
       $("#timeline-loading").css("display", "none")
-      formattedGames = []
       $.each(data.docs, function(idx, val) {
         newVal = {}
         newVal.hero = val.hero
@@ -204,9 +207,8 @@ var getGames = function(page) {
         newVal.won = val.winner == val.hero
         newVal.winner = val.winner
 
-        formattedGames.push(newVal)
+        appData.homeGameList.push(newVal)
       })
-      appData.homeGameList = formattedGames;
     }
   })
 }

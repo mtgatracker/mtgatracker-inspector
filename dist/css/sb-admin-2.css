@@ -36,6 +36,13 @@ body {
 .red {
   color: #c11d1d;
 }
+.reminder {
+  font-size: 12px;
+  color: #bfbfbf;
+}
+.link-subd {
+  color: #89a3b9;
+}
 .navbar-top-links {
   margin-right: 0;
 }
@@ -374,6 +381,19 @@ table.dataTable thead .sorting:after {
   line-height: 50px;
   color: #fff;
   background-color: #999999;
+}
+.timeline > li > .timeline-button {
+  z-index: 100;
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  width: 190px;
+  height: 50px;
+  margin-left: -95px;
+  text-align: center;
+  font-size: 1.4em;
+  line-height: 50px;
+  color: #fff;
 }
 .timeline > li.timeline-inverted > .timeline-panel {
   float: right;
