@@ -6,6 +6,7 @@ var cleanCSS = require('gulp-clean-css');
 var rename = require("gulp-rename");
 var uglify = require('gulp-uglify');
 var pkg = require('./package.json');
+var cacheBuster = require('gulp-cache-bust');
 
 // Set the banner content
 var banner = ['/*!\n',
@@ -60,6 +61,16 @@ gulp.task('minify-js', ['js'], function() {
         }))
 });
 
+
+// CACHE BUSTER
+// cacheBuster looks at the css and js files and appends a hash to the
+// request to cause the file to get reloaded when the file changes.
+gulp.task('cache-bust', ['minify-css', 'minify-js'], function () {
+    return gulp.src('pages/*.html')
+        .pipe(cacheBuster())
+        .pipe(gulp.dest('pages'));
+});
+
 // Copy vendor libraries from /bower_components into /vendor
 gulp.task('copy', function() {
     gulp.src(['bower_components/bootstrap/dist/**/*', '!**/npm.js', '!**/bootstrap-theme.*', '!**/*.map'])
@@ -111,7 +122,7 @@ gulp.task('browserSync', function() {
 })
 
 // Dev task with browserSync
-gulp.task('dev', ['browserSync', 'less', 'minify-css', 'js', 'minify-js'], function() {
+gulp.task('dev', ['browserSync', 'less', 'minify-css', 'js', 'minify-js', 'cache-bust'], function() {
     gulp.watch('less/*.less', ['less']);
     gulp.watch('dist/css/*.css', ['minify-css']);
     gulp.watch('js/*.js', ['minify-js']);

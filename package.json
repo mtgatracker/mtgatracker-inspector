@@ -22,6 +22,7 @@
     "url": "git://github.com/BlackrockDigital/startbootstrap-sb-admin-2.git"
   },
   "dependencies": {
+    "gulp-cache-bust": "^1.3.0",
     "rivets": "^0.9.6",
     "timeago.js": "^3.0.2"
   }
