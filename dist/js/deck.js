@@ -6,6 +6,7 @@ var _require = require('./api'),
     getDeckWinLossByColor = _require.getDeckWinLossByColor;
 
 var deckRoute = function deckRoute(c, n) {
+  appData.currentDeckName = "loading ...";
   console.log("CALLED FROM /deck/");
   if (appData.bound) bound.unbind();
   $("#more-games-button").unbind("click");
@@ -47,7 +48,7 @@ var deckRoute = function deckRoute(c, n) {
       });
       appData.homeGameListPage = 1;
       appData.deckID = c.params.deckID;
-      getGames(1, { deckID: c.params.deckID, removeOld: true });
+      getGames(1, { deckID: c.params.deckID, removeOld: true, setCurrentDeckName: true });
       getDecks();
       getDeckWinLossByColor(c.params.deckID).then(function (values) {
         appData.winLossColorChart.data.datasets[0].data = appData.winLossColors;

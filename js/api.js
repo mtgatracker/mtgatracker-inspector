@@ -97,6 +97,8 @@ var getGames = function(page, opts) {
     success: function(data) {
       $("#more-games-button").removeClass("btn-primary").addClass("btn-info").val("Load more games").prop('disabled', false)
       $("#timeline-loading").css("display", "none")
+      if (opts && opts.setCurrentDeckName)
+        appData.currentDeckName = data.docs[0].players[0].deck.poolName
       $.each(data.docs, function(idx, val) {
         let heroColors = cardUtils.cardsColors(Object.keys(val.players[0].deck.cards).map(x => parseInt(x, 10)))
         let opponentColors = cardUtils.cardsColors(Object.keys(val.players[1].deck.cards).map(x => parseInt(x, 10)))

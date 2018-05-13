@@ -15,6 +15,7 @@ window.cardUtils = cardUtils;
 
 var appData = {
   username: "unknown",
+  currentDeckName: "",
   homeDeckList: [],
   homeGameList: [],
   homeGameListPage: 1,

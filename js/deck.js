@@ -1,6 +1,7 @@
 const { getGames, getDecks, getDeckWinLossByColor } = require('./api')
 
 let deckRoute = (c, n) => {
+  appData.currentDeckName = "loading ..."
   console.log("CALLED FROM /deck/")
   if (appData.bound)
     bound.unbind()
@@ -43,7 +44,7 @@ let deckRoute = (c, n) => {
         })
         appData.homeGameListPage = 1
         appData.deckID = c.params.deckID
-        getGames(1, {deckID: c.params.deckID, removeOld: true})
+        getGames(1, {deckID: c.params.deckID, removeOld: true, setCurrentDeckName: true})
         getDecks()
         getDeckWinLossByColor(c.params.deckID).then(values => {
           appData.winLossColorChart.data.datasets[0].data = appData.winLossColors
