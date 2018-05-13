@@ -17,6 +17,9 @@ body {
     border-left: 1px solid #e7e7e7;
   }
 }
+.decklist-p {
+  margin: 0px 0 2px;
+}
 .btn-primary,
 .btn-primary:hover,
 .btn-primary:active,

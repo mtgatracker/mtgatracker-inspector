@@ -1,0 +1,66 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Game Inspector: { data.currentGameName }</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-8">
+        <h3>Winner: { data.currentGameWinner}</h3>
+        <!-- /.panel -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                { data.currentGameHeroDeckName }
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <img class="game-loading" src="../loading.gif">
+                <p class="decklist-p" rv-each-card="data.currentGameHeroDeck">
+                    <i>{ card.count }</i> - { card.name } <span rv-multimana="card.cost"></span>
+                </p>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                { data.currentGameOpponentDeckName }
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <img class="game-loading" src="../loading.gif">
+                <p class="decklist-p" rv-each-card="data.currentGameOpponentDeck">
+                    <i>{ card.count }</i> - { card.name } <span rv-multimana="card.cost"></span>
+                </p>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-8 -->
+    <div class="col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-bell fa-fw"></i> My decks
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <img id="decks-loading" src="../loading.gif">
+                <div class="list-group">
+                    <a rv-each-deck="data.homeDeckList" rv-href="deck.link" class="list-group-item">
+                        <i class="fa fa-leanpub fa-fw"></i> { deck.deckName }
+                        <span class="pull-right text-muted small"><em> { deck.wins } <i class="fa fa-caret-up fa-fw green"></i> / { deck.losses} <i class="fa fa-caret-down fa-fw red"></i></em>
+                        </span>
+                    </a>
+                </div>
+                <!-- /.list-group -->
+                <a href="#" class="btn btn-default btn-block">View All Decks</a>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel .chat-panel -->
+    </div>
+    <!-- /.col-lg-4 -->
+</div>
+<!-- /.row -->

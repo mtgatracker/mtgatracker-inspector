@@ -1,12 +1,39 @@
 var cookies = require('browser-cookies');
 
+var getGame = function(gameID) {
+  return new Promise((resolve, reject) => {
+    $(".game-loading").css("display", "block")
+    let token = cookies.get("token")
+    if (!token) {
+      document.location.href = "/login"
+    }
+    $.ajax({
+      url: `https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/game/_id/${gameID}`,
+      headers: {token: token},
+      success: function(data) {
+        $(".game-loading").css("display", "none")
+        resolve(data)
+      },
+      error: function(err) {
+        if (err.status == 401) {
+          cookies.erase("token")
+          document.location.href = "/login"
+        } else if (err.responseJSON.error && err.responseJSON.error == "your account has been locked") {
+          // nothing to do
+        }
+        $(".game-loading").css("display", "none")
+        reject(err)
+      }
+    })
+  })
+}
+
 var getDeckWinLossByColor = function(deckID) {
   return new Promise((resolve, reject) => {
     if (appData.winLossColorChart) {
       appData.winLossColorChart.data.datasets[0].data = [0,0,0,0,0]
       appData.winLossColorChart.update()
     }
-    console.log("getDeckWinLossByColor")
     $("#matchup-loading").css("display", "block")
     let token = cookies.get("token")
     if (!token) {
@@ -114,6 +141,7 @@ var getGames = function(page, opts) {
           newVal.opponentDeckColors = res[1]
           newVal.timeago = timeago().format(val.date)
           newVal.won = val.winner == val.hero
+          newVal.link = `/game/?gameID=${val._id}`
           newVal.winner = val.winner
 
           appData.homeGameList.push(newVal)
@@ -144,4 +172,5 @@ module.exports = {
   getDecks: getDecks,
   getGames: getGames,
   getDeckWinLossByColor: getDeckWinLossByColor,
+  getGame: getGame,
 }

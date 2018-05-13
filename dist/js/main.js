@@ -3,19 +3,29 @@
 var cookies = require('browser-cookies');
 window.ncookies = cookies;
 
-var cardUtils = require('./mtga/cardUtils.js');
+var cardUtils = require('mtga');
+window.cardUtils = cardUtils;
+
 var page = require('page');
+window.page = page;
 var spaRouter = require('./spaRouter');
 
 var _require = require('./api'),
     getGames = _require.getGames;
 
-window.page = page;
-window.cardUtils = cardUtils;
-
 var appData = {
   username: "unknown",
   currentDeckName: "",
+
+  currentGameWinner: "loading ...",
+  currentGameName: "",
+  currentGameHero: "",
+  currentGameHeroDeck: [],
+  currentGameHeroDeckName: "loading ...",
+  currentGameOpponent: "",
+  currentGameOpponentDeck: [],
+  currentGameOpponentDeckName: "loading ...",
+
   homeDeckList: [],
   homeGameList: [],
   homeGameListPage: 1,

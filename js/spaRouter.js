@@ -1,5 +1,6 @@
 var cookies = require('browser-cookies');
 const { deckRoute } = require("./deck")
+const { gameRoute } = require("./game")
 const { homeRoute } = require("./home")
 const { getDecks, getGames } = require("./api")
 
@@ -31,5 +32,6 @@ $(function() {
       }
     })
     page('/deck/', parseQuerystring, deckRoute)
+    page('/game/', parseQuerystring, gameRoute)
     page()
 })

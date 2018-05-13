@@ -23,6 +23,13 @@
     <!-- Bootstrap Core CSS -->
     <link href="../vendor/bootstrap/css/bootstrap.min.css?v=ec3bb52a00e176a7181d454dffaea219" rel="stylesheet">
 
+    <!-- chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
+
+    <!-- MTG Font: http://alexandrearpin.com/mtg-font/icons.html -->
+    <link href="../vendor/mtg-font-master/css/magic-font.css?v=0094a7519d23d9404b9a154404c5d3ae" rel="stylesheet">
+
     <!-- MetisMenu CSS -->
     <link href="../vendor/metisMenu/metisMenu.min.css?v=bb3f6f86f3feb94b2ba7b43c9d315c54" rel="stylesheet">
 
@@ -65,22 +72,22 @@
 
             <ul class="nav navbar-top-links navbar-right">
                 <li>
-                    <a href="https://inspector.mtgatracker.com">Inspector Home</a>
+                    <a href="/">Inspector Home</a>
                 </li>
                 <li>
                     <a href="https://mtgatracker.com">Get MTGATracker</a>
                 </li>
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="">
                          <i class="fa fa-user fa-fw"></i> Hello, { data.username } <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        <li><a href=""><i class="fa fa-user fa-fw"></i> User Profile</a>
                         </li>
-                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        <li><a href=""><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href="#" onclick="logout()"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        <li><a href="" id="logout-button"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -116,70 +123,6 @@
         </nav>
 
         <div id="page-wrapper">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">Inspector Dash</h1>
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
-            <div class="row">
-                <div class="col-lg-8">
-                    <!-- /.panel -->
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <i class="fa fa-clock-o fa-fw"></i> My Game History
-                        </div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            <img id="timeline-loading" src="../loading.gif">
-                            <ul class="timeline">
-                                <li rv-each-game="data.homeGameList" rv-class-timeline-inverted="game.won">
-                                    <div class="timeline-badge" rv-linegame="game"></div>
-                                    <!--<div class="timeline-badge danger"><i class="fa fa-exclamation-circle"></i></div>-->
-                                    <div class="timeline-panel">
-                                        <div class="timeline-heading">
-                                            <h4 class="timeline-title">{ game.heroDeckName }</h4>
-                                            <p><small class="text-muted"><a rv-href="game.link"><i class="fa fa-clock-o"></i> { game.timeago }</a></small>
-                                        </div>
-                                        <div class="timeline-body">
-                                            <p>{ game.hero } vs { game.opponent } - <i>Winner: { game.winner }</i></p>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li><div class="timeline-button"><input type="button" onclick="getGames(appData.homeGameListPage)" id="more-games-button" class="btn btn-lg btn-info btn-block" value="Load more games"></div></li>
-                            </ul>
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                    <!-- /.panel -->
-                </div>
-                <!-- /.col-lg-8 -->
-                <div class="col-lg-4">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <i class="fa fa-bell fa-fw"></i> My decks
-                        </div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            <img id="decks-loading" src="../loading.gif">
-                            <div class="list-group">
-                                <a rv-each-deck="data.homeDeckList" rv-href="deck.link" class="list-group-item">
-                                    <i class="fa fa-leanpub fa-fw"></i> { deck.deckName }
-                                    <span class="pull-right text-muted small"><em> { deck.wins } <i class="fa fa-caret-up fa-fw green"></i> / { deck.losses} <i class="fa fa-caret-down fa-fw red"></i></em>
-                                    </span>
-                                </a>
-                            </div>
-                            <!-- /.list-group -->
-                            <a href="#" class="btn btn-default btn-block">View All Decks</a>
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                    <!-- /.panel .chat-panel -->
-                </div>
-                <!-- /.col-lg-4 -->
-            </div>
-            <!-- /.row -->
         </div>
         <!-- /#page-wrapper -->
 
@@ -200,8 +143,7 @@
     <script src="../vendor/morrisjs/morris.min.js?v=fadac462637afd6cdc0cb0a0137629af"></script>
 
     <!-- Custom Theme JavaScript -->
-    <script src="../dist/js/bundle.min.js?v=d2f3a058c5cc3f6d16adf0705340645e"></script>
-    <!--<script src="../dist/js/mtga/cardUtils.js?v=510e23c686974d7fbc347c36a02d455e"></script>-->
+    <script src="../dist/js/bundle.min.js?v=a55d1a8ec5514044d5b0073927289898"></script>
 </body>
 
 </html>

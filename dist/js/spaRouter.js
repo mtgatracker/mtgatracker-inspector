@@ -5,12 +5,15 @@ var cookies = require('browser-cookies');
 var _require = require("./deck"),
     deckRoute = _require.deckRoute;
 
-var _require2 = require("./home"),
-    homeRoute = _require2.homeRoute;
+var _require2 = require("./game"),
+    gameRoute = _require2.gameRoute;
 
-var _require3 = require("./api"),
-    getDecks = _require3.getDecks,
-    getGames = _require3.getGames;
+var _require3 = require("./home"),
+    homeRoute = _require3.homeRoute;
+
+var _require4 = require("./api"),
+    getDecks = _require4.getDecks,
+    getGames = _require4.getGames;
 
 var parseQuerystring = function parseQuerystring(ctx, next) {
   var cleanQuerystring = ctx.querystring.split("#")[0];
@@ -40,5 +43,6 @@ $(function () {
     }
   });
   page('/deck/', parseQuerystring, deckRoute);
+  page('/game/', parseQuerystring, gameRoute);
   page();
 });
