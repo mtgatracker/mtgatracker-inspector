@@ -1,27 +1,22 @@
+var browserify = require('browserify');
+var babel = require('gulp-babel');
 var gulp = require('gulp');
 var less = require('gulp-less');
 var browserSync = require('browser-sync').create();
-var header = require('gulp-header');
 var cleanCSS = require('gulp-clean-css');
 var rename = require("gulp-rename");
 var uglify = require('gulp-uglify');
 var pkg = require('./package.json');
 var cacheBuster = require('gulp-cache-bust');
-
-// Set the banner content
-var banner = ['/*!\n',
-    ' * Start Bootstrap - <%= pkg.title %> v<%= pkg.version %> (<%= pkg.homepage %>)\n',
-    ' * Copyright 2013-' + (new Date()).getFullYear(), ' <%= pkg.author %>\n',
-    ' * Licensed under <%= pkg.license.type %> (<%= pkg.license.url %>)\n',
-    ' */\n',
-    ''
-].join('');
+var gulpUtil = require('gulp-util');
+var source = require("vinyl-source-stream");
+var buffer = require("vinyl-buffer");
+var sourcemaps = require("gulp-sourcemaps");
 
 // Compile LESS files from /less into /css
 gulp.task('less', function() {
     return gulp.src('less/sb-admin-2.less')
         .pipe(less())
-        .pipe(header(banner, { pkg: pkg }))
         .pipe(gulp.dest('dist/css'))
         .pipe(browserSync.reload({
             stream: true
@@ -41,8 +36,8 @@ gulp.task('minify-css', ['less'], function() {
 
 // Copy JS to dist
 gulp.task('js', function() {
-    return gulp.src(['js/main.js'])
-        .pipe(header(banner, { pkg: pkg }))
+    return gulp.src(['js/**/*.js'])
+        .pipe(babel())
         .pipe(gulp.dest('dist/js'))
         .pipe(browserSync.reload({
             stream: true
@@ -51,24 +46,43 @@ gulp.task('js', function() {
 
 // Minify JS
 gulp.task('minify-js', ['js'], function() {
-    return gulp.src('js/main.js')
-        .pipe(uglify())
-        .pipe(header(banner, { pkg: pkg }))
-        .pipe(rename({ suffix: '.min' }))
-        .pipe(gulp.dest('dist/js'))
-        .pipe(browserSync.reload({
-            stream: true
-        }))
-});
+  // set up the browserify instance on a task basis
+  var b = browserify({
+    entries: './js/main.js',
+    debug: true
+  });
 
+  return b.bundle()
+    .pipe(source('bundle.js'))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({loadMaps: true}))
+    .pipe(babel())
+    .pipe(uglify())
+      .on('error', gulpUtil.log)
+    .pipe(rename({ suffix: '.min' }))
+    .pipe(sourcemaps.write('./maps'))
+    .pipe(gulp.dest('./dist/js/'));
+});
 
 // CACHE BUSTER
 // cacheBuster looks at the css and js files and appends a hash to the
 // request to cause the file to get reloaded when the file changes.
 gulp.task('cache-bust', ['minify-css', 'minify-js'], function () {
-    return gulp.src('pages/*.html')
+
+    gulp.src(['deck/index.html'])
         .pipe(cacheBuster())
-        .pipe(gulp.dest('pages'));
+          .on('error', gulpUtil.log)
+        .pipe(gulp.dest('deck/'));
+
+    gulp.src(['game/index.html'])
+        .pipe(cacheBuster())
+          .on('error', gulpUtil.log)
+        .pipe(gulp.dest('game/'));
+
+    gulp.src(['index.html'])
+        .pipe(cacheBuster())
+          .on('error', gulpUtil.log)
+        .pipe(gulp.dest('./'));
 });
 
 // Copy vendor libraries from /bower_components into /vendor
@@ -122,11 +136,11 @@ gulp.task('browserSync', function() {
 })
 
 // Dev task with browserSync
-gulp.task('dev', ['browserSync', 'less', 'minify-css', 'js', 'minify-js', 'cache-bust'], function() {
+gulp.task('dev', ['less', 'minify-css', 'js', 'minify-js', 'cache-bust', 'browserSync'], function() {
     gulp.watch('less/*.less', ['less']);
     gulp.watch('dist/css/*.css', ['minify-css']);
-    gulp.watch('js/*.js', ['minify-js']);
+    gulp.watch('js/**/*.js', ['minify-js']);
     // Reloads the browser whenever HTML or JS files change
-    gulp.watch('pages/*.html', browserSync.reload);
-    gulp.watch('dist/js/*.js', browserSync.reload);
+//    gulp.watch('pages/*.html', browserSync.reload);
+    gulp.watch('dist/js/bundle.min.js', browserSync.reload);
 });

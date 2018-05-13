@@ -1,0 +1,67 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Inspector Dash</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-8">
+        <!-- /.panel -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-clock-o fa-fw"></i> My Game History
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <img id="timeline-loading" src="../loading.gif">
+                <ul class="timeline">
+                    <li rv-each-game="data.homeGameList" rv-class-timeline-inverted="game.won">
+                        <div class="timeline-badge" rv-linegame="game"></div>
+                        <!--<div class="timeline-badge danger"><i class="fa fa-exclamation-circle"></i></div>-->
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4 class="timeline-title">{ game.heroDeckName }
+                                    <span rv-multimana="game.heroDeckColors"></span>
+                                </h4>
+                                <h5>vs. { game.opponent } <span rv-multimana="game.opponentDeckColors"></span></h5>
+                                <p><small class="text-muted"><a rv-href="game.link"><i class="fa fa-clock-o"></i> { game.timeago }</a></small>
+                            </div>
+                            <div class="timeline-body">
+                                <p><i>Winner: { game.winner }</i></p>
+                            </div>
+                        </div>
+                    </li>
+                    <li><div class="timeline-button"><input type="button" id="more-games-button" class="btn btn-lg btn-info btn-block" value="Load more games"></div></li>
+                </ul>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-8 -->
+    <div class="col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-bell fa-fw"></i> My decks
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <img id="decks-loading" src="../loading.gif">
+                <div class="list-group">
+                    <a rv-each-deck="data.homeDeckList" rv-href="deck.link" class="list-group-item">
+                        <i class="fa fa-leanpub fa-fw"></i> { deck.deckName }
+                        <span class="pull-right text-muted small"><em> { deck.wins } <i class="fa fa-caret-up fa-fw green"></i> / { deck.losses} <i class="fa fa-caret-down fa-fw red"></i></em>
+                        </span>
+                    </a>
+                </div>
+                <!-- /.list-group -->
+                <a href="#" class="btn btn-default btn-block">View All Decks</a>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel .chat-panel -->
+    </div>
+    <!-- /.col-lg-4 -->
+</div>
+<!-- /.row -->

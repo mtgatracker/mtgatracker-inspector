@@ -1,24 +1,75 @@
-$(function() {
-    $('#side-menu').metisMenu();
-});
+var cookies = require('browser-cookies')
+window.ncookies = cookies
+
+var cardUtils = require('./mtga/cardUtils.js')
+var page = require('page')
+var spaRouter = require('./spaRouter')
+
+const { getGames } = require('./api')
+
+window.page = page
+window.cardUtils = cardUtils
 
 var appData = {
   username: "unknown",
   homeDeckList: [],
   homeGameList: [],
   homeGameListPage: 1,
+  winLossColors: [0, 0, 0, 0, 0],
+  winLossColorChart: null,
+  bound: null,
+}
+
+window.appData = appData
+
+rivets.binders.multimana = (el, value) => {
+  el.innerHTML = "";
+  let ih = ""
+  if (value === undefined)
+    value = []
+  value.forEach(val => {
+    if (val == "Blue") val = "u"
+    val = val[0].toLowerCase()
+    if (val != "c") {
+      ih += `<i class="mi mi-mana mi-shadow mi-${val}"></i>`
+    }
+  })
+  el.innerHTML = ih;
+}
+
+rivets.binders.mana = function(el, value) {
+    if (value == "Blue") value = "u"
+    value = value[0].toLowerCase()
+    let mi_class = "mi-" + value.toLowerCase()
+    el.classList.remove("mi-w")
+    el.classList.remove("mi-b")
+    el.classList.remove("mi-g")
+    el.classList.remove("mi-u")
+    el.classList.remove("mi-r")
+    el.classList.remove("mi-1")
+    el.classList.remove("mi-2")
+    el.classList.remove("mi-3")
+    el.classList.remove("mi-4")
+    el.classList.remove("mi-5")
+    el.classList.remove("mi-6")
+    el.classList.remove("mi-7")
+    el.classList.remove("mi-8")
+    el.classList.remove("mi-9")
+    el.classList.remove("mi-10")
+    el.classList.remove("mi-x")
+    el.classList.add(mi_class)
 }
 
 rivets.binders.linegame = function(el, val) {
-  console.log(val.won)
   $(el).removeClass("danger").removeClass("success")
-  console.log($(el))
-  if (!val.won) {
-    $(el).addClass("danger")
-    el.innerHTML = '<i class="fa fa-exclamation-circle"></i>'
-  } else {
-    $(el).addClass("success")
-    el.innerHTML = '<i class="fa fa-check-circle"></i>'
+  if (val) {
+    if (!val.won) {
+      $(el).addClass("danger")
+      el.innerHTML = '<i class="fa fa-exclamation-circle"></i>'
+    } else {
+      $(el).addClass("success")
+      el.innerHTML = '<i class="fa fa-check-circle"></i>'
+    }
   }
 }
 
@@ -26,10 +77,13 @@ rivets.binders.linegame = function(el, val) {
 //collapses the sidebar on window resize.
 // Sets the min-height of #page-wrapper to window size
 $(function() {
-    var username = getCookie("username")
+    $("#token-req-button").click(authRequest)
+    $("#token-submit-button").click(authAttempt)
+    $("#logout-button").click(logout)
+    $('#side-menu').metisMenu();
+    var username = cookies.get("username")
     $("#username").val(username)
     appData.username = username;
-    rivets.bind($('#app'), {data: appData})
     $(window).bind("load resize", function() {
         var topOffset = 50;
         var width = (this.window.innerWidth > 0) ? this.window.innerWidth : this.screen.width;
@@ -65,33 +119,17 @@ $(function() {
     }
 });
 
-var getCookie = function(cname) {
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
-}
-
 var logout = function() {
-  document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;"
-  document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC;"
-  document.location.href = "login.html"
+  cookies.erase("username")
+  cookies.erase("token")
+  document.location.href = "/login/"
 }
 
 var authAttempt = function() {
   $("#auth-loading").css("opacity", "1")
   $("#token-submit-button").addClass("btn-primary").removeClass("btn-success").val("Attempting to log in...").prop('disabled', true)
-  username = $("#username").val()
-  accessCode = $("#access-code").val()
+  let username = $("#username").val()
+  let accessCode = $("#access-code").val()
   $.ajax({
     url: "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/public-api/auth-attempt",
     type: "POST",
@@ -99,8 +137,8 @@ var authAttempt = function() {
     dataType: "json",
     contentType: "application/json",
     success: function(data) {
-      document.cookie = "token=" + data.token;
-      document.location.href = ".."
+      cookies.set("token", data.token, {expires: 6})
+      window.location.href = "/"
     },
     error: function(xhr, status, err) {
       $("#token-submit-button").removeClass("btn-primary").addClass("btn-success").val("Log in").prop('disabled', false)
@@ -123,8 +161,7 @@ var authAttempt = function() {
 var authRequest = function() {
   $("#token-loading").css("opacity", "1")
   $("#token-req-button").addClass("btn-primary").removeClass("btn-success").val("Sending token...").prop('disabled', true)
-  username = $("#username").val()
-  console.log(username)
+  let username = $("#username").val()
   $.ajax({
     url: "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/public-api/auth-request",
     type: "POST",
@@ -133,7 +170,7 @@ var authRequest = function() {
     contentType: "application/json",
     success: function(data) {
       $("#username").val(data.username)
-      document.cookie = "username = " + data.username;
+      cookies.set("username", data.username, {expires: 6})
       $("#auth-container").slideDown()
       $('#access-code').pincodeInput({
         hideDigits:false,
@@ -146,8 +183,6 @@ var authRequest = function() {
       });
       $("#token-req-button").addClass("btn-primary").removeClass("btn-success").val("Token Sent").prop('disabled', true)
       $("#token-loading").css("opacity", "0")
-
-      console.log(data.request)
     },
     error: function(xhr, status, err) {
       $("#token-loading").css("opacity", "0")
@@ -166,76 +201,6 @@ var authRequest = function() {
         $("#token-req-button").removeClass("btn-primary").addClass("btn-success").val("Request Token").prop('disabled', false)
         toastr.error("An unknown error occurred, please try again")
       }
-    }
-  })
-}
-
-var getDecks = function() {
-  $("#decks-loading").css("display", "block")
-  token = getCookie("token")
-  if (!token) return
-  $.ajax({
-    url: "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/decks",
-    headers: {token: token},
-    success: function(data) {
-      $("#decks-loading").css("display", "none")
-      appData.homeDeckList = []
-      $.each(data, function(key, value){
-        appData.homeDeckList.push(value)
-      })
-    },
-    error: function(err) {
-      if (err.responseJSON.error && err.responseJSON.error == "your account has been locked") {
-        appData.homeDeckList.push({
-          deckName: "Your account has been locked!",
-          wins: "?",
-          losses: "?",
-          link: "https://github.com/shawkinsl/mtga-tracker/blob/master/logging_in.md#inspector-says-my-account-is-locked-what-gives",
-        })
-      }
-      $("#decks-loading").css("display", "none")
-    }
-  })
-}
-
-var getGames = function(page) {
-  console.log("getting games...")
-  $("#more-games-button").removeClass("btn-info").addClass("btn-primary").val("Loading games...").prop('disabled', true)
-  appData.homeGameListPage += 1;
-  if (page === undefined) page = 1;
-  token = getCookie("token")
-  if (!token) return
-  $.ajax({
-    url: "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/games?page="+page,
-    headers: {token: token},
-    success: function(data) {
-      $("#more-games-button").removeClass("btn-primary").addClass("btn-info").val("Load more games").prop('disabled', false)
-      $("#timeline-loading").css("display", "none")
-      $.each(data.docs, function(idx, val) {
-        newVal = {}
-        newVal.hero = val.hero
-        newVal.opponent = val.opponent
-        newVal.heroDeckName = val.players[0].deck.poolName
-        newVal.opponentDeckName = val.players[1].deck.poolName
-        newVal.timeago = timeago().format(val.date)
-        newVal.won = val.winner == val.hero
-        newVal.winner = val.winner
-
-        appData.homeGameList.push(newVal)
-      })
-    },
-    error: function(err) {
-      if (err.responseJSON.error && err.responseJSON.error == "your account has been locked") {
-        appData.homeGameList.push({
-          heroDeckName: "Your account has been locked!",
-          timeago: "Click here for more info",
-          hero: "unknown",
-          opponent: "unknown",
-          winner: "unknown",
-          link: "https://github.com/shawkinsl/mtga-tracker/blob/master/logging_in.md#inspector-says-my-account-is-locked-what-gives",
-        })
-      }
-      $("#timeline-loading").css("display", "none")
     }
   })
 }
