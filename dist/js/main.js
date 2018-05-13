@@ -206,7 +206,7 @@ var authRequest = function authRequest() {
       console.log(err);
       if (xhr.responseJSON.error.includes("no user found")) {
         $("#token-req-button").removeClass("btn-primary").addClass("btn-success").val("Request Token").prop('disabled', false);
-        toastr.error("User not found.<br>Note that you must have used MTGATracker to track at least one game in order to log in!");
+        toastr.error("User not found.<br><br>Note that you must have used MTGATracker to track at least one game in order to log in!<br><br><br><a href='https://mtgatracker.com'>Click here to get MTGATracker!</a>");
       } else if (xhr.responseJSON.error.includes("discord mapping not found")) {
         $("#token-req-button").addClass("btn-primary").removeClass("btn-success").val("Redirecting...").prop('disabled', true);
         window.stop();
