@@ -79,6 +79,11 @@ gulp.task('cache-bust', ['minify-css', 'minify-js'], function () {
           .on('error', gulpUtil.log)
         .pipe(gulp.dest('game/'));
 
+    gulp.src(['login/index.html'])
+        .pipe(cacheBuster())
+          .on('error', gulpUtil.log)
+        .pipe(gulp.dest('login/'));
+
     gulp.src(['index.html'])
         .pipe(cacheBuster())
           .on('error', gulpUtil.log)
