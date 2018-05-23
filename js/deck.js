@@ -10,6 +10,10 @@ let deckRoute = (c, n) => {
     $("#page-wrapper").load('/templates/deck-inner.html', loaded => {
       rivets.bind($('#app'), {data: appData})
       $("#more-games-button").click(() => {getGames(appData.homeGameListPage, {deckID: appData.deckID})})
+      $("#matchup-style").change((e) => {
+        let text = (e.target.checked ? "Multiple colors" : "Single color");
+        $("#matchup-style-label").html(text)
+      })
 
       var ctx = document.getElementById('matchup-plot').getContext('2d');
       appData.winLossColorChart = new Chart(ctx, {

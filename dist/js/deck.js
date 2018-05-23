@@ -16,6 +16,10 @@ var deckRoute = function deckRoute(c, n) {
       $("#more-games-button").click(function () {
         getGames(appData.homeGameListPage, { deckID: appData.deckID });
       });
+      $("#matchup-style").change(function (e) {
+        var text = e.target.checked ? "Multiple colors" : "Single color";
+        $("#matchup-style-label").html(text);
+      });
 
       var ctx = document.getElementById('matchup-plot').getContext('2d');
       appData.winLossColorChart = new Chart(ctx, {

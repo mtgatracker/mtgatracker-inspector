@@ -17,6 +17,12 @@ body {
     border-left: 1px solid #e7e7e7;
   }
 }
+.header-toggle {
+  float: right;
+}
+#matchup-style-label {
+  margin: 0 10px;
+}
 .decklist-p {
   margin: 0px 0 2px;
 }
