@@ -1,18 +1,6 @@
-'use strict';
+"use strict";
 
-var cookies = require('browser-cookies');
-window.ncookies = cookies;
-
-var cardUtils = require('mtga');
-window.cardUtils = cardUtils;
-
-var page = require('page');
-window.page = page;
-var spaRouter = require('./spaRouter');
-
-var _require = require('./api'),
-    getGames = _require.getGames;
-
+// do this very first to try to avoid FouC
 var appData = {
   username: "unknown",
   currentDeckName: "",
@@ -34,6 +22,69 @@ var appData = {
   bound: null
 };
 
+var darkModeEnabled = localStorage.getItem("dark-mode") == "true" || false;
+var enableDarkMode = function enableDarkMode(noTransition) {
+  if (noTransition) {
+    $(".themeable").addClass("notransition");
+  }
+  $(".themeable").addClass("dark-mode");
+  if (appData.winLossColorChart) {
+    appData.winLossColorChart.options.scales.yAxes[0].gridLines.color = "#5d5d5d";
+    appData.winLossColorChart.options.scales.xAxes[0].gridLines.color = "#5d5d5d";
+    appData.winLossColorChart.options.scales.yAxes[0].ticks.fontColor = "#dedede";
+    appData.winLossColorChart.options.scales.xAxes[0].ticks.fontColor = "#dedede";
+    appData.winLossColorChart.options.title.fontColor = "#dedede";
+    appData.winLossColorChart.data.datasets[0].backgroundColor = ["#005429", "#004ba5", "#940400", "#8c8c51", "#6d6d6d"];
+    appData.winLossColorChart.update();
+  }
+  $(".themeable").removeClass("notransition");
+  setTimeout(function () {
+    // after it has been long enough for any transitions to complete, flip the toggle
+    // in case this is the first load, and the toggle is blank
+    $("#dark-mode").prop("checked", true);
+  }, 300);
+};
+window.enableDarkMode = enableDarkMode;
+var disableDarkMode = function disableDarkMode() {
+  $(".themeable").removeClass("dark-mode");
+  if (appData.winLossColorChart) {
+    appData.winLossColorChart.options.scales.yAxes[0].gridLines.color = "#d5d5d5";
+    appData.winLossColorChart.options.scales.xAxes[0].gridLines.color = "#d5d5d5";
+    appData.winLossColorChart.options.scales.xAxes[0].ticks.fontColor = "#696969";
+    appData.winLossColorChart.options.scales.yAxes[0].ticks.fontColor = "#696969";
+    appData.winLossColorChart.options.title.fontColor = "#696969";
+    appData.winLossColorChart.data.datasets[0].backgroundColor = ["#c4d3ca", "#b3ceea", "#e47777", "#f8e7b9", "#a69f9d"];
+    appData.winLossColorChart.update();
+  }
+};
+var toggleDarkMode = function toggleDarkMode() {
+  darkModeEnabled = !darkModeEnabled;
+  localStorage.setItem("dark-mode", darkModeEnabled);
+  if (darkModeEnabled) {
+    enableDarkMode();
+  } else {
+    disableDarkMode();
+  }
+};
+
+window.toggleDarkMode = toggleDarkMode;
+if (localStorage.getItem("dark-mode") == "true") enableDarkMode(true);
+
+var cookies = require('browser-cookies');
+window.ncookies = cookies;
+
+var cardUtils = require('mtga');
+window.cardUtils = cardUtils;
+
+var page = require('page');
+window.page = page;
+var spaRouter = require('./spaRouter');
+
+var _require = require('./api'),
+    getGames = _require.getGames,
+    hideDeck = _require.hideDeck,
+    unHideDeck = _require.unHideDeck;
+
 window.appData = appData;
 
 rivets.binders.multimana = function (el, value) {
@@ -44,7 +95,7 @@ rivets.binders.multimana = function (el, value) {
     if (val == "Blue") val = "u";
     val = val[0].toLowerCase();
     if (val != "c") {
-      ih += '<i class="mi mi-mana mi-shadow mi-' + val + '"></i>';
+      ih += "<i class=\"mi mi-mana mi-shadow mi-" + val + "\"></i>";
     }
   });
   el.innerHTML = ih;
@@ -86,10 +137,34 @@ rivets.binders.linegame = function (el, val) {
   }
 };
 
+rivets.binders.hidedeck = function (el, deckid) {
+  console.log("attempting to bind...");
+  $(el).click(function () {
+    console.log("sliding up: " + '[deckid="' + deckid + '"]');
+    $('[deckid="' + deckid + '"]').slideUp();
+    hideDeck(deckid, el);
+  });
+};
+
+rivets.binders.softhidedeck = function (el, deckid) {
+  $(el).click(function () {
+    console.log("softhiding deck " + deckid);
+    hideDeck(deckid, el);
+  });
+};
+
+rivets.binders.unhidedeck = function (el, deckid) {
+  $(el).click(function () {
+    console.log("softhiding deck " + deckid);
+    unHideDeck(deckid, el);
+  });
+};
+
 //Loads the correct sidebar on window load,
 //collapses the sidebar on window resize.
 // Sets the min-height of #page-wrapper to window size
 $(function () {
+  if (localStorage.getItem("dark-mode") == "true") enableDarkMode(true);
   $("#token-req-button").click(authRequest);
   $("#token-submit-button").click(authAttempt);
   $("#logout-button").click(logout);

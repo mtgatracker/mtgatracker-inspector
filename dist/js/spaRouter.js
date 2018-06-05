@@ -5,15 +5,18 @@ var cookies = require('browser-cookies');
 var _require = require("./deck"),
     deckRoute = _require.deckRoute;
 
-var _require2 = require("./game"),
-    gameRoute = _require2.gameRoute;
+var _require2 = require("./decks"),
+    decksRoute = _require2.decksRoute;
 
-var _require3 = require("./home"),
-    homeRoute = _require3.homeRoute;
+var _require3 = require("./game"),
+    gameRoute = _require3.gameRoute;
 
-var _require4 = require("./api"),
-    getDecks = _require4.getDecks,
-    getGames = _require4.getGames;
+var _require4 = require("./home"),
+    homeRoute = _require4.homeRoute;
+
+var _require5 = require("./api"),
+    getDecks = _require5.getDecks,
+    getGames = _require5.getGames;
 
 var parseQuerystring = function parseQuerystring(ctx, next) {
   var cleanQuerystring = ctx.querystring.split("#")[0];
@@ -43,6 +46,7 @@ $(function () {
     }
   });
   page('/deck/', parseQuerystring, deckRoute);
+  page('/decks/', parseQuerystring, decksRoute);
   page('/game/', parseQuerystring, gameRoute);
   page();
 });

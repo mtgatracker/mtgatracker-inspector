@@ -3,6 +3,18 @@
 
 // Global Styles
 
+.themeable {
+  -webkit-transition: background-color .2s linear 0s;
+  transition: background-color .3s linear 0s;
+}
+
+.notransition {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -o-transition: none !important;
+  transition: none !important;
+}
+
 body {
     background-color: @gray-lightest;
 }
@@ -34,7 +46,39 @@ body {
     float: right;
 }
 
+
+.dropdown-toggleswitch {
+    position: relative;
+    top: -22px;
+    left: -14px;
+    float: right;
+}
+
+
+.deckhidden {
+  font-style: italic;
+  color: #bfbfbf;
+}
+
+.hide-deck-button:disabled {
+  cursor: progress;
+}
+
+.hide-deck-button {
+  width: 100%;
+}
+
+.hide-deck {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+
 #matchup-style-label {
+  margin: 0 10px;
+}
+
+#deck-edit-label {
   margin: 0 10px;
 }
 
@@ -67,6 +111,161 @@ body {
 
 .link-subd {
   color: #89a3b9;
+}
+
+// DARK MODE THEMES
+
+body.dark-mode {
+    background-color: @dark-bgsecondary;
+}
+
+#page-wrapper.dark-mode {
+  background-color: @dark-bglight;
+  color: @dark-textprimary;
+  border-left: 1px solid @dark-lightprimary;
+}
+
+.page-header.dark-mode {
+  border-bottom: 1px solid @dark-lightprimary;
+}
+
+.sidebar.dark-mode ul li {
+    border-bottom: 1px solid @dark-lightprimary;
+}
+
+.navbar-default.dark-mode {
+    background-color: @dark-bgprimary;
+    border-color: @dark-lightprimary;
+}
+
+.navbar-default .navbar-collapse.dark-mode, .navbar-default .navbar-form.dark-mode {
+    border-color: @dark-bgsecondary;
+}
+
+a.dark-mode {
+  color: @dark-textaccent;
+}
+
+a.dark-mode:hover {
+  color: @dark-textaccentsecondary;
+}
+
+.sidebar ul li a.active.dark-mode {
+    background-color: @dark-bgprimary;
+}
+
+
+.sidebar ul li a.active.dark-mode:hover {
+    background-color: @dark-bgsecondary;
+}
+
+
+.nav>li>a.dark-mode:focus, .nav>li>a.dark-mode:hover {
+    text-decoration: none;
+    background-color: @dark-bgsecondary;
+}
+
+.open.dark-mode>a {
+    background-color: @dark-bgsecondary;
+}
+
+.nav .open>a.dark-mode, .nav .open>a.dark-mode:focus, .nav .open>a.dark-mode:hover {
+    border-color: @dark-bgsecondary;
+    background-color: @dark-bgsecondary;
+}
+
+.nav>li>a.dark-mode:focus, .nav>li>a.dark-mode:hover {
+    background-color: @dark-bgsecondary;
+}
+
+.navbar-default .navbar-brand.dark-mode {
+    color: #dedede;
+}
+
+.navbar-default .navbar-brand.dark-mode:hover {
+    color: #eee;
+}
+
+.navbar.dark-mode {
+  background-color: @dark-bgsecondary;
+  color: white;
+}
+
+.panel.dark-mode {
+  background-color: @dark-bgsecondary;
+}
+
+.panel-default.dark-mode>.panel-heading {
+    color: @dark-textprimary;
+    background-color: @dark-bgprimary;
+    border-color: @dark-lightprimary;
+}
+
+.panel-default.dark-mode {
+    border-color: @dark-lightprimary;
+}
+
+.list-group.dark-mode>div>.list-group-item {
+  background-color: @dark-bgprimary;
+  border: 1px solid @dark-lightprimary;
+  color: @dark-textprimary;
+}
+
+.btn-default.dark-mode {
+    color: @dark-textprimary;
+    background-color: @dark-bglight;
+    border-color: @dark-lightprimary;
+}
+
+.btn-danger.dark-mode {
+    color: #fff;
+    background-color: #630300;
+    border-color: #7f2d2a;
+}
+
+.btn-info.dark-mode {
+    color: #fff;
+    background-color: #005a75;
+    border-color: #037090;
+}
+
+.btn-info.dark-mode:hover {
+    color: #fff;
+    background-color: #007294;
+    border-color: #027ca0;
+}
+
+.btn-danger.dark-mode:hover {
+    background-color: #940400;
+    border-color: #ac2925;
+}
+.timeline.dark-mode > li > .timeline-panel {
+    border: 1px solid  @dark-lightprimary;
+}
+
+.timeline.dark-mode:before {
+  background-color: @dark-lightprimary;
+}
+
+.timeline.dark-mode > li > .timeline-panel:after {
+    border-right: 0 solid @dark-textprimary;
+    border-left: 14px solid @dark-textprimary;
+}
+.dropdown.dark-mode>ul {
+    background-color: @dark-bgprimary;
+}
+.dropdown.dark-mode>a, .dropdown.dark-mode>ul>li>a {
+    color: @dark-textprimary;
+}
+.dropdown.dark-mode>a:hover, .dropdown.dark-mode>ul>li>a:hover {
+    background-color: @dark-bgsecondary;
+    color: @dark-textprimary;
+}
+.divider.dark-mode {
+    background-color: @dark-lightprimary;
+}
+.deckhidden.dark-mode {
+  color: #676767;
 }
 
 // END OUR STUFF

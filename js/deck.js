@@ -6,6 +6,7 @@ let deckRoute = (c, n) => {
   if (appData.bound)
     bound.unbind()
   $("#more-games-button").unbind("click")
+  $("#edit-decks").unbind("change")
   $(function() {
     $("#page-wrapper").load('/templates/deck-inner.html', loaded => {
       rivets.bind($('#app'), {data: appData})
@@ -13,6 +14,15 @@ let deckRoute = (c, n) => {
       $("#matchup-style").change((e) => {
         let text = (e.target.checked ? "Multiple colors" : "Single color");
         $("#matchup-style-label").html(text)
+      })
+
+      $("#edit-decks").change((e) => {
+        if (e.target.checked) {
+          $(".hide-deck").slideDown()
+        } else {
+          $(".hide-deck").slideUp()
+          $(".deckhidden").slideUp()
+        }
       })
 
       var ctx = document.getElementById('matchup-plot').getContext('2d');

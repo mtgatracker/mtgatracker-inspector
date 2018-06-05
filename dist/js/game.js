@@ -19,6 +19,8 @@ var gameRoute = function gameRoute(c, n) {
   appData.currentGameOpponentDeckName = "loading ...";
   if (appData.bound) bound.unbind();
 
+  $("#edit-decks").unbind("change");
+
   $(function () {
     $("#page-wrapper").load('/templates/game-inner.html', function (loaded) {
       rivets.bind($('#app'), { data: appData });
@@ -56,6 +58,16 @@ var gameRoute = function gameRoute(c, n) {
             appData.currentGameOpponentDeck.push(cardObj);
           }
         });
+      });
+
+      $("#edit-decks").change(function (e) {
+        console.log("edit decks");
+        if (e.target.checked) {
+          $(".hide-deck").slideDown();
+        } else {
+          $(".hide-deck").slideUp();
+          $(".deckhidden").slideUp();
+        }
       });
     });
   });

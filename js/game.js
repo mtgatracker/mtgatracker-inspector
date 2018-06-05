@@ -16,6 +16,8 @@ let gameRoute = (c, n) => {
   if (appData.bound)
     bound.unbind()
 
+  $("#edit-decks").unbind("change")
+
   $(function() {
     $("#page-wrapper").load('/templates/game-inner.html', loaded => {
       rivets.bind($('#app'), {data: appData})
@@ -53,6 +55,16 @@ let gameRoute = (c, n) => {
             appData.currentGameOpponentDeck.push(cardObj)
           }
         })
+      })
+
+      $("#edit-decks").change((e) => {
+        console.log("edit decks")
+        if (e.target.checked) {
+          $(".hide-deck").slideDown()
+        } else {
+          $(".hide-deck").slideUp()
+          $(".deckhidden").slideUp()
+        }
       })
     })
   })

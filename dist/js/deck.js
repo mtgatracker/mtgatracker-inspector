@@ -10,6 +10,7 @@ var deckRoute = function deckRoute(c, n) {
   console.log("CALLED FROM /deck/");
   if (appData.bound) bound.unbind();
   $("#more-games-button").unbind("click");
+  $("#edit-decks").unbind("change");
   $(function () {
     $("#page-wrapper").load('/templates/deck-inner.html', function (loaded) {
       rivets.bind($('#app'), { data: appData });
@@ -19,6 +20,15 @@ var deckRoute = function deckRoute(c, n) {
       $("#matchup-style").change(function (e) {
         var text = e.target.checked ? "Multiple colors" : "Single color";
         $("#matchup-style-label").html(text);
+      });
+
+      $("#edit-decks").change(function (e) {
+        if (e.target.checked) {
+          $(".hide-deck").slideDown();
+        } else {
+          $(".hide-deck").slideUp();
+          $(".deckhidden").slideUp();
+        }
       });
 
       var ctx = document.getElementById('matchup-plot').getContext('2d');

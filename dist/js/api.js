@@ -64,14 +64,18 @@ var getDeckWinLossByColor = function getDeckWinLossByColor(deckID) {
   });
 };
 
-var getDecks = function getDecks() {
+var getDecks = function getDecks(includeHidden) {
   $("#decks-loading").css("display", "block");
   var token = cookies.get("token");
   if (!token) {
     document.location.href = "/login";
   }
+  var url = "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/decks";
+  if (includeHidden) {
+    url += "?includeHidden=true";
+  }
   $.ajax({
-    url: "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/decks",
+    url: url,
     headers: { token: token },
     success: function success(data) {
       $("#decks-loading").css("display", "none");
@@ -94,6 +98,96 @@ var getDecks = function getDecks() {
         });
       }
       $("#decks-loading").css("display", "none");
+    }
+  });
+};
+
+var hideDeck = function hideDeck(deckID, button) {
+  if (button) {
+    $(button).prop('disabled', true);
+  }
+  console.log("hideDeck called");
+  var token = cookies.get("token");
+  if (!token) {
+    document.location.href = "/login";
+  }
+  var url = "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/deck/" + deckID + "/hide";
+  $.ajax({
+    url: url,
+    method: "POST",
+    headers: { token: token },
+    success: function success(data) {
+      if (button) {
+        $(button).prop('disabled', false);
+      }
+      console.log("success, hidden");
+      appData.homeDeckList.forEach(function (deck) {
+        if (deck.deckID == deckID) {
+          deck.hidden = true;
+        }
+      });
+    },
+    error: function error(err) {
+      if (button) {
+        $(button).prop('disabled', false);
+      }
+      console.log("err didn't hide :(");
+      if (err.status == 401) {
+        cookies.erase("token");
+        document.location.href = "/login";
+      } else if (err.responseJSON.error && err.responseJSON.error == "your account has been locked") {
+        appData.homeDeckList.push({
+          deckName: "Your account has been locked!",
+          wins: "?",
+          losses: "?",
+          link: "https://github.com/shawkinsl/mtga-tracker/blob/master/logging_in.md#inspector-says-my-account-is-locked-what-gives"
+        });
+      }
+    }
+  });
+};
+
+var unHideDeck = function unHideDeck(deckID, button) {
+  if (button) {
+    $(button).prop('disabled', true);
+  }
+  console.log("unHideDeck called");
+  var token = cookies.get("token");
+  if (!token) {
+    document.location.href = "/login";
+  }
+  var url = "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/deck/" + deckID + "/unhide";
+  $.ajax({
+    url: url,
+    method: "POST",
+    headers: { token: token },
+    success: function success(data) {
+      if (button) {
+        $(button).prop('disabled', false);
+      }
+      console.log("success, unhidden");
+      appData.homeDeckList.forEach(function (deck) {
+        if (deck.deckID == deckID) {
+          deck.hidden = false;
+        }
+      });
+    },
+    error: function error(err) {
+      if (button) {
+        $(button).prop('disabled', false);
+      }
+      console.log("err didn't unhide :(");
+      if (err.status == 401) {
+        cookies.erase("token");
+        document.location.href = "/login";
+      } else if (err.responseJSON.error && err.responseJSON.error == "your account has been locked") {
+        appData.homeDeckList.push({
+          deckName: "Your account has been locked!",
+          wins: "?",
+          losses: "?",
+          link: "https://github.com/shawkinsl/mtga-tracker/blob/master/logging_in.md#inspector-says-my-account-is-locked-what-gives"
+        });
+      }
     }
   });
 };
@@ -168,5 +262,7 @@ module.exports = {
   getDecks: getDecks,
   getGames: getGames,
   getDeckWinLossByColor: getDeckWinLossByColor,
-  getGame: getGame
+  getGame: getGame,
+  hideDeck: hideDeck,
+  unHideDeck: unHideDeck
 };

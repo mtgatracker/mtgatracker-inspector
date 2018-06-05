@@ -23,11 +23,21 @@
     <!-- Bootstrap Core CSS -->
     <link href="../vendor/bootstrap/css/bootstrap.min.css?v=ec3bb52a00e176a7181d454dffaea219" rel="stylesheet">
 
+    <!-- chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
+
+    <!-- MTG Font: http://alexandrearpin.com/mtg-font/icons.html -->
+    <link href="../vendor/mtg-font-master/css/magic-font.css?v=0094a7519d23d9404b9a154404c5d3ae" rel="stylesheet">
+
     <!-- MetisMenu CSS -->
     <link href="../vendor/metisMenu/metisMenu.min.css?v=bb3f6f86f3feb94b2ba7b43c9d315c54" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="../dist/css/style.css?v=96b924e1a24be966f59503e83a349ca5" rel="stylesheet">
+    <link href="../dist/css/style.css?v=f198a5d292adc7415cb91299719a384d" rel="stylesheet">
+
+    <!-- toggle -->
+    <link href="../vendor/toggle/toggle.css?v=388c597e7d94cc8eabd7444a4ed59ce9" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href="../vendor/font-awesome/css/font-awesome.min.css?v=4083f5d376eb849a458cc790b53ba080" rel="stylesheet" type="text/css">
@@ -37,6 +47,8 @@
 
     <script src="../vendor/rivets/rivets.bundled.min.js?v=c332075e18fc593c56f89bc89a8407d3"></script>
     <script src="../vendor/timeago.js/timeago.min.js?v=a6895bd606a0bb6523c326f6d953b5b6"></script>
+
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -46,8 +58,10 @@
 
 </head>
 
-<body>
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+<body id="app" class="themeable">
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar themeable navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -55,81 +69,80 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">MTGATracker Inspector</a>
+                <a class="navbar-brand themeable" href="/">MTGATracker Inspector</a>
             </div>
             <!-- /.navbar-header -->
 
             <ul class="nav navbar-top-links navbar-right">
                 <li>
-                    <a href="https://mtgatracker.com">Get MTGATracker</a>
+                    <a class="themeable" href="https://mtgatracker.com">Get MTGATracker</a>
                 </li>
             </ul>
             <!-- /.navbar-top-links -->
             <!-- /.navbar-static-side -->
         </nav>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4 col-md-offset-4">
-                <div class="login-panel panel panel-default">
-                    <div class="panel-heading">
-                        <h3 id="login-header" class="panel-title">Please enter your MTGA Username</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <input class="form-control" name="MTGAUsername" id="username" autofocus>
+        <div class="container themeable">
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4">
+                    <div class="login-panel panel panel-default">
+                        <div class="panel-heading">
+                            <h3 id="login-header" class="panel-title">Please enter your MTGA Username</h3>
                         </div>
-                        <!-- Change this to a button or input when using this as a form -->
-                        <div>
-                            <img id="token-loading" src="../loading.gif" style="position: relative; top: 0px; left: 8px; opacity: 0;">
-                            <input type="button" style="margin-top: -38px;" id="token-req-button" class="btn btn-lg btn-success btn-block" value="Request Token">
-                        </div>
-                        <br />
-                        <div id="auth-container" style="display:none;">
-                            <p><i>Our discord bot has sent you a 6-digit pin. Having issues? Get in touch with us <a href="https://discord.gg/Ygfv25w">in discord</a>!</i></p>
+                        <div class="panel-body">
                             <div class="form-group">
-                                <center>
-                                <input class="form-control" name="accessCode" id="access-code">
-                                </center>
+                                <input class="form-control" name="MTGAUsername" id="username" autofocus>
                             </div>
                             <!-- Change this to a button or input when using this as a form -->
                             <div>
-                              <img id="auth-loading" src="../loading.gif" style="position: relative; top: 0px; left: 8px; opacity: 0;">
-                              <input style="margin-top: -38px;" id="token-submit-button" type="button" class="btn btn-lg btn-success btn-block" value="Log in">
+                                <img id="token-loading" src="../loading.gif" style="position: relative; top: 0px; left: 8px; opacity: 0;">
+                                <input type="button" style="margin-top: -38px;" id="token-req-button" class="btn btn-lg btn-success btn-block" value="Request Token">
+                            </div>
+                            <br />
+                            <div id="auth-container" style="display:none;">
+                                <p><i>Our discord bot has sent you a 6-digit pin. Having issues? Get in touch with us <a href="https://discord.gg/Ygfv25w">in discord</a>!</i></p>
+                                <div class="form-group">
+                                    <center>
+                                    <input class="form-control" name="accessCode" id="access-code">
+                                    </center>
+                                </div>
+                                <!-- Change this to a button or input when using this as a form -->
+                                <div>
+                                  <img id="auth-loading" src="../loading.gif" style="position: relative; top: 0px; left: 8px; opacity: 0;">
+                                  <input style="margin-top: -38px;" id="token-submit-button" type="button" class="btn btn-lg btn-success btn-block" value="Log in">
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <!-- /.sidebar-collapse -->
                 </div>
+            </div>
+
+            <div class="row">
+                <center>
+                    <p class="reminder">
+                        <i>By logging in to inspector or using MTGATracker I <br />consent to MTGATracker's
+                        <a class="link-subd" href="https://github.com/shawkinsl/mtga-tracker/blob/master/privacy.md">privacy policy</a></i>
+                    </p>
+                </center>
             </div>
         </div>
 
-        <div class="row">
-            <center>
-                <p class="reminder">
-                    <i>Logging in to inspector, or using MTGATracker is an<br />implicit agreement to MTGATracker's
-                    <a class="link-subd" href="https://github.com/shawkinsl/mtga-tracker/blob/master/privacy.md">privacy policy</a></i>
-                </p>
-            </center>
-        </div>
+        <!-- jQuery -->
+        <script src="../vendor/jquery/jquery.min.js?v=05e51b1db558320f1939f9789ccf5c8f"></script>
+
+        <!-- Bootstrap Core JavaScript -->
+        <script src="../vendor/bootstrap/js/bootstrap.min.js?v=5869c96cc8f19086aee625d670d741f9"></script>
+
+        <!-- Metis Menu Plugin JavaScript -->
+        <script src="../vendor/metisMenu/metisMenu.min.js?v=9d596cdad6a6e250ced46785d04adf4e"></script>
+
+        <!-- Custom Theme JavaScript -->
+        <script src="../dist/js/bundle.min.js?v=5306d9a46ee3dea57632a16ba18b0914"></script>
+
+        <link href="../vendor/bootstrap-pin-input/bootstrap-pincode-input.css?v=15b0d478125a1e5e91d66d7ecc28c7df" rel="stylesheet">
+        <script src="../vendor/bootstrap-pin-input/bootstrap-pincode-input.js?v=5ae23ea78e053cbd5bbce23651777fcf"></script>
     </div>
-
-    <!-- jQuery -->
-    <script src="../vendor/jquery/jquery.min.js?v=05e51b1db558320f1939f9789ccf5c8f"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="../vendor/bootstrap/js/bootstrap.min.js?v=5869c96cc8f19086aee625d670d741f9"></script>
-
-    <!-- Metis Menu Plugin JavaScript -->
-    <script src="../vendor/metisMenu/metisMenu.min.js?v=9d596cdad6a6e250ced46785d04adf4e"></script>
-
-    <!-- Custom Theme JavaScript -->
-    <script src="../dist/js/bundle.min.js?v=f5c6ef06687fc92871cf2bd5a25695cd"></script>
-
-    <!-- toastr -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
-    <link href="../vendor/bootstrap-pin-input/bootstrap-pincode-input.css?v=15b0d478125a1e5e91d66d7ecc28c7df" rel="stylesheet">
-    <script src="../vendor/bootstrap-pin-input/bootstrap-pincode-input.js?v=5ae23ea78e053cbd5bbce23651777fcf"></script>
 </body>
 
 </html>

@@ -10,6 +10,9 @@ let homeRoute = () => {
 
   if (appData.bound)
     bound.unbind()
+  console.log("unbind home")
+  $("#edit-decks").unbind("change")
+
   $(function() {
     $("#page-wrapper").load('/templates/home-inner.html', loaded => {
       $("#more-games-button").unbind("click")
@@ -18,6 +21,15 @@ let homeRoute = () => {
       appData.homeGameListPage = 1
       getDecks()
       getGames(1, {removeOld: true})
+
+      $("#edit-decks").change((e) => {
+        if (e.target.checked) {
+          $(".hide-deck").slideDown()
+        } else {
+          $(".hide-deck").slideUp()
+          $(".deckhidden").slideUp()
+        }
+      })
     })
   })
 }
