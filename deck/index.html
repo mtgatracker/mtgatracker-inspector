@@ -34,10 +34,13 @@
     <link href="../vendor/metisMenu/metisMenu.min.css?v=bb3f6f86f3feb94b2ba7b43c9d315c54" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="../dist/css/sb-admin-2.css?v=b07deba47d00e8b65fe53330bcddd03e" rel="stylesheet">
+    <link href="../dist/css/style.css?v=f198a5d292adc7415cb91299719a384d" rel="stylesheet">
 
     <!-- Morris Charts CSS -->
     <link href="../vendor/morrisjs/morris.css?v=36e70bf949fcdb7d0fe55fc16ce86445" rel="stylesheet">
+
+    <!-- toggle -->
+    <link href="../vendor/toggle/toggle.css?v=388c597e7d94cc8eabd7444a4ed59ce9" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href="../vendor/font-awesome/css/font-awesome.min.css?v=4083f5d376eb849a458cc790b53ba080" rel="stylesheet" type="text/css">
@@ -55,10 +58,10 @@
 
 </head>
 
-<body id="app">
+<body id="app" class="themeable">
     <div id="wrapper">
         <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <nav class="navbar themeable navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -66,28 +69,33 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">MTGATracker Inspector</a>
+                <a class="navbar-brand themeable" href="/">MTGATracker Inspector</a>
             </div>
             <!-- /.navbar-header -->
 
             <ul class="nav navbar-top-links navbar-right">
                 <li>
-                    <a href="/">Inspector Home</a>
+                    <a class="themeable" href="/">Inspector Home</a>
                 </li>
                 <li>
-                    <a href="https://mtgatracker.com">Get MTGATracker</a>
+                    <a class="themeable" href="https://mtgatracker.com">Get MTGATracker</a>
                 </li>
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="">
+                    <a class="dropdown-toggle themeable" data-toggle="dropdown" href="">
                          <i class="fa fa-user fa-fw"></i> Hello, { data.username } <i class="fa fa-caret-down"></i>
                     </a>
-                    <ul class="dropdown-menu dropdown-user">
-                        <li><a href=""><i class="fa fa-user fa-fw"></i> User Profile</a>
+                    <ul class="dropdown-menu dropdown-user themeable">
+                        <li>
+                            <a class="themeable">Dark Mode</a>
+                                <span class="dropdown-toggleswitch">
+                                <label class="switch switch_type1" role="switch">
+                                  <input type="checkbox" class="switch__toggle" id="dark-mode" onclick="toggleDarkMode()">
+                                  <span class="switch__label"></span>
+                                </label>
+                            </span>
                         </li>
-                        <li><a href=""><i class="fa fa-gear fa-fw"></i> Settings</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li><a href="" id="logout-button"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        <li class="divider themeable"></li>
+                        <li><a class="themeable" href="" id="logout-button"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -96,11 +104,11 @@
             </ul>
             <!-- /.navbar-top-links -->
 
-            <div class="navbar-default sidebar" role="navigation">
-                <div class="sidebar-nav navbar-collapse">
+            <div class="navbar-default sidebar themeable" role="navigation">
+                <div class="sidebar-nav navbar-collapse themeable">
                     <ul class="nav" id="side-menu">
                         <li>
-                            <a href="/"><i class="fa fa-dashboard fa-fw"></i> Inspector</a>
+                            <a class="themeable"  href="/"><i class="fa fa-dashboard fa-fw"></i> Inspector</a>
                         </li>
                         <!--
                         <li>
@@ -122,7 +130,7 @@
             <!-- /.navbar-static-side -->
         </nav>
 
-        <div id="page-wrapper">
+        <div id="page-wrapper" class="themeable">
         </div>
         <!-- /#page-wrapper -->
 
@@ -143,7 +151,7 @@
     <script src="../vendor/morrisjs/morris.min.js?v=fadac462637afd6cdc0cb0a0137629af"></script>
 
     <!-- Custom Theme JavaScript -->
-    <script src="../dist/js/bundle.min.js?v=50e3483fd52bb60752aadbedf1417236"></script>
+    <script src="../dist/js/bundle.min.js?v=5306d9a46ee3dea57632a16ba18b0914"></script>
 </body>
 
 </html>
