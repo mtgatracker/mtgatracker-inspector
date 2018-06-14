@@ -93,16 +93,29 @@
                             <h3 id="login-header" class="panel-title">What's new in Inspector?</h3>
                         </div>
                         <div class="panel-body">
-                            <!-- Change this to a button or input when using this as a form -->
-                            <h1>New in version 1.1.0</h1>
+                            <h1>New in version 1.2.0</h1>
                             <hr />
-                            <h4>Hide decks from quick-view</h4>
-                            <p>Too many decks cluttering up your quick-view? Use the edit button to hide the ones you don't care about anymore!</p>
-                            <video width="100%" src="https://s3-us-west-1.amazonaws.com/mtgatracker/inspector_static/hide_decks.mp4" controls autoplay loop></video>
+                            <h4>KLD and AER have arrived!</h4>
+                            <p>Gone are the days of empty-looking AER draft game pages! (Sorry we didn't fix it before quick draft rotated... 🙁 )</p>
                             <hr />
-                            <h4>Dark Mode</h4>
-                            <p>We know, the white is really bright. Turn on dark mode to be nice to your eyes 😎</p>
-                            <video width="100%" src="https://s3-us-west-1.amazonaws.com/mtgatracker/inspector_static/dark_mode.mp4" controls autoplay loop></video>
+                            <h4>No more getting logged out for clicking a game link!</h4>
+                            <p>Whew lads, that was an annoying bug! Now when you click on an "Opponent Owned" record,
+                                you'll be able to get to the game, but you won't be able to see your opponent's deck list.</p>
+                            <img style="width: 100%" src="oppo_owned.png">
+
+                            <hr />
+                            <button class="btn btn-info" onclick="$('#older').slideToggle()">Show older release notes</button>
+                            <div id="older" style="display:none;">
+                                <h1>New in version 1.1.0</h1>
+                                <hr />
+                                <h4>Hide decks from quick-view</h4>
+                                <p>Too many decks cluttering up your quick-view? Use the edit button to hide the ones you don't care about anymore!</p>
+                                <video width="100%" src="https://s3-us-west-1.amazonaws.com/mtgatracker/inspector_static/hide_decks.mp4" controls autoplay loop></video>
+                                <hr />
+                                <h4>Dark Mode</h4>
+                                <p>We know, the white is really bright. Turn on dark mode to be nice to your eyes 😎</p>
+                                <video width="100%" src="https://s3-us-west-1.amazonaws.com/mtgatracker/inspector_static/dark_mode.mp4" controls autoplay loop></video>
+                            </div>
                         </div>
                     </div>
                     <!-- /.sidebar-collapse -->
