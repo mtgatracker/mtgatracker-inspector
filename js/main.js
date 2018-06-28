@@ -1,4 +1,5 @@
-// do this very first to try to avoid FouC
+const { API_URL } = require("./api")
+
 var appData = {
   username: "unknown",
   currentDeckName: "",
@@ -20,6 +21,7 @@ var appData = {
   bound: null,
 }
 
+// do this very first to try to avoid FouC
 let darkModeEnabled = localStorage.getItem("dark-mode") == "true" || false;
 let enableDarkMode = (noTransition) => {
     if (noTransition) {
@@ -215,7 +217,7 @@ var authAttempt = function() {
   let username = $("#username").val()
   let accessCode = $("#access-code").val()
   $.ajax({
-    url: "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/public-api/auth-attempt",
+    url: `${API_URL}/public-api/auth-attempt`,
     type: "POST",
     data: JSON.stringify({"username": username, "accessCode": accessCode}),
     dataType: "json",
@@ -247,7 +249,7 @@ var authRequest = function() {
   $("#token-req-button").addClass("btn-primary").removeClass("btn-success").val("Sending token...").prop('disabled', true)
   let username = $("#username").val()
   $.ajax({
-    url: "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/public-api/auth-request",
+    url: `${API_URL}/public-api/auth-request`,
     type: "POST",
     data: JSON.stringify({"username": username}),
     dataType: "json",

@@ -1,6 +1,8 @@
 "use strict";
 
-// do this very first to try to avoid FouC
+var _require = require("./api"),
+    API_URL = _require.API_URL;
+
 var appData = {
   username: "unknown",
   currentDeckName: "",
@@ -20,9 +22,9 @@ var appData = {
   winLossColors: [0, 0, 0, 0, 0],
   winLossColorChart: null,
   bound: null
-};
 
-var darkModeEnabled = localStorage.getItem("dark-mode") == "true" || false;
+  // do this very first to try to avoid FouC
+};var darkModeEnabled = localStorage.getItem("dark-mode") == "true" || false;
 var enableDarkMode = function enableDarkMode(noTransition) {
   if (noTransition) {
     $(".themeable").addClass("notransition");
@@ -80,10 +82,10 @@ var page = require('page');
 window.page = page;
 var spaRouter = require('./spaRouter');
 
-var _require = require('./api'),
-    getGames = _require.getGames,
-    hideDeck = _require.hideDeck,
-    unHideDeck = _require.unHideDeck;
+var _require2 = require('./api'),
+    getGames = _require2.getGames,
+    hideDeck = _require2.hideDeck,
+    unHideDeck = _require2.unHideDeck;
 
 window.appData = appData;
 
@@ -219,7 +221,7 @@ var authAttempt = function authAttempt() {
   var username = $("#username").val();
   var accessCode = $("#access-code").val();
   $.ajax({
-    url: "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/public-api/auth-attempt",
+    url: API_URL + "/public-api/auth-attempt",
     type: "POST",
     data: JSON.stringify({ "username": username, "accessCode": accessCode }),
     dataType: "json",
@@ -250,7 +252,7 @@ var authRequest = function authRequest() {
   $("#token-req-button").addClass("btn-primary").removeClass("btn-success").val("Sending token...").prop('disabled', true);
   var username = $("#username").val();
   $.ajax({
-    url: "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/public-api/auth-request",
+    url: API_URL + "/public-api/auth-request",
     type: "POST",
     data: JSON.stringify({ "username": username }),
     dataType: "json",

@@ -1,3 +1,5 @@
+const API_URL = "https://gx2.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p2/mtgatracker-prod-EhDvLyq7PNb"
+
 var cookies = require('browser-cookies');
 
 var getGame = function(gameID) {
@@ -8,7 +10,7 @@ var getGame = function(gameID) {
       document.location.href = "/login"
     }
     $.ajax({
-      url: `https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/game/_id/${gameID}`,
+      url: `${API_URL}/api/game/_id/${gameID}`,
       headers: {token: token},
       success: function(data) {
         $(".game-loading").css("display", "none")
@@ -40,7 +42,7 @@ var getDeckWinLossByColor = function(deckID) {
       document.location.href = "/login"
     }
     $.ajax({
-      url: `https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/deck/${deckID}/winloss-colors`,
+      url: `${API_URL}/api/deck/${deckID}/winloss-colors`,
       headers: {token: token},
       success: function(data) {
         console.log(data)
@@ -74,7 +76,7 @@ var getDecks = function(includeHidden) {
   if (!token) {
     document.location.href = "/login"
   }
-  let url = "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/decks"
+  let url = `${API_URL}/api/decks`
   if (includeHidden) {
     url += "?includeHidden=true"
   }
@@ -115,7 +117,7 @@ var hideDeck = function(deckID, button) {
   if (!token) {
     document.location.href = "/login"
   }
-  let url = "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/deck/" + deckID + "/hide"
+  let url = `${API_URL}/api/deck/${deckID}/hide`
   $.ajax({
     url: url,
     method: "POST",
@@ -160,7 +162,7 @@ var unHideDeck = function(deckID, button) {
   if (!token) {
     document.location.href = "/login"
   }
-  let url = "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/deck/" + deckID + "/unhide"
+  let url = `${API_URL}/api/deck/${deckID}/unhide`
   $.ajax({
     url: url,
     method: "POST",
@@ -205,7 +207,7 @@ var getGames = function(page, opts) {
   if (!token) {
     document.location.href = "/login"
   }
-  let url = `https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/games?page=${page}`
+  let url = `${API_URL}/api/games?page=${page}`
   if (opts && opts.deckID)
     url += `&deckID=${opts.deckID}`
   if (opts && opts.opponent)
@@ -269,4 +271,5 @@ module.exports = {
   getGame: getGame,
   hideDeck: hideDeck,
   unHideDeck: unHideDeck,
+  API_URL: API_URL,
 }

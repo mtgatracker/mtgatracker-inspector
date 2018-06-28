@@ -1,5 +1,7 @@
 "use strict";
 
+var API_URL = "https://gx2.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p2/mtgatracker-prod-EhDvLyq7PNb";
+
 var cookies = require('browser-cookies');
 
 var getGame = function getGame(gameID) {
@@ -10,7 +12,7 @@ var getGame = function getGame(gameID) {
       document.location.href = "/login";
     }
     $.ajax({
-      url: "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/game/_id/" + gameID,
+      url: API_URL + "/api/game/_id/" + gameID,
       headers: { token: token },
       success: function success(data) {
         $(".game-loading").css("display", "none");
@@ -42,7 +44,7 @@ var getDeckWinLossByColor = function getDeckWinLossByColor(deckID) {
       document.location.href = "/login";
     }
     $.ajax({
-      url: "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/deck/" + deckID + "/winloss-colors",
+      url: API_URL + "/api/deck/" + deckID + "/winloss-colors",
       headers: { token: token },
       success: function success(data) {
         console.log(data);
@@ -70,7 +72,7 @@ var getDecks = function getDecks(includeHidden) {
   if (!token) {
     document.location.href = "/login";
   }
-  var url = "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/decks";
+  var url = API_URL + "/api/decks";
   if (includeHidden) {
     url += "?includeHidden=true";
   }
@@ -111,7 +113,7 @@ var hideDeck = function hideDeck(deckID, button) {
   if (!token) {
     document.location.href = "/login";
   }
-  var url = "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/deck/" + deckID + "/hide";
+  var url = API_URL + "/api/deck/" + deckID + "/hide";
   $.ajax({
     url: url,
     method: "POST",
@@ -156,7 +158,7 @@ var unHideDeck = function unHideDeck(deckID, button) {
   if (!token) {
     document.location.href = "/login";
   }
-  var url = "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/deck/" + deckID + "/unhide";
+  var url = API_URL + "/api/deck/" + deckID + "/unhide";
   $.ajax({
     url: url,
     method: "POST",
@@ -201,7 +203,7 @@ var getGames = function getGames(page, opts) {
   if (!token) {
     document.location.href = "/login";
   }
-  var url = "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/games?page=" + page;
+  var url = API_URL + "/api/games?page=" + page;
   if (opts && opts.deckID) url += "&deckID=" + opts.deckID;
   if (opts && opts.opponent) url += "&opponent=" + opts.opponent;
   if (opts && opts.removeOld) appData.homeGameList = [];
@@ -264,5 +266,6 @@ module.exports = {
   getDeckWinLossByColor: getDeckWinLossByColor,
   getGame: getGame,
   hideDeck: hideDeck,
-  unHideDeck: unHideDeck
+  unHideDeck: unHideDeck,
+  API_URL: API_URL
 };
