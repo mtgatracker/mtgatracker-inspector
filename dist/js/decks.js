@@ -1,8 +1,11 @@
-"use strict";
+'use strict';
 
 var _require = require('./api'),
     getGames = _require.getGames,
     getDecks = _require.getDecks;
+
+var _require2 = require('./conf'),
+    pagePrefix = _require2.pagePrefix;
 
 var decksRoute = function decksRoute(c, n) {
   appData.currentDeckName = "loading ...";
@@ -13,7 +16,7 @@ var decksRoute = function decksRoute(c, n) {
   console.log("unbind change");
   $("#edit-decks").unbind("change");
   $(function () {
-    $("#page-wrapper").load('/templates/decks-inner.html', function (loaded) {
+    $("#page-wrapper").load(pagePrefix + '/templates/decks-inner.html', function (loaded) {
       rivets.bind($('#app'), { data: appData });
       appData.homeGameListPage = 1;
 

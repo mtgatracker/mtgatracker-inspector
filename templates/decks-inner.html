@@ -23,7 +23,7 @@
                 <img id="decks-loading" src="../loading.gif">
                 <div class="list-group themeable">
                     <div rv-each-deck="data.homeDeckList" rv-deckid="deck.deckID">
-                        <a rv-href="deck.link" class="list-group-item">
+                        <a rv-href="deck.link" rv-fixhref="" class="list-group-item">
                             <i class="fa fa-leanpub fa-fw"></i> <span rv-class-deckhidden="deck.hidden" class="themeable">{ deck.deckName }</span>
                             <span class="pull-right text-muted small"><em> { deck.wins } <i class="fa fa-caret-up fa-fw green"></i> / { deck.losses} <i class="fa fa-caret-down fa-fw red"></i></em>
                             </span>

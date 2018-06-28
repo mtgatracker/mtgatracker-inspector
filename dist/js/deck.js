@@ -5,6 +5,9 @@ var _require = require('./api'),
     getDecks = _require.getDecks,
     getDeckWinLossByColor = _require.getDeckWinLossByColor;
 
+var _require2 = require("./conf"),
+    pagePrefix = _require2.pagePrefix;
+
 var deckRoute = function deckRoute(c, n) {
   appData.currentDeckName = "loading ...";
   console.log("CALLED FROM /deck/");
@@ -12,7 +15,7 @@ var deckRoute = function deckRoute(c, n) {
   $("#more-games-button").unbind("click");
   $("#edit-decks").unbind("change");
   $(function () {
-    $("#page-wrapper").load('/templates/deck-inner.html', function (loaded) {
+    $("#page-wrapper").load(pagePrefix + "/templates/deck-inner.html", function (loaded) {
       rivets.bind($('#app'), { data: appData });
       $("#more-games-button").click(function () {
         getGames(appData.homeGameListPage, { deckID: appData.deckID });

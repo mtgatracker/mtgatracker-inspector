@@ -1,14 +1,14 @@
+const API_URL = "https://gx2.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p2/mtgatracker-prod-EhDvLyq7PNb"
+
 var cookies = require('browser-cookies');
+let { loginCheck } = require('./conf')
 
 var getGame = function(gameID) {
   return new Promise((resolve, reject) => {
     $(".game-loading").css("display", "block")
-    let token = cookies.get("token")
-    if (!token) {
-      document.location.href = "/login"
-    }
+    let token = loginCheck()
     $.ajax({
-      url: `https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/game/_id/${gameID}`,
+      url: `${API_URL}/api/game/_id/${gameID}`,
       headers: {token: token},
       success: function(data) {
         $(".game-loading").css("display", "none")
@@ -35,12 +35,9 @@ var getDeckWinLossByColor = function(deckID) {
       appData.winLossColorChart.update()
     }
     $("#matchup-loading").css("display", "block")
-    let token = cookies.get("token")
-    if (!token) {
-      document.location.href = "/login"
-    }
+    let token = loginCheck()
     $.ajax({
-      url: `https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/deck/${deckID}/winloss-colors`,
+      url: `${API_URL}/api/deck/${deckID}/winloss-colors`,
       headers: {token: token},
       success: function(data) {
         console.log(data)
@@ -70,11 +67,8 @@ var getDeckWinLossByColor = function(deckID) {
 
 var getDecks = function(includeHidden) {
   $("#decks-loading").css("display", "block")
-  let token = cookies.get("token")
-  if (!token) {
-    document.location.href = "/login"
-  }
-  let url = "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/decks"
+  let token = loginCheck()
+  let url = `${API_URL}/api/decks`
   if (includeHidden) {
     url += "?includeHidden=true"
   }
@@ -111,11 +105,8 @@ var hideDeck = function(deckID, button) {
     $(button).prop('disabled', true);
   }
   console.log("hideDeck called")
-  let token = cookies.get("token")
-  if (!token) {
-    document.location.href = "/login"
-  }
-  let url = "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/deck/" + deckID + "/hide"
+  let token = loginCheck()
+  let url = `${API_URL}/api/deck/${deckID}/hide`
   $.ajax({
     url: url,
     method: "POST",
@@ -156,11 +147,8 @@ var unHideDeck = function(deckID, button) {
     $(button).prop('disabled', true);
   }
   console.log("unHideDeck called")
-  let token = cookies.get("token")
-  if (!token) {
-    document.location.href = "/login"
-  }
-  let url = "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/deck/" + deckID + "/unhide"
+  let token = loginCheck()
+  let url = `${API_URL}/api/deck/${deckID}/unhide`
   $.ajax({
     url: url,
     method: "POST",
@@ -201,11 +189,8 @@ var getGames = function(page, opts) {
   $("#more-games-button").removeClass("btn-info").addClass("btn-primary").val("Loading games...").prop('disabled', true)
   appData.homeGameListPage += 1;
   if (page === undefined) page = 1;
-  let token = cookies.get("token")
-  if (!token) {
-    document.location.href = "/login"
-  }
-  let url = `https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/games?page=${page}`
+  let token = loginCheck()
+  let url = `${API_URL}/api/games?page=${page}`
   if (opts && opts.deckID)
     url += `&deckID=${opts.deckID}`
   if (opts && opts.opponent)
@@ -269,4 +254,5 @@ module.exports = {
   getGame: getGame,
   hideDeck: hideDeck,
   unHideDeck: unHideDeck,
+  API_URL: API_URL,
 }

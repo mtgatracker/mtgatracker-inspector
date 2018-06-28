@@ -1,16 +1,18 @@
-"use strict";
+'use strict';
+
+var API_URL = "https://gx2.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p2/mtgatracker-prod-EhDvLyq7PNb";
 
 var cookies = require('browser-cookies');
+
+var _require = require('./conf'),
+    loginCheck = _require.loginCheck;
 
 var getGame = function getGame(gameID) {
   return new Promise(function (resolve, reject) {
     $(".game-loading").css("display", "block");
-    var token = cookies.get("token");
-    if (!token) {
-      document.location.href = "/login";
-    }
+    var token = loginCheck();
     $.ajax({
-      url: "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/game/_id/" + gameID,
+      url: API_URL + '/api/game/_id/' + gameID,
       headers: { token: token },
       success: function success(data) {
         $(".game-loading").css("display", "none");
@@ -37,12 +39,9 @@ var getDeckWinLossByColor = function getDeckWinLossByColor(deckID) {
       appData.winLossColorChart.update();
     }
     $("#matchup-loading").css("display", "block");
-    var token = cookies.get("token");
-    if (!token) {
-      document.location.href = "/login";
-    }
+    var token = loginCheck();
     $.ajax({
-      url: "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/deck/" + deckID + "/winloss-colors",
+      url: API_URL + '/api/deck/' + deckID + '/winloss-colors',
       headers: { token: token },
       success: function success(data) {
         console.log(data);
@@ -66,11 +65,8 @@ var getDeckWinLossByColor = function getDeckWinLossByColor(deckID) {
 
 var getDecks = function getDecks(includeHidden) {
   $("#decks-loading").css("display", "block");
-  var token = cookies.get("token");
-  if (!token) {
-    document.location.href = "/login";
-  }
-  var url = "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/decks";
+  var token = loginCheck();
+  var url = API_URL + '/api/decks';
   if (includeHidden) {
     url += "?includeHidden=true";
   }
@@ -81,7 +77,7 @@ var getDecks = function getDecks(includeHidden) {
       $("#decks-loading").css("display", "none");
       appData.homeDeckList = [];
       $.each(data, function (key, value) {
-        value.link = "/deck/?deckID=" + value.deckID;
+        value.link = '/deck/?deckID=' + value.deckID;
         appData.homeDeckList.push(value);
       });
     },
@@ -107,11 +103,8 @@ var hideDeck = function hideDeck(deckID, button) {
     $(button).prop('disabled', true);
   }
   console.log("hideDeck called");
-  var token = cookies.get("token");
-  if (!token) {
-    document.location.href = "/login";
-  }
-  var url = "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/deck/" + deckID + "/hide";
+  var token = loginCheck();
+  var url = API_URL + '/api/deck/' + deckID + '/hide';
   $.ajax({
     url: url,
     method: "POST",
@@ -152,11 +145,8 @@ var unHideDeck = function unHideDeck(deckID, button) {
     $(button).prop('disabled', true);
   }
   console.log("unHideDeck called");
-  var token = cookies.get("token");
-  if (!token) {
-    document.location.href = "/login";
-  }
-  var url = "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/deck/" + deckID + "/unhide";
+  var token = loginCheck();
+  var url = API_URL + '/api/deck/' + deckID + '/unhide';
   $.ajax({
     url: url,
     method: "POST",
@@ -197,13 +187,10 @@ var getGames = function getGames(page, opts) {
   $("#more-games-button").removeClass("btn-info").addClass("btn-primary").val("Loading games...").prop('disabled', true);
   appData.homeGameListPage += 1;
   if (page === undefined) page = 1;
-  var token = cookies.get("token");
-  if (!token) {
-    document.location.href = "/login";
-  }
-  var url = "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/api/games?page=" + page;
-  if (opts && opts.deckID) url += "&deckID=" + opts.deckID;
-  if (opts && opts.opponent) url += "&opponent=" + opts.opponent;
+  var token = loginCheck();
+  var url = API_URL + '/api/games?page=' + page;
+  if (opts && opts.deckID) url += '&deckID=' + opts.deckID;
+  if (opts && opts.opponent) url += '&opponent=' + opts.opponent;
   if (opts && opts.removeOld) appData.homeGameList = [];
   $.ajax({
     url: url,
@@ -231,7 +218,7 @@ var getGames = function getGames(page, opts) {
           newVal.opponentDeckColors = res[1];
           newVal.timeago = timeago().format(val.date);
           newVal.won = val.winner == val.hero;
-          newVal.link = "/game/?gameID=" + val._id;
+          newVal.link = '/game/?gameID=' + val._id;
           newVal.winner = val.winner;
 
           appData.homeGameList.push(newVal);
@@ -264,5 +251,6 @@ module.exports = {
   getDeckWinLossByColor: getDeckWinLossByColor,
   getGame: getGame,
   hideDeck: hideDeck,
-  unHideDeck: unHideDeck
+  unHideDeck: unHideDeck,
+  API_URL: API_URL
 };

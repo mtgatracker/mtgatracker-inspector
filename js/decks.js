@@ -1,4 +1,5 @@
 const { getGames, getDecks } = require('./api')
+const { pagePrefix } = require('./conf')
 
 let decksRoute = (c, n) => {
   appData.currentDeckName = "loading ..."
@@ -10,7 +11,7 @@ let decksRoute = (c, n) => {
   console.log("unbind change")
   $("#edit-decks").unbind("change")
   $(function() {
-    $("#page-wrapper").load('/templates/decks-inner.html', loaded => {
+    $("#page-wrapper").load(`${pagePrefix}/templates/decks-inner.html`, loaded => {
       rivets.bind($('#app'), {data: appData})
       appData.homeGameListPage = 1
 

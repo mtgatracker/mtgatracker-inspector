@@ -46,7 +46,7 @@
                                     <span rv-multimana="game.heroDeckColors"></span>
                                 </h4>
                                 <h5>vs. { game.opponent } <span rv-multimana="game.opponentDeckColors"></span></h5>
-                                <p><small class="text-muted"><a rv-href="game.link"><i class="fa fa-clock-o"></i> { game.timeago }</a></small>
+                                <p><small class="text-muted"><a rv-href="game.link" rv-fixhref=""><i class="fa fa-clock-o"></i> { game.timeago }</a></small>
                             </div>
                             <div class="timeline-body">
                                 <p>{ game.hero } vs { game.opponent } - <i>Winner: { game.winner }</i></p>
@@ -78,7 +78,7 @@
                 <img id="decks-loading" src="../loading.gif">
                 <div class="list-group themeable">
                     <div rv-each-deck="data.homeDeckList" rv-deckid="deck.deckID" rv-class-deckhidden="deck.hidden">
-                        <a rv-href="deck.link" class="list-group-item">
+                        <a rv-href="deck.link" rv-fixhref="" class="list-group-item">
                             <i class="fa fa-leanpub fa-fw"></i> { deck.deckName }
                             <span class="pull-right text-muted small"><em> { deck.wins } <i class="fa fa-caret-up fa-fw green"></i> / { deck.losses} <i class="fa fa-caret-down fa-fw red"></i></em>
                             </span>
@@ -90,7 +90,7 @@
                     </div>
                 </div>
                 <!-- /.list-group -->
-                <a href="/decks" class="btn btn-default btn-block themeable">View All Decks</a>
+                <a href="/decks" rv-fixhref="" class="btn btn-default btn-block themeable">View All Decks</a>
             </div>
             <!-- /.panel-body -->
         </div>

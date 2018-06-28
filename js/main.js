@@ -1,4 +1,6 @@
-// do this very first to try to avoid FouC
+const { API_URL } = require("./api")
+const { pagePrefix } = require("./conf")
+
 var appData = {
   username: "unknown",
   currentDeckName: "",
@@ -18,8 +20,10 @@ var appData = {
   winLossColors: [0, 0, 0, 0, 0],
   winLossColorChart: null,
   bound: null,
+  pagePrefix: pagePrefix
 }
 
+// do this very first to try to avoid FouC
 let darkModeEnabled = localStorage.getItem("dark-mode") == "true" || false;
 let enableDarkMode = (noTransition) => {
     if (noTransition) {
@@ -81,6 +85,14 @@ var spaRouter = require('./spaRouter')
 const { getGames, hideDeck, unHideDeck } = require('./api')
 
 window.appData = appData
+
+rivets.binders.fixhref = (el, value) => {
+  if(!el.href.includes(pagePrefix)) {
+    let hrefStart = el.href.split("/").slice(0, 3).join("/")
+    let hrefEnd = el.href.split("/").slice(3).join("/")
+    el.href = `${hrefStart}${pagePrefix}/${hrefEnd}`
+  }
+}
 
 rivets.binders.multimana = (el, value) => {
   el.innerHTML = "";
@@ -187,9 +199,6 @@ $(function() {
     });
 
     var url = window.location;
-    // var element = $('ul.nav a').filter(function() {
-    //     return this.href == url;
-    // }).addClass('active').parent().parent().addClass('in').parent();
     var element = $('ul.nav a').filter(function() {
         return this.href == url;
     }).addClass('active').parent();
@@ -206,7 +215,7 @@ $(function() {
 var logout = function() {
   cookies.erase("username")
   cookies.erase("token")
-  document.location.href = "/login/"
+  document.location.href = `${pagePrefix}/login/`
 }
 
 var authAttempt = function() {
@@ -215,14 +224,14 @@ var authAttempt = function() {
   let username = $("#username").val()
   let accessCode = $("#access-code").val()
   $.ajax({
-    url: "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/public-api/auth-attempt",
+    url: `${API_URL}/public-api/auth-attempt`,
     type: "POST",
     data: JSON.stringify({"username": username, "accessCode": accessCode}),
     dataType: "json",
     contentType: "application/json",
     success: function(data) {
       cookies.set("token", data.token, {expires: 6})
-      window.location.href = "/"
+      window.location.href = `${pagePrefix}/`
     },
     error: function(xhr, status, err) {
       $("#token-submit-button").removeClass("btn-primary").addClass("btn-success").val("Log in").prop('disabled', false)
@@ -247,7 +256,7 @@ var authRequest = function() {
   $("#token-req-button").addClass("btn-primary").removeClass("btn-success").val("Sending token...").prop('disabled', true)
   let username = $("#username").val()
   $.ajax({
-    url: "https://wt.mtgatracker.com/wt-bd90f3fae00b1572ed028d0340861e6a-0/mtgatracker-prod-EhDvLyq7PNb/public-api/auth-request",
+    url: `${API_URL}/public-api/auth-request`,
     type: "POST",
     data: JSON.stringify({"username": username}),
     dataType: "json",
