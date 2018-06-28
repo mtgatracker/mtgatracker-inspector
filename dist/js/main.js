@@ -24,7 +24,8 @@ var appData = {
   homeGameListPage: 1,
   winLossColors: [0, 0, 0, 0, 0],
   winLossColorChart: null,
-  bound: null
+  bound: null,
+  pagePrefix: pagePrefix
 
   // do this very first to try to avoid FouC
 };var darkModeEnabled = localStorage.getItem("dark-mode") == "true" || false;
@@ -91,6 +92,14 @@ var _require3 = require('./api'),
     unHideDeck = _require3.unHideDeck;
 
 window.appData = appData;
+
+rivets.binders.fixhref = function (el, value) {
+  if (!el.href.includes(pagePrefix)) {
+    var hrefStart = el.href.split("/").slice(0, 3).join("/");
+    var hrefEnd = el.href.split("/").slice(3).join("/");
+    el.href = "" + hrefStart + pagePrefix + "/" + hrefEnd;
+  }
+};
 
 rivets.binders.multimana = function (el, value) {
   el.innerHTML = "";
@@ -228,7 +237,7 @@ var authAttempt = function authAttempt() {
     contentType: "application/json",
     success: function success(data) {
       cookies.set("token", data.token, { expires: 6 });
-      window.location.href = "/";
+      window.location.href = pagePrefix + "/";
     },
     error: function error(xhr, status, err) {
       $("#token-submit-button").removeClass("btn-primary").addClass("btn-success").val("Log in").prop('disabled', false);

@@ -20,6 +20,7 @@ var appData = {
   winLossColors: [0, 0, 0, 0, 0],
   winLossColorChart: null,
   bound: null,
+  pagePrefix: pagePrefix
 }
 
 // do this very first to try to avoid FouC
@@ -84,6 +85,14 @@ var spaRouter = require('./spaRouter')
 const { getGames, hideDeck, unHideDeck } = require('./api')
 
 window.appData = appData
+
+rivets.binders.fixhref = (el, value) => {
+  if(!el.href.includes(pagePrefix)) {
+    let hrefStart = el.href.split("/").slice(0, 3).join("/")
+    let hrefEnd = el.href.split("/").slice(3).join("/")
+    el.href = `${hrefStart}${pagePrefix}/${hrefEnd}`
+  }
+}
 
 rivets.binders.multimana = (el, value) => {
   el.innerHTML = "";
@@ -222,7 +231,7 @@ var authAttempt = function() {
     contentType: "application/json",
     success: function(data) {
       cookies.set("token", data.token, {expires: 6})
-      window.location.href = "/"
+      window.location.href = `${pagePrefix}/`
     },
     error: function(xhr, status, err) {
       $("#token-submit-button").removeClass("btn-primary").addClass("btn-success").val("Log in").prop('disabled', false)
