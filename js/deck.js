@@ -1,4 +1,5 @@
 const { getGames, getDecks, getDeckWinLossByColor } = require('./api')
+const { pagePrefix } = require("./conf")
 
 let deckRoute = (c, n) => {
   appData.currentDeckName = "loading ..."
@@ -8,7 +9,7 @@ let deckRoute = (c, n) => {
   $("#more-games-button").unbind("click")
   $("#edit-decks").unbind("change")
   $(function() {
-    $("#page-wrapper").load('/templates/deck-inner.html', loaded => {
+    $("#page-wrapper").load(`${pagePrefix}/templates/deck-inner.html`, loaded => {
       rivets.bind($('#app'), {data: appData})
       $("#more-games-button").click(() => {getGames(appData.homeGameListPage, {deckID: appData.deckID})})
       $("#matchup-style").change((e) => {

@@ -6,19 +6,22 @@ var _require = require('./api'),
 
 var cookies = require('browser-cookies');
 
+var _require2 = require('./conf'),
+    pagePrefix = _require2.pagePrefix,
+    loginCheck = _require2.loginCheck;
+
+console.log('got pagePrefix ' + pagePrefix + ' from spaRouter');
+
 var homeRoute = function homeRoute() {
   console.log("CALLED FROM /");
-  if (!cookies.get("token")) {
-    window.stop();
-    window.location.href = "/login/";
-  }
+  loginCheck();
 
   if (appData.bound) bound.unbind();
   console.log("unbind home");
   $("#edit-decks").unbind("change");
 
   $(function () {
-    $("#page-wrapper").load('/templates/home-inner.html', function (loaded) {
+    $("#page-wrapper").load(pagePrefix + '/templates/home-inner.html', function (loaded) {
       $("#more-games-button").unbind("click");
       rivets.bind($('#app'), { data: appData });
       $("#more-games-button").click(function () {

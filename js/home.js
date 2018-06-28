@@ -1,12 +1,12 @@
 const { getGames, getDecks } = require('./api')
 const cookies = require('browser-cookies')
+const { pagePrefix, loginCheck } = require('./conf')
+
+console.log(`got pagePrefix ${pagePrefix} from spaRouter`)
 
 let homeRoute = () => {
   console.log("CALLED FROM /")
-  if (!cookies.get("token")) {
-    window.stop();
-    window.location.href = "/login/"
-  }
+  loginCheck()
 
   if (appData.bound)
     bound.unbind()
@@ -14,7 +14,7 @@ let homeRoute = () => {
   $("#edit-decks").unbind("change")
 
   $(function() {
-    $("#page-wrapper").load('/templates/home-inner.html', loaded => {
+    $("#page-wrapper").load(`${pagePrefix}/templates/home-inner.html`, loaded => {
       $("#more-games-button").unbind("click")
       rivets.bind($('#app'), {data: appData})
       $("#more-games-button").click(() => {getGames(appData.homeGameListPage)})

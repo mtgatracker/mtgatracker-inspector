@@ -2,6 +2,7 @@
 // 5af804c72088d900069b283a
 
 const { getGame, getDecks } = require('./api')
+const { pagePrefix } = require('./conf')
 
 let gameRoute = (c, n) => {
   console.log("CALLED FROM /game/")
@@ -19,7 +20,7 @@ let gameRoute = (c, n) => {
   $("#edit-decks").unbind("change")
 
   $(function() {
-    $("#page-wrapper").load('/templates/game-inner.html', loaded => {
+    $("#page-wrapper").load(`${pagePrefix}/templates/game-inner.html`, loaded => {
       rivets.bind($('#app'), {data: appData})
       getDecks()
       getGame(c.params.gameID).then(game => {

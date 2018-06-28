@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 // /game/_id/:_id
 // 5af804c72088d900069b283a
@@ -6,6 +6,9 @@
 var _require = require('./api'),
     getGame = _require.getGame,
     getDecks = _require.getDecks;
+
+var _require2 = require('./conf'),
+    pagePrefix = _require2.pagePrefix;
 
 var gameRoute = function gameRoute(c, n) {
   console.log("CALLED FROM /game/");
@@ -22,11 +25,11 @@ var gameRoute = function gameRoute(c, n) {
   $("#edit-decks").unbind("change");
 
   $(function () {
-    $("#page-wrapper").load('/templates/game-inner.html', function (loaded) {
+    $("#page-wrapper").load(pagePrefix + '/templates/game-inner.html', function (loaded) {
       rivets.bind($('#app'), { data: appData });
       getDecks();
       getGame(c.params.gameID).then(function (game) {
-        appData.currentGameName = game.hero + " vs " + game.opponent;
+        appData.currentGameName = game.hero + ' vs ' + game.opponent;
         appData.currentGameHero = game.hero;
         appData.currentGameWinner = game.winner;
         appData.currentGameOpponent = game.opponent;
@@ -43,7 +46,7 @@ var gameRoute = function gameRoute(c, n) {
             appData.currentGameHeroDeck.push(cardObj);
           }
         });
-        appData.currentGameHeroDeckName = game.hero + "'s deck: " + game.players[0].deck.poolName;
+        appData.currentGameHeroDeckName = game.hero + '\'s deck: ' + game.players[0].deck.poolName;
         appData.currentGameOpponentDeckName = game.players[1].deck.poolName;
         appData.currentGameOpponentDeck = [];
         Object.keys(game.players[1].deck.cards).forEach(function (cardID) {

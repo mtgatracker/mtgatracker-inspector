@@ -1,4 +1,5 @@
 const { API_URL } = require("./api")
+const { pagePrefix } = require("./conf")
 
 var appData = {
   username: "unknown",
@@ -189,9 +190,6 @@ $(function() {
     });
 
     var url = window.location;
-    // var element = $('ul.nav a').filter(function() {
-    //     return this.href == url;
-    // }).addClass('active').parent().parent().addClass('in').parent();
     var element = $('ul.nav a').filter(function() {
         return this.href == url;
     }).addClass('active').parent();
@@ -208,7 +206,7 @@ $(function() {
 var logout = function() {
   cookies.erase("username")
   cookies.erase("token")
-  document.location.href = "/login/"
+  document.location.href = `${pagePrefix}/login/`
 }
 
 var authAttempt = function() {

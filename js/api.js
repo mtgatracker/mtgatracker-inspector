@@ -1,14 +1,12 @@
 const API_URL = "https://gx2.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p2/mtgatracker-prod-EhDvLyq7PNb"
 
 var cookies = require('browser-cookies');
+let { loginCheck } = require('./conf')
 
 var getGame = function(gameID) {
   return new Promise((resolve, reject) => {
     $(".game-loading").css("display", "block")
-    let token = cookies.get("token")
-    if (!token) {
-      document.location.href = "/login"
-    }
+    let token = loginCheck()
     $.ajax({
       url: `${API_URL}/api/game/_id/${gameID}`,
       headers: {token: token},
@@ -37,10 +35,7 @@ var getDeckWinLossByColor = function(deckID) {
       appData.winLossColorChart.update()
     }
     $("#matchup-loading").css("display", "block")
-    let token = cookies.get("token")
-    if (!token) {
-      document.location.href = "/login"
-    }
+    let token = loginCheck()
     $.ajax({
       url: `${API_URL}/api/deck/${deckID}/winloss-colors`,
       headers: {token: token},
@@ -72,10 +67,7 @@ var getDeckWinLossByColor = function(deckID) {
 
 var getDecks = function(includeHidden) {
   $("#decks-loading").css("display", "block")
-  let token = cookies.get("token")
-  if (!token) {
-    document.location.href = "/login"
-  }
+  let token = loginCheck()
   let url = `${API_URL}/api/decks`
   if (includeHidden) {
     url += "?includeHidden=true"
@@ -113,10 +105,7 @@ var hideDeck = function(deckID, button) {
     $(button).prop('disabled', true);
   }
   console.log("hideDeck called")
-  let token = cookies.get("token")
-  if (!token) {
-    document.location.href = "/login"
-  }
+  let token = loginCheck()
   let url = `${API_URL}/api/deck/${deckID}/hide`
   $.ajax({
     url: url,
@@ -158,10 +147,7 @@ var unHideDeck = function(deckID, button) {
     $(button).prop('disabled', true);
   }
   console.log("unHideDeck called")
-  let token = cookies.get("token")
-  if (!token) {
-    document.location.href = "/login"
-  }
+  let token = loginCheck()
   let url = `${API_URL}/api/deck/${deckID}/unhide`
   $.ajax({
     url: url,
@@ -203,10 +189,7 @@ var getGames = function(page, opts) {
   $("#more-games-button").removeClass("btn-info").addClass("btn-primary").val("Loading games...").prop('disabled', true)
   appData.homeGameListPage += 1;
   if (page === undefined) page = 1;
-  let token = cookies.get("token")
-  if (!token) {
-    document.location.href = "/login"
-  }
+  let token = loginCheck()
   let url = `${API_URL}/api/games?page=${page}`
   if (opts && opts.deckID)
     url += `&deckID=${opts.deckID}`

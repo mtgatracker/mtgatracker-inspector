@@ -18,6 +18,9 @@ var _require5 = require("./api"),
     getDecks = _require5.getDecks,
     getGames = _require5.getGames;
 
+var _require6 = require('./conf.js'),
+    pagePrefix = _require6.pagePrefix;
+
 var parseQuerystring = function parseQuerystring(ctx, next) {
   var cleanQuerystring = ctx.querystring.split("#")[0];
   var args = cleanQuerystring.split("&");
@@ -37,16 +40,16 @@ var parseQuerystring = function parseQuerystring(ctx, next) {
 };
 
 $(function () {
-  page('/', homeRoute);
-  page('/login/', function (c, n) {
+  page(pagePrefix + "/", homeRoute);
+  page(pagePrefix + "/login/", function (c, n) {
     console.log("CALLED FROM /login/");
     if (cookies.get("token")) {
       window.stop();
-      window.location.href = "/";
+      window.location.href = pagePrefix + "/";
     }
   });
-  page('/deck/', parseQuerystring, deckRoute);
-  page('/decks/', parseQuerystring, decksRoute);
-  page('/game/', parseQuerystring, gameRoute);
+  page(pagePrefix + "/deck/", parseQuerystring, deckRoute);
+  page(pagePrefix + "/decks/", parseQuerystring, decksRoute);
+  page(pagePrefix + "/game/", parseQuerystring, gameRoute);
   page();
 });

@@ -3,6 +3,9 @@
 var _require = require("./api"),
     API_URL = _require.API_URL;
 
+var _require2 = require("./conf"),
+    pagePrefix = _require2.pagePrefix;
+
 var appData = {
   username: "unknown",
   currentDeckName: "",
@@ -82,10 +85,10 @@ var page = require('page');
 window.page = page;
 var spaRouter = require('./spaRouter');
 
-var _require2 = require('./api'),
-    getGames = _require2.getGames,
-    hideDeck = _require2.hideDeck,
-    unHideDeck = _require2.unHideDeck;
+var _require3 = require('./api'),
+    getGames = _require3.getGames,
+    hideDeck = _require3.hideDeck,
+    unHideDeck = _require3.unHideDeck;
 
 window.appData = appData;
 
@@ -193,9 +196,6 @@ $(function () {
   });
 
   var url = window.location;
-  // var element = $('ul.nav a').filter(function() {
-  //     return this.href == url;
-  // }).addClass('active').parent().parent().addClass('in').parent();
   var element = $('ul.nav a').filter(function () {
     return this.href == url;
   }).addClass('active').parent();
@@ -212,7 +212,7 @@ $(function () {
 var logout = function logout() {
   cookies.erase("username");
   cookies.erase("token");
-  document.location.href = "/login/";
+  document.location.href = pagePrefix + "/login/";
 };
 
 var authAttempt = function authAttempt() {
