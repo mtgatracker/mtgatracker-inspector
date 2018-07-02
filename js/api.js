@@ -1,4 +1,4 @@
-const API_URL = "https://gx2.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p2/mtgatracker-prod-EhDvLyq7PNb"
+const API_URL = "https://gx1.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p1/mtgatracker-prod-EhDvLyq7PNb"
 
 var cookies = require('browser-cookies');
 let { loginCheck } = require('./conf')
