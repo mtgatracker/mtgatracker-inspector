@@ -138,6 +138,13 @@ rivets.binders.mana = function (el, value) {
   el.classList.add(mi_class);
 };
 
+rivets.binders.hideifnotcorrecttype = function (el, val) {
+  var expectedType = $(el).attr("type-check");
+  if (val != expectedType) {
+    el.style.display = 'none';
+  }
+};
+
 rivets.binders.linegame = function (el, val) {
   $(el).removeClass("danger").removeClass("success");
   if (val) {
