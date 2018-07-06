@@ -1,18 +1,34 @@
 const { API_URL } = require("./api")
 const { pagePrefix } = require("./conf")
+const toastr = require("toastr")
+window.toastr = toastr
 
 var appData = {
   username: "unknown",
   currentDeckName: "",
 
   currentGameWinner: "loading ...",
+  currentGameHasInfo: false,
+  currentGameHasRankInfo: false,
+
+  currentGameEvent: "",
+  currentGameOnPlay: "",
+  currentGameEndPhase: "",
+  currentGameElapsedTime: "",
+  currentGameTurnCount: -1,
+  currentGameHeroRankBefore: "",
+  currentGameHeroRankAfter: "",
+  currentGameHeroRankChange: 0.0,
+
   currentGameName: "",
   currentGameHero: "",
   currentGameHeroDeck: [],
   currentGameHeroDeckName: "loading ...",
+  currentGameHeroDeck: "loading ...",
   currentGameOpponent: "",
   currentGameOpponentDeck: [],
   currentGameOpponentDeckName: "loading ...",
+  currentGameOpponentRank: "loading ...",
 
   homeDeckList: [],
   homeGameList: [],
@@ -68,8 +84,38 @@ let toggleDarkMode = () => {
       disableDarkMode()
     }
 }
-
 window.toggleDarkMode = toggleDarkMode
+
+// https://stackoverflow.com/questions/46041831/copy-to-clipboard-with-break-line
+function clipboardCopy(text) {
+    var input = document.createElement('textarea');
+    input.innerHTML = text;
+    input.id = "heyheyhey"
+    document.body.appendChild(input);
+    input.select();
+    var result = document.execCommand('copy');
+    document.body.removeChild(input)
+    return result;
+}
+
+function exportDeck(deck) {
+    let result = "";
+    if (deck && typeof deck === 'object' && deck.constructor === Array) {
+         deck.forEach(cardObj => {
+           if (typeof cardObj == "number" || typeof cardObj == "string") {
+             let card = cardUtils.allCards.findCard(cardID)
+             result += `1 ${card.get("prettyName")} (${card.get("set")}) ${card.get("setNumber")}` + "\n"
+           } else if (cardObj.count) {
+             result += `${cardObj.count} ${cardObj.name} (${cardObj.set}) ${cardObj.setNumber}` + "\n"
+           }
+         })
+    }
+    clipboardCopy(result)
+    toastr.info("Deck Exported to Clipboard")
+}
+
+window.exportDeck = exportDeck
+
 if (localStorage.getItem("dark-mode") == "true") enableDarkMode(true)
 
 var cookies = require('browser-cookies')
@@ -130,6 +176,22 @@ rivets.binders.mana = function(el, value) {
     el.classList.remove("mi-10")
     el.classList.remove("mi-x")
     el.classList.add(mi_class)
+}
+
+rivets.binders.typecount = function(el, val) {
+  let expectedType = $(el).attr("type-check")
+  let total = 0;
+  val.forEach(card => {
+    if (card.cardType == expectedType) {
+      total += card.count;
+    }
+  })
+  $(el).html($(el).html().split(" ")[0] + ` &mdash; ${total}`)
+  if (total) {
+    el.style.display = 'block'
+  } else {
+    el.style.display = 'none'
+  }
 }
 
 rivets.binders.hideifnotcorrecttype = function(el, val) {

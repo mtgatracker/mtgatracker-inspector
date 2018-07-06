@@ -6,12 +6,14 @@ let { loginCheck } = require('./conf')
 var getGame = function(gameID) {
   return new Promise((resolve, reject) => {
     $(".game-loading").css("display", "block")
+    $(".export-button").prop('disabled', true);
     let token = loginCheck()
     $.ajax({
       url: `${API_URL}/api/game/_id/${gameID}`,
       headers: {token: token},
       success: function(data) {
         $(".game-loading").css("display", "none")
+        $(".export-button").prop('disabled', false);
         resolve(data)
       },
       error: function(err) {

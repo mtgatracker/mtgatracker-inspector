@@ -1,34 +1,45 @@
 "use strict";
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _appData;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var _require = require("./api"),
     API_URL = _require.API_URL;
 
 var _require2 = require("./conf"),
     pagePrefix = _require2.pagePrefix;
 
-var appData = {
+var toastr = require("toastr");
+window.toastr = toastr;
+
+var appData = (_appData = {
   username: "unknown",
   currentDeckName: "",
 
   currentGameWinner: "loading ...",
+  currentGameHasInfo: false,
+  currentGameHasRankInfo: false,
+
+  currentGameEvent: "",
+  currentGameOnPlay: "",
+  currentGameEndPhase: "",
+  currentGameElapsedTime: "",
+  currentGameTurnCount: -1,
+  currentGameHeroRankBefore: "",
+  currentGameHeroRankAfter: "",
+  currentGameHeroRankChange: 0.0,
+
   currentGameName: "",
   currentGameHero: "",
   currentGameHeroDeck: [],
-  currentGameHeroDeckName: "loading ...",
-  currentGameOpponent: "",
-  currentGameOpponentDeck: [],
-  currentGameOpponentDeckName: "loading ...",
+  currentGameHeroDeckName: "loading ..."
+}, _defineProperty(_appData, "currentGameHeroDeck", "loading ..."), _defineProperty(_appData, "currentGameOpponent", ""), _defineProperty(_appData, "currentGameOpponentDeck", []), _defineProperty(_appData, "currentGameOpponentDeckName", "loading ..."), _defineProperty(_appData, "currentGameOpponentRank", "loading ..."), _defineProperty(_appData, "homeDeckList", []), _defineProperty(_appData, "homeGameList", []), _defineProperty(_appData, "homeGameListPage", 1), _defineProperty(_appData, "winLossColors", [0, 0, 0, 0, 0]), _defineProperty(_appData, "winLossColorChart", null), _defineProperty(_appData, "bound", null), _defineProperty(_appData, "pagePrefix", pagePrefix), _appData);
 
-  homeDeckList: [],
-  homeGameList: [],
-  homeGameListPage: 1,
-  winLossColors: [0, 0, 0, 0, 0],
-  winLossColorChart: null,
-  bound: null,
-  pagePrefix: pagePrefix
-
-  // do this very first to try to avoid FouC
-};var darkModeEnabled = localStorage.getItem("dark-mode") == "true" || false;
+// do this very first to try to avoid FouC
+var darkModeEnabled = localStorage.getItem("dark-mode") == "true" || false;
 var enableDarkMode = function enableDarkMode(noTransition) {
   if (noTransition) {
     $(".themeable").addClass("notransition");
@@ -72,8 +83,38 @@ var toggleDarkMode = function toggleDarkMode() {
     disableDarkMode();
   }
 };
-
 window.toggleDarkMode = toggleDarkMode;
+
+// https://stackoverflow.com/questions/46041831/copy-to-clipboard-with-break-line
+function clipboardCopy(text) {
+  var input = document.createElement('textarea');
+  input.innerHTML = text;
+  input.id = "heyheyhey";
+  document.body.appendChild(input);
+  input.select();
+  var result = document.execCommand('copy');
+  document.body.removeChild(input);
+  return result;
+}
+
+function exportDeck(deck) {
+  var result = "";
+  if (deck && (typeof deck === "undefined" ? "undefined" : _typeof(deck)) === 'object' && deck.constructor === Array) {
+    deck.forEach(function (cardObj) {
+      if (typeof cardObj == "number" || typeof cardObj == "string") {
+        var card = cardUtils.allCards.findCard(cardID);
+        result += "1 " + card.get("prettyName") + " (" + card.get("set") + ") " + card.get("setNumber") + "\n";
+      } else if (cardObj.count) {
+        result += cardObj.count + " " + cardObj.name + " (" + cardObj.set + ") " + cardObj.setNumber + "\n";
+      }
+    });
+  }
+  clipboardCopy(result);
+  toastr.info("Deck Exported to Clipboard");
+}
+
+window.exportDeck = exportDeck;
+
 if (localStorage.getItem("dark-mode") == "true") enableDarkMode(true);
 
 var cookies = require('browser-cookies');
@@ -136,6 +177,22 @@ rivets.binders.mana = function (el, value) {
   el.classList.remove("mi-10");
   el.classList.remove("mi-x");
   el.classList.add(mi_class);
+};
+
+rivets.binders.typecount = function (el, val) {
+  var expectedType = $(el).attr("type-check");
+  var total = 0;
+  val.forEach(function (card) {
+    if (card.cardType == expectedType) {
+      total += card.count;
+    }
+  });
+  $(el).html($(el).html().split(" ")[0] + (" &mdash; " + total));
+  if (total) {
+    el.style.display = 'block';
+  } else {
+    el.style.display = 'none';
+  }
 };
 
 rivets.binders.hideifnotcorrecttype = function (el, val) {

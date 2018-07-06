@@ -10,12 +10,14 @@ var _require = require('./conf'),
 var getGame = function getGame(gameID) {
   return new Promise(function (resolve, reject) {
     $(".game-loading").css("display", "block");
+    $(".export-button").prop('disabled', true);
     var token = loginCheck();
     $.ajax({
       url: API_URL + '/api/game/_id/' + gameID,
       headers: { token: token },
       success: function success(data) {
         $(".game-loading").css("display", "none");
+        $(".export-button").prop('disabled', false);
         resolve(data);
       },
       error: function error(err) {

@@ -32,27 +32,45 @@ let gameRoute = (c, n) => {
     $("#page-wrapper").load(`${pagePrefix}/templates/game-inner.html`, loaded => {
       rivets.bind($('#app'), {data: appData})
       getDecks()
+      appData.currentGameHasRankInfo = false;
+      appData.currentGameHasInfo = false;
       getGame(c.params.gameID).then(game => {
+        if(game.eventID) {  // old records don't have this stuff, let it be
+          appData.currentGameEvent = `${game.eventID}`
+          appData.currentGameOnPlay = `${game.onThePlay}`
+          appData.currentGameElapsedTime = `${game.elapsedTime}`
+          appData.currentGameTurnCount = game.turnNumber
+          appData.currentGameOpponentRank = game.opponentStartingRank
+          appData.currentGameHasInfo = true;
+        }
+
+        if (game.rankChange) {
+          appData.currentGameHeroRankBefore = `${game.rankChange.oldClass} ${game.rankChange.oldTier} - ${Math.round(100 * game.rankChange.oldProgress) / 100}`
+          appData.currentGameHeroRankAfter = `${game.rankChange.newClass} ${game.rankChange.newTier} - ${Math.round(100 * game.rankChange.newProgress) / 100}`
+          appData.currentGameHeroRankChange = Math.round(100 * (game.rankChange.newProgress - game.rankChange.oldProgress)) / 100
+          appData.currentGameHasRankInfo = true;
+        }
+
         appData.currentGameName = `${game.hero} vs ${game.opponent}`
         appData.currentGameHero = game.hero
         appData.currentGameWinner = game.winner
         appData.currentGameOpponent = game.opponent
         appData.currentGameHeroDeck = []
-        console.log(Object.keys(game.players[0].deck.cards).length)
+
         Object.keys(game.players[0].deck.cards).forEach(cardID => {
           let card = cardUtils.allCards.findCard(cardID)
           if (card) {
-            console.log(`hello ${card.get("prettyName")}, type ${card.get("cardType").split(" ").slice(-1)[0]}`)
             let cardObj = {
+              cardID: cardID,
               count: game.players[0].deck.cards[cardID],
               colors: card.get("colors"),
               cost: card.get("cost"),
               name: card.get("prettyName"),
+              set: card.get("set"),
+              setNumber: card.get("setNumber"),
               cardType: card.get("cardType").split(" ").slice(-1)[0] // "Legendary Creature" => "Creature"
             }
             appData.currentGameHeroDeck.push(cardObj)
-          } else {
-            console.log(`NO NO NO ${cardID}`)
           }
         })
         appData.currentGameHeroDeckName = `${game.hero}'s deck: ${game.players[0].deck.poolName}`
@@ -62,10 +80,13 @@ let gameRoute = (c, n) => {
           let card = cardUtils.allCards.findCard(cardID)
           if (card) {
             let cardObj = {
+              cardID: cardID,
               count: game.players[1].deck.cards[cardID],
               colors: card.get("colors"),
               cost: card.get("cost"),
               name: card.get("prettyName"),
+              set: card.get("set"),
+              setNumber: card.get("setNumber"),
               cardType: card.get("cardType").split(" ").slice(-1)[0] // "Legendary Creature" => "Creature"
             }
             appData.currentGameOpponentDeck.push(cardObj)
