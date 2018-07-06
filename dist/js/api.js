@@ -198,7 +198,11 @@ var getGames = function getGames(page, opts) {
     url: url,
     headers: { token: token },
     success: function success(data) {
-      $("#more-games-button").removeClass("btn-primary").addClass("btn-info").val("Load more games").prop('disabled', false);
+      if (data.totalPages > page) {
+        $("#more-games-button").removeClass("btn-primary").addClass("btn-info").val('Load more (' + page + '/' + data.totalPages + ')').prop('disabled', false);
+      } else {
+        $("#more-games-button").removeClass("btn-info").addClass("btn-primary").val("No more to load!").prop('disabled', true);
+      }
       $("#timeline-loading").css("display", "none");
       if (opts && opts.setCurrentDeckName) appData.currentDeckName = data.docs[0].players[0].deck.poolName;
       $.each(data.docs, function (idx, val) {
@@ -216,6 +220,7 @@ var getGames = function getGames(page, opts) {
           newVal.opponent = val.opponent;
           newVal.opponentDeck = val.players[1].deck.cards;
           newVal.heroDeckName = val.players[0].deck.poolName;
+          newVal.deckLink = '/deck/?deckID=' + val.players[0].deck.deckID;
           newVal.opponentDeckName = val.players[1].deck.poolName;
           newVal.opponentDeckColors = res[1];
           newVal.timeago = timeago().format(val.date);

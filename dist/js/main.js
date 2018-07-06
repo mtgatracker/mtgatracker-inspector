@@ -207,7 +207,7 @@ rivets.binders.linegame = function (el, val) {
   if (val) {
     if (!val.won) {
       $(el).addClass("danger");
-      el.innerHTML = '<i class="fa fa-exclamation-circle"></i>';
+      el.innerHTML = '<i class="fa fa-times-circle"></i>';
     } else {
       $(el).addClass("success");
       el.innerHTML = '<i class="fa fa-check-circle"></i>';
@@ -242,6 +242,10 @@ rivets.binders.unhidedeck = function (el, deckid) {
 //collapses the sidebar on window resize.
 // Sets the min-height of #page-wrapper to window size
 $(function () {
+  // this will catch homepage links, but we still need to add page.js middleware in spaRouter
+  $("a").click(function (e) {
+    window.scrollTo(0, 0);
+  });
   if (localStorage.getItem("dark-mode") == "true") enableDarkMode(true);
   $("#token-req-button").click(authRequest);
   $("#token-submit-button").click(authAttempt);

@@ -25,17 +25,22 @@ let parseQuerystring = (ctx, next) => {
   next()
 }
 
+let scrollTop = (ctx, next) => {
+  window.scrollTo(0,0);
+  next()
+}
+
 $(function() {
-    page(`${pagePrefix}/`, homeRoute)
-    page(`${pagePrefix}/login/`, (c, n) => {
+    page(`${pagePrefix}/`, scrollTop, homeRoute)
+    page(`${pagePrefix}/login/`, scrollTop, (c, n) => {
       console.log("CALLED FROM /login/")
       if (cookies.get("token")) {
         window.stop();
         window.location.href = `${pagePrefix}/`
       }
     })
-    page(`${pagePrefix}/deck/`, parseQuerystring, deckRoute)
-    page(`${pagePrefix}/decks/`, parseQuerystring, decksRoute)
-    page(`${pagePrefix}/game/`, parseQuerystring, gameRoute)
+    page(`${pagePrefix}/deck/`, scrollTop, parseQuerystring, deckRoute)
+    page(`${pagePrefix}/decks/`, scrollTop, parseQuerystring, decksRoute)
+    page(`${pagePrefix}/game/`, scrollTop, parseQuerystring, gameRoute)
     page()
 })

@@ -17,15 +17,14 @@
                 <img id="timeline-loading" src="../loading.gif">
                 <ul class="timeline themeable">
                     <li rv-each-game="data.homeGameList" rv-class-timeline-inverted="game.won">
-                        <div class="timeline-badge" rv-linegame="game"></div>
-                        <!--<div class="timeline-badge danger"><i class="fa fa-exclamation-circle"></i></div>-->
+                        <a class="timeline-badge" rv-linegame="game" rv-href="game.link"></a>
                         <div class="timeline-panel">
                             <div class="timeline-heading">
-                                <h4 class="timeline-title">{ game.heroDeckName }
+                                <h4 class="timeline-title"><a class="themeable" rv-href="game.deckLink" rv-fixhref="">{ game.heroDeckName }</a>
                                     <span rv-multimana="game.heroDeckColors"></span>
                                 </h4>
                                 <h5>vs. { game.opponent } <span rv-multimana="game.opponentDeckColors"></span></h5>
-                                <p><small class="text-muted"><a rv-href="game.link" rv-fixhref=""><i class="fa fa-clock-o"></i> { game.timeago }</a></small>
+                                <p><small class="text-muted"><a class="themeable" rv-href="game.link" rv-fixhref=""><i class="fa fa-clock-o"></i> { game.timeago }</a></small>
                             </div>
                             <div class="timeline-body">
                                 <p>{ game.hero } vs { game.opponent } - <i>Winner: { game.winner }</i></p>
