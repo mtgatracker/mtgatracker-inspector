@@ -15,7 +15,7 @@ var deckRoute = function deckRoute(c, n) {
   $("#more-games-button").unbind("click");
   $("#edit-decks").unbind("change");
   $(function () {
-    $("#page-wrapper").load(pagePrefix + "/templates/deck-inner.html", function (loaded) {
+    $("#page-wrapper").load(pagePrefix + "/templates/deck-inner.html?v=1.3.0", function (loaded) {
       rivets.bind($('#app'), { data: appData });
       $("#more-games-button").click(function () {
         getGames(appData.homeGameListPage, { deckID: appData.deckID });

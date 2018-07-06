@@ -9,7 +9,7 @@ let deckRoute = (c, n) => {
   $("#more-games-button").unbind("click")
   $("#edit-decks").unbind("change")
   $(function() {
-    $("#page-wrapper").load(`${pagePrefix}/templates/deck-inner.html`, loaded => {
+    $("#page-wrapper").load(`${pagePrefix}/templates/deck-inner.html?v=1.3.0`, loaded => {
       rivets.bind($('#app'), {data: appData})
       $("#more-games-button").click(() => {getGames(appData.homeGameListPage, {deckID: appData.deckID})})
       $("#matchup-style").change((e) => {

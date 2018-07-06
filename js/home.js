@@ -14,7 +14,7 @@ let homeRoute = () => {
   $("#edit-decks").unbind("change")
 
   $(function() {
-    $("#page-wrapper").load(`${pagePrefix}/templates/home-inner.html`, loaded => {
+    $("#page-wrapper").load(`${pagePrefix}/templates/home-inner.html?v=1.3.0`, loaded => {
       $("#more-games-button").unbind("click")
       rivets.bind($('#app'), {data: appData})
       $("#more-games-button").click(() => {getGames(appData.homeGameListPage)})

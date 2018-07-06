@@ -29,7 +29,7 @@ let gameRoute = (c, n) => {
   $("#edit-decks").unbind("change")
 
   $(function() {
-    $("#page-wrapper").load(`${pagePrefix}/templates/game-inner.html`, loaded => {
+    $("#page-wrapper").load(`${pagePrefix}/templates/game-inner.html?v=1.3.0`, loaded => {
       rivets.bind($('#app'), {data: appData})
       getDecks()
       appData.currentGameHasRankInfo = false;
