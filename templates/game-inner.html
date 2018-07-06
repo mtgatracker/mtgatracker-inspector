@@ -23,6 +23,12 @@
                     </p>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
+                    <h4>Planeswalker</h4>
+                    <p class="decklist-p" rv-each-card="data.currentGameHeroDeck" type-check="Planeswalker" rv-hideifnotcorrecttype="card.cardType">
+                        <i>{ card.count }</i> - { card.name } <span rv-multimana="card.cost"></span>
+                    </p>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
                     <h4>Sorcery</h4>
                     <p class="decklist-p" rv-each-card="data.currentGameHeroDeck" type-check="Sorcery" rv-hideifnotcorrecttype="card.cardType">
                         <i>{ card.count }</i> - { card.name } <span rv-multimana="card.cost"></span>
@@ -67,6 +73,12 @@
                 <div class="col-lg-6 col-md-6 col-sm-12">
                     <h4>Creature</h4>
                     <p class="decklist-p" rv-each-card="data.currentGameOpponentDeck" type-check="Creature" rv-hideifnotcorrecttype="card.cardType">
+                        <i>{ card.count }</i> - { card.name } <span rv-multimana="card.cost"></span>
+                    </p>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <h4>Planeswalker</h4>
+                    <p class="decklist-p" rv-each-card="data.currentGameOpponentDeck" type-check="Planeswalker" rv-hideifnotcorrecttype="card.cardType">
                         <i>{ card.count }</i> - { card.name } <span rv-multimana="card.cost"></span>
                     </p>
                 </div>
