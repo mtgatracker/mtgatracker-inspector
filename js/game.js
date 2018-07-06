@@ -3,6 +3,15 @@
 
 const { getGame, getDecks } = require('./api')
 const { pagePrefix } = require('./conf')
+const allTypes = [
+  'Creature',
+  'Sorcery',
+  'Instant',
+  'Enchantment',
+  'Planeswalker',
+  'Artifact',
+  'Land'
+]
 
 let gameRoute = (c, n) => {
   console.log("CALLED FROM /game/")
@@ -29,16 +38,21 @@ let gameRoute = (c, n) => {
         appData.currentGameWinner = game.winner
         appData.currentGameOpponent = game.opponent
         appData.currentGameHeroDeck = []
+        console.log(Object.keys(game.players[0].deck.cards).length)
         Object.keys(game.players[0].deck.cards).forEach(cardID => {
           let card = cardUtils.allCards.findCard(cardID)
           if (card) {
+            console.log(`hello ${card.get("prettyName")}, type ${card.get("cardType").split(" ").slice(-1)[0]}`)
             let cardObj = {
               count: game.players[0].deck.cards[cardID],
               colors: card.get("colors"),
               cost: card.get("cost"),
-              name: card.get("prettyName")
+              name: card.get("prettyName"),
+              cardType: card.get("cardType").split(" ").slice(-1)[0] // "Legendary Creature" => "Creature"
             }
             appData.currentGameHeroDeck.push(cardObj)
+          } else {
+            console.log(`NO NO NO ${cardID}`)
           }
         })
         appData.currentGameHeroDeckName = `${game.hero}'s deck: ${game.players[0].deck.poolName}`
@@ -51,7 +65,8 @@ let gameRoute = (c, n) => {
               count: game.players[1].deck.cards[cardID],
               colors: card.get("colors"),
               cost: card.get("cost"),
-              name: card.get("prettyName")
+              name: card.get("prettyName"),
+              cardType: card.get("cardType").split(" ").slice(-1)[0] // "Legendary Creature" => "Creature"
             }
             appData.currentGameOpponentDeck.push(cardObj)
           }

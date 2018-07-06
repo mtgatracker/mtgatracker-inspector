@@ -16,9 +16,42 @@
             <!-- /.panel-heading -->
             <div class="panel-body">
                 <img class="game-loading" src="../loading.gif">
-                <p class="decklist-p" rv-each-card="data.currentGameHeroDeck">
-                    <i>{ card.count }</i> - { card.name } <span rv-multimana="card.cost"></span>
-                </p>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <h4>Creature</h4>
+                    <p class="decklist-p" rv-each-card="data.currentGameHeroDeck" type-check="Creature" rv-hideifnotcorrecttype="card.cardType">
+                        <i>{ card.count }</i> - { card.name } <span rv-multimana="card.cost"></span>
+                    </p>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <h4>Sorcery</h4>
+                    <p class="decklist-p" rv-each-card="data.currentGameHeroDeck" type-check="Sorcery" rv-hideifnotcorrecttype="card.cardType">
+                        <i>{ card.count }</i> - { card.name } <span rv-multimana="card.cost"></span>
+                    </p>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <h4>Instant</h4>
+                    <p class="decklist-p" rv-each-card="data.currentGameHeroDeck" type-check="Instant" rv-hideifnotcorrecttype="card.cardType">
+                        <i>{ card.count }</i> - { card.name } <span rv-multimana="card.cost"></span>
+                    </p>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <h4>Enchantment</h4>
+                    <p class="decklist-p" rv-each-card="data.currentGameHeroDeck" type-check="Enchantment" rv-hideifnotcorrecttype="card.cardType">
+                        <i>{ card.count }</i> - { card.name } <span rv-multimana="card.cost"></span>
+                    </p>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <h4>Artifact</h4>
+                    <p class="decklist-p" rv-each-card="data.currentGameHeroDeck" type-check="Artifact" rv-hideifnotcorrecttype="card.cardType">
+                        <i>{ card.count }</i> - { card.name } <span rv-multimana="card.cost"></span>
+                    </p>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <h4>Land</h4>
+                    <p class="decklist-p" rv-each-card="data.currentGameHeroDeck" type-check="Land" rv-hideifnotcorrecttype="card.cardType">
+                        <i>{ card.count }</i> - { card.name } <span rv-multimana="card.cost"></span>
+                    </p>
+                </div>
             </div>
             <!-- /.panel-body -->
         </div>
@@ -30,9 +63,43 @@
             <!-- /.panel-heading -->
             <div class="panel-body">
                 <img class="game-loading" src="../loading.gif">
-                <p class="decklist-p" rv-each-card="data.currentGameOpponentDeck">
-                    <i>{ card.count }</i> - { card.name } <span rv-multimana="card.cost"></span>
-                </p>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <h4>Creature</h4>
+                    <p class="decklist-p" rv-each-card="data.currentGameOpponentDeck" type-check="Creature" rv-hideifnotcorrecttype="card.cardType">
+                        <i>{ card.count }</i> - { card.name } <span rv-multimana="card.cost"></span>
+                    </p>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <h4>Sorcery</h4>
+                    <p class="decklist-p" rv-each-card="data.currentGameOpponentDeck" type-check="Sorcery" rv-hideifnotcorrecttype="card.cardType">
+                        <i>{ card.count }</i> - { card.name } <span rv-multimana="card.cost"></span>
+                    </p>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <h4>Instant</h4>
+                    <p class="decklist-p" rv-each-card="data.currentGameOpponentDeck" type-check="Instant" rv-hideifnotcorrecttype="card.cardType">
+                        <i>{ card.count }</i> - { card.name } <span rv-multimana="card.cost"></span>
+                    </p>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <h4>Enchantment</h4>
+                    <p class="decklist-p" rv-each-card="data.currentGameOpponentDeck" type-check="Enchantment" rv-hideifnotcorrecttype="card.cardType">
+                        <i>{ card.count }</i> - { card.name } <span rv-multimana="card.cost"></span>
+                    </p>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <h4>Artifact</h4>
+                    <p class="decklist-p" rv-each-card="data.currentGameOpponentDeck" type-check="Artifact" rv-hideifnotcorrecttype="card.cardType">
+                        <i>{ card.count }</i> - { card.name } <span rv-multimana="card.cost"></span>
+                    </p>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <h4>Land</h4>
+                    <p class="decklist-p" rv-each-card="data.currentGameOpponentDeck" type-check="Land" rv-hideifnotcorrecttype="card.cardType">
+                        <i>{ card.count }</i> - { card.name } <span rv-multimana="card.cost"></span>
+                    </p>
+                </div>
             </div>
             <!-- /.panel-body -->
         </div>
