@@ -93,19 +93,42 @@
                             <h3 id="login-header" class="panel-title">What's new in Inspector?</h3>
                         </div>
                         <div class="panel-body">
-                            <h1>New in version 1.2.0</h1>
+                            <h1>New in version 1.3.0</h1>
                             <hr />
-                            <h4>KLD and AER have arrived!</h4>
-                            <p>Gone are the days of empty-looking AER draft game pages! (Sorry we didn't fix it before quick draft rotated... 🙁 )</p>
+                            <h4>A whole slew of new metrics!</h4>
+                            <p>The latest MTGATracker now reports:</p>
+                              <ul>
+                                <li>Who's on the play</li>
+                                <li>Elapsed time of a game</li>
+                                <li>Total number of turns</li>
+                                <li>Your start, end, and delta rank</li>
+                                <li>Your opponent's rank</li>
+                              </ul>
+                            <p>If a game record was uploaded with the latest Tracker, you'll now see these bits of data in inspector as well!</p>
+                            <img style="width: 100%" src="new_metrics.png">
                             <hr />
-                            <h4>No more getting logged out for clicking a game link!</h4>
-                            <p>Whew lads, that was an annoying bug! Now when you click on an "Opponent Owned" record,
-                                you'll be able to get to the game, but you won't be able to see your opponent's deck list.</p>
-                            <img style="width: 100%" src="oppo_owned.png">
-
+                            <h4>Deck Export buttons!</h4>
+                            <p>We're a little behind the times here, but we finally have <i>export buttons!</i>
+                                Lost an old deck that inspector still has? Grab a copy!
+                                See a cool deck in the wild? Export it for yourself--or at
+                                least, a good chunk of it. (You can fill in the blanks!)</p>
+                                <video width="100%" src="https://s3-us-west-1.amazonaws.com/mtgatracker/inspector_static/export.mp4" controls autoplay loop></video>
+                            <hr />
+                             <h4>Cleaner deck formatting!</h4>
+                            <p>We've cleaned up decklists in Inspector!</p>
+                            <img style="width: 100%" src="new_deck_format.png">
                             <hr />
                             <button class="btn btn-info" onclick="$('#older').slideToggle()">Show older release notes</button>
                             <div id="older" style="display:none;">
+                                <h1>New in version 1.2.0</h1>
+                                <hr />
+                                <h4>KLD and AER have arrived!</h4>
+                                <p>Gone are the days of empty-looking AER draft game pages! (Sorry we didn't fix it before quick draft rotated... 🙁 )</p>
+                                <hr />
+                                <h4>No more getting logged out for clicking a game link!</h4>
+                                <p>Whew lads, that was an annoying bug! Now when you click on an "Opponent Owned" record,
+                                    you'll be able to get to the game, but you won't be able to see your opponent's deck list.</p>
+                                <img style="width: 100%" src="oppo_owned.png">
                                 <h1>New in version 1.1.0</h1>
                                 <hr />
                                 <h4>Hide decks from quick-view</h4>
