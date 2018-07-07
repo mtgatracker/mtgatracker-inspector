@@ -16,7 +16,7 @@ var decksRoute = function decksRoute(c, n) {
   console.log("unbind change");
   $("#edit-decks").unbind("change");
   $(function () {
-    $("#page-wrapper").load(pagePrefix + '/templates/decks-inner.html', function (loaded) {
+    $("#page-wrapper").load(pagePrefix + '/templates/decks-inner.html?v=1.3.0', function (loaded) {
       rivets.bind($('#app'), { data: appData });
       appData.homeGameListPage = 1;
 
