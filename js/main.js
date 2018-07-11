@@ -224,6 +224,7 @@ rivets.binders.hidedeck = function(el, deckid) {
 }
 
 rivets.binders.softhidedeck = function(el, deckid) {
+  $(el).unbind("click")
   $(el).click(function() {
     console.log("softhiding deck " + deckid)
     hideDeck(deckid, el)
@@ -231,6 +232,7 @@ rivets.binders.softhidedeck = function(el, deckid) {
 }
 
 rivets.binders.unhidedeck = function(el, deckid) {
+  $(el).unbind("click")
   $(el).click(function() {
     console.log("softhiding deck " + deckid)
     unHideDeck(deckid, el)
