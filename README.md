@@ -2,9 +2,12 @@
 
 MTGATracker: Inspector is a web-based companion app for [MTGATracker](https://github.com/mtgatracker/mtgatracker).
 
-The code in this repository drives the [development / staging](https://mtgatracker.github.io/mtgatracker-inspector/)
-instance of Inspector; once code is merged here, it must also be merged into a private repo to hit the
-production instance.
+The code in the [mtgatracker/mtgatracker-inspector](https://github.com/mtgatracker/mtgatracker-inspector)
+repository drives the [development / staging](https://mtgatracker.github.io/mtgatracker-inspector/)
+instance of Inspector; once code is merged there, it must also be merged into the
+[shawkinsl/mtgatracker-inspector](https://github.com/shawkinsl/mtgatracker-inspector)
+repo to hit the production instance. (Why? Because shawkinsl/mtgatracker-inspector was around first, and
+it would likely be a downtime-required change to swap it.)
 
 ## Getting started
 
