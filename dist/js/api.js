@@ -34,6 +34,45 @@ var getGame = function getGame(gameID) {
   });
 };
 
+var getDraft = function getDraft(draftID) {
+
+  // Fake promise until endpoint is implemented
+  var data = { 'picks': [{ 'pickNumber': 0,
+      'packNumber': 0,
+      'pick': 65177,
+      'pack': [64857, 64839, 64851, 64983, 65091] }, { 'pickNumber': 1,
+      'packNumber': 0,
+      'pick': '65177',
+      'pack': ["65011", "64859", "65151", "64931", "65063", "64951", "65177"] }] };
+  $(".draft-loading").css("display", "none");
+  return Promise.resolve(data);
+
+  return new Promise(function (resolve, reject) {
+    $(".draft-loading").css("display", "block");
+    var token = loginCheck();
+    resolve(data);
+
+    $.ajax({
+      url: API_URL + '/api/draft/_id/' + draftID,
+      headers: { token: token },
+      success: function success(data) {
+        $(".draft-loading").css("display", "none");
+        resolve(data);
+      },
+      error: function error(err) {
+        if (err.status == 401) {
+          cookies.erase("token");
+          document.location.href = "/login";
+        } else if (err.responseJSON.error && err.responseJSON.error == "your account has been locked") {
+          // nothing to do
+        }
+        $(".game-loading").css("display", "none");
+        reject(err);
+      }
+    });
+  });
+};
+
 var getDeckWinLossByColor = function getDeckWinLossByColor(deckID) {
   return new Promise(function (resolve, reject) {
     if (appData.winLossColorChart) {
@@ -261,5 +300,6 @@ module.exports = {
   getGame: getGame,
   hideDeck: hideDeck,
   unHideDeck: unHideDeck,
+  getDraft: getDraft,
   API_URL: API_URL
 };

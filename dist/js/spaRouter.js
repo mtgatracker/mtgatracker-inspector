@@ -8,18 +8,21 @@ var _require = require("./deck"),
 var _require2 = require("./decks"),
     decksRoute = _require2.decksRoute;
 
-var _require3 = require("./game"),
-    gameRoute = _require3.gameRoute;
+var _require3 = require("./draft"),
+    draftRoute = _require3.draftRoute;
 
-var _require4 = require("./home"),
-    homeRoute = _require4.homeRoute;
+var _require4 = require("./game"),
+    gameRoute = _require4.gameRoute;
 
-var _require5 = require("./api"),
-    getDecks = _require5.getDecks,
-    getGames = _require5.getGames;
+var _require5 = require("./home"),
+    homeRoute = _require5.homeRoute;
 
-var _require6 = require('./conf.js'),
-    pagePrefix = _require6.pagePrefix;
+var _require6 = require("./api"),
+    getDecks = _require6.getDecks,
+    getGames = _require6.getGames;
+
+var _require7 = require('./conf.js'),
+    pagePrefix = _require7.pagePrefix;
 
 var parseQuerystring = function parseQuerystring(ctx, next) {
   var cleanQuerystring = ctx.querystring.split("#")[0];
@@ -55,6 +58,7 @@ $(function () {
   });
   page(pagePrefix + "/deck/", scrollTop, parseQuerystring, deckRoute);
   page(pagePrefix + "/decks/", scrollTop, parseQuerystring, decksRoute);
+  page(pagePrefix + "/draft/", scrollTop, parseQuerystring, draftRoute);
   page(pagePrefix + "/game/", scrollTop, parseQuerystring, gameRoute);
   page();
 });
