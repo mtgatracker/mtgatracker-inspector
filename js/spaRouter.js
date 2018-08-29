@@ -2,6 +2,7 @@ var cookies = require('browser-cookies');
 
 const { deckRoute } = require("./deck")
 const { decksRoute } = require("./decks")
+const { draftRoute } = require("./draft")
 const { gameRoute } = require("./game")
 const { homeRoute } = require("./home")
 const { getDecks, getGames } = require("./api")
@@ -41,6 +42,7 @@ $(function() {
     })
     page(`${pagePrefix}/deck/`, scrollTop, parseQuerystring, deckRoute)
     page(`${pagePrefix}/decks/`, scrollTop, parseQuerystring, decksRoute)
+    page(`${pagePrefix}/draft/`, scrollTop, parseQuerystring, draftRoute)
     page(`${pagePrefix}/game/`, scrollTop, parseQuerystring, gameRoute)
     page()
 })
