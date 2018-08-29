@@ -95,7 +95,7 @@ var getDeckWinLossByColor = function(deckID) {
 
 
 var getDrafts = function() {
-  $("#decks-loading").css("display", "block")
+  $("#drafts-loading").css("display", "block")
   let token = loginCheck()
   let url = `${API_URL}/api/drafts`
   $.ajax({
