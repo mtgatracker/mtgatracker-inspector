@@ -2,7 +2,7 @@
 
 var _require = require('./api'),
     getDraft = _require.getDraft,
-    getDecks = _require.getDecks;
+    getDrafts = _require.getDrafts;
 
 var _require2 = require("./conf"),
     pagePrefix = _require2.pagePrefix;
@@ -11,15 +11,19 @@ var draftRoute = function draftRoute(c, n) {
   appData.currentDeckName = "loading ...";
   console.log("CALLED FROM /draft/");
   if (appData.bound) bound.unbind();
+  $("#more-games-button").unbind("click");
+  $("#edit-decks").unbind("change");
   $(function () {
     $("#page-wrapper").load(pagePrefix + "/templates/draft-inner.html?v=1.3.0", function (loaded) {
       rivets.bind($('#app'), { data: appData });
-      getDecks();
+      getDrafts();
 
       getDraft(c.params.draftID).then(function (draft) {
         appData.picks = [];
+        appData.eventName = draft.draftID.split(":")[1];
 
         Object.values(draft.picks).forEach(function (event) {
+
           var pick = {};
           pick.pickNumber = event.pickNumber + 1;
           pick.packNumber = event.packNumber + 1;

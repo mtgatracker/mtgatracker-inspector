@@ -1,4 +1,4 @@
-const { getDraft, getDecks } = require('./api')
+const { getDraft, getDrafts } = require('./api')
 const { pagePrefix } = require("./conf")
 
 let draftRoute = (c, n) => {
@@ -6,15 +6,19 @@ let draftRoute = (c, n) => {
   console.log("CALLED FROM /draft/")
   if (appData.bound)
     bound.unbind()
+  $("#more-games-button").unbind("click")
+  $("#edit-decks").unbind("change")
   $(function() {
     $("#page-wrapper").load(`${pagePrefix}/templates/draft-inner.html?v=1.3.0`, loaded => {
       rivets.bind($('#app'), {data: appData})
-      getDecks()
+      getDrafts()
 
       getDraft(c.params.draftID).then(draft => {
           appData.picks = []
+          appData.eventName = draft.draftID.split(":")[1]
 
           Object.values(draft.picks).forEach(event => {
+
             let pick = {}
             pick.pickNumber = event.pickNumber+1
             pick.packNumber = event.packNumber+1
@@ -51,6 +55,8 @@ let draftRoute = (c, n) => {
               })
             pick.pack = pack
             appData.picks.push(pick)
+
+
             })
           })
       })

@@ -1,4 +1,4 @@
-const API_URL = "https://gx2.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p2/mtgatracker-prod-EhDvLyq7PNb"
+const API_URL = "https://gx1.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p1/mtgatracker-prod-EhDvLyq7PNb"
 
 var cookies = require('browser-cookies');
 let { loginCheck } = require('./conf')
@@ -32,25 +32,9 @@ var getGame = function(gameID) {
 
 var getDraft = function(draftID) {
 
-  // Fake promise until endpoint is implemented
-  let data = {'picks': [{'pickNumber': 0,
-                         'packNumber': 0,
-                         'pick': 65177,
-                         'pack': [63753, 64839, 64851, 67706, 63721]},
-                        {'pickNumber': 1,
-                         'packNumber': 0,
-                         'pick': '63751',
-                         'pack': ["65011","64859","63721","64931","65063","64951","65177"]},
-              ]}
-  $(".draft-loading").css("display", "none")
-  return Promise.resolve(data);
-
-
   return new Promise((resolve, reject) => {
     $(".draft-loading").css("display", "block")
     let token = loginCheck()
-    resolve(data)
-
     $.ajax({
       url: `${API_URL}/api/draft/_id/${draftID}`,
       headers: {token: token},
@@ -108,6 +92,41 @@ var getDeckWinLossByColor = function(deckID) {
     })
   })
 }
+
+
+var getDrafts = function() {
+  $("#decks-loading").css("display", "block")
+  let token = loginCheck()
+  let url = `${API_URL}/api/drafts`
+  $.ajax({
+    url: url,
+    headers: {token: token},
+    success: function(data) {
+      $("#drafts-loading").css("display", "none")
+      appData.homeDraftList = []
+      $.each(data.docs, function(key, value){
+        value.link = `/draft/?draftID=${value._id}`
+        value.draftName = value.draftID.split(':')[1]
+        appData.homeDraftList.unshift(value)
+      })
+    },
+    error: function(err) {
+      if (err.status == 401) {
+        cookies.erase("token")
+        document.location.href = "/login"
+      } else if (err.responseJSON.error && err.responseJSON.error == "your account has been locked") {
+        appData.homeDraftList.push({
+          draftName: "Your account has been locked!",
+          wins: "?",
+          losses: "?",
+          link: "https://github.com/shawkinsl/mtga-tracker/blob/master/logging_in.md#inspector-says-my-account-is-locked-what-gives",
+        })
+      }
+      $("#drafts-loading").css("display", "none")
+    }
+  })
+}
+
 
 var getDecks = function(includeHidden) {
   $("#decks-loading").css("display", "block")
@@ -306,5 +325,6 @@ module.exports = {
   hideDeck: hideDeck,
   unHideDeck: unHideDeck,
   getDraft: getDraft,
+  getDrafts: getDrafts,
   API_URL: API_URL,
 }

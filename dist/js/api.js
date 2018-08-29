@@ -1,6 +1,6 @@
 'use strict';
 
-var API_URL = "https://gx2.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p2/mtgatracker-prod-EhDvLyq7PNb";
+var API_URL = "https://gx1.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p1/mtgatracker-prod-EhDvLyq7PNb";
 
 var cookies = require('browser-cookies');
 
@@ -36,22 +36,9 @@ var getGame = function getGame(gameID) {
 
 var getDraft = function getDraft(draftID) {
 
-  // Fake promise until endpoint is implemented
-  var data = { 'picks': [{ 'pickNumber': 0,
-      'packNumber': 0,
-      'pick': 65177,
-      'pack': [63753, 64839, 64851, 67706, 63721] }, { 'pickNumber': 1,
-      'packNumber': 0,
-      'pick': '63751',
-      'pack': ["65011", "64859", "63721", "64931", "65063", "64951", "65177"] }] };
-  $(".draft-loading").css("display", "none");
-  return Promise.resolve(data);
-
   return new Promise(function (resolve, reject) {
     $(".draft-loading").css("display", "block");
     var token = loginCheck();
-    resolve(data);
-
     $.ajax({
       url: API_URL + '/api/draft/_id/' + draftID,
       headers: { token: token },
@@ -101,6 +88,39 @@ var getDeckWinLossByColor = function getDeckWinLossByColor(deckID) {
         reject(err);
       }
     });
+  });
+};
+
+var getDrafts = function getDrafts() {
+  $("#decks-loading").css("display", "block");
+  var token = loginCheck();
+  var url = API_URL + '/api/drafts';
+  $.ajax({
+    url: url,
+    headers: { token: token },
+    success: function success(data) {
+      $("#drafts-loading").css("display", "none");
+      appData.homeDraftList = [];
+      $.each(data.docs, function (key, value) {
+        value.link = '/draft/?draftID=' + value._id;
+        value.draftName = value.draftID.split(':')[1];
+        appData.homeDraftList.unshift(value);
+      });
+    },
+    error: function error(err) {
+      if (err.status == 401) {
+        cookies.erase("token");
+        document.location.href = "/login";
+      } else if (err.responseJSON.error && err.responseJSON.error == "your account has been locked") {
+        appData.homeDraftList.push({
+          draftName: "Your account has been locked!",
+          wins: "?",
+          losses: "?",
+          link: "https://github.com/shawkinsl/mtga-tracker/blob/master/logging_in.md#inspector-says-my-account-is-locked-what-gives"
+        });
+      }
+      $("#drafts-loading").css("display", "none");
+    }
   });
 };
 
@@ -301,5 +321,6 @@ module.exports = {
   hideDeck: hideDeck,
   unHideDeck: unHideDeck,
   getDraft: getDraft,
+  getDrafts: getDrafts,
   API_URL: API_URL
 };
