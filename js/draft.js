@@ -26,6 +26,7 @@ let draftRoute = (c, n) => {
                 cost: card.get("cost"),
                 name: card.get("prettyName"),
                 set: card.get("set"),
+                rarity: card.get("rarity"),
                 setNumber: card.get("setNumber"),
                 cardType: card.get("cardType").split(" ").slice(-1)[0] // "Legendary Creature" => "Creature"
               }
@@ -41,6 +42,7 @@ let draftRoute = (c, n) => {
                   cost: card.get("cost"),
                   name: card.get("prettyName"),
                   set: card.get("set"),
+                  rarity: card.get("rarity"),
                   setNumber: card.get("setNumber"),
                   cardType: card.get("cardType").split(" ").slice(-1)[0] // "Legendary Creature" => "Creature"
                 }
@@ -50,11 +52,7 @@ let draftRoute = (c, n) => {
             pick.pack = pack
             appData.picks.push(pick)
             })
-
-
           })
-
-
       })
   })
 }

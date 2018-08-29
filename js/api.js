@@ -36,11 +36,11 @@ var getDraft = function(draftID) {
   let data = {'picks': [{'pickNumber': 0,
                          'packNumber': 0,
                          'pick': 65177,
-                         'pack': [64857, 64839, 64851, 64983, 65091]},
+                         'pack': [63753, 64839, 64851, 67706, 63721]},
                         {'pickNumber': 1,
                          'packNumber': 0,
-                         'pick': '65177',
-                         'pack': ["65011","64859","65151","64931","65063","64951","65177"]},
+                         'pick': '63751',
+                         'pack': ["65011","64859","63721","64931","65063","64951","65177"]},
               ]}
   $(".draft-loading").css("display", "none")
   return Promise.resolve(data);

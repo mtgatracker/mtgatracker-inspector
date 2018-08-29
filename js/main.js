@@ -155,6 +155,16 @@ rivets.binders.multimana = (el, value) => {
   el.innerHTML = ih;
 }
 
+rivets.binders.rarity = (el, value) => {
+    el.classList.remove("rare")
+    el.classList.remove("mythic")
+    el.classList.remove("uncommon")
+    el.classList.remove("common")
+    value = value.toLowerCase().split(" ")[0]
+
+    el.classList.add(value)
+}
+
 rivets.binders.mana = function(el, value) {
     if (value == "Blue") value = "u"
     value = value[0].toLowerCase()

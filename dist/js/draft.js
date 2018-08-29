@@ -31,6 +31,7 @@ var draftRoute = function draftRoute(c, n) {
               cost: card.get("cost"),
               name: card.get("prettyName"),
               set: card.get("set"),
+              rarity: card.get("rarity"),
               setNumber: card.get("setNumber"),
               cardType: card.get("cardType").split(" ").slice(-1)[0] // "Legendary Creature" => "Creature"
             };
@@ -46,6 +47,7 @@ var draftRoute = function draftRoute(c, n) {
                 cost: card.get("cost"),
                 name: card.get("prettyName"),
                 set: card.get("set"),
+                rarity: card.get("rarity"),
                 setNumber: card.get("setNumber"),
                 cardType: card.get("cardType").split(" ").slice(-1)[0] // "Legendary Creature" => "Creature"
               };

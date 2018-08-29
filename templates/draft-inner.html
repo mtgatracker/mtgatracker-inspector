@@ -7,17 +7,18 @@
 <!-- /.row -->
 <div class="row">
     <div class="col-lg-8">
-
         <img class="draft-loading" src="../loading.gif">
-        <div rv-each-pick="data.picks" class="panel panel-default">
+        <div rv-each-pick="data.picks" class="panel panel-default themeable">
           <div class="panel-heading">Pack { pick.packNumber }, Pick { pick.pickNumber }</div>
           <div class="panel-body">
             <div class="col-lg-6 col-md-6 col-sm-12">
-              <div><strong><em>{ pick.pick.name }</em></strong> <span rv-multimana="pick.pick.cost"></span></div>
+              <div>
+                  <i rv-rarity="pick.pick.rarity" class="fa fa-circle fa-fw"></i><b><i>{ pick.pick.name }</i></b> <span rv-multimana="pick.pick.cost"></span>
+              </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12">
               <div rv-each-pass="pick.pack">
-                { pass.name } <span rv-multimana="pass.cost"></span>
+                <i rv-rarity="pass.rarity" class="fa fa-circle fa-fw"></i>{ pass.name } <span rv-multimana="pass.cost"></span>
               </div>
             </div>
           </div>
@@ -26,8 +27,6 @@
 
     </div>
     <!-- /.col-lg-8 -->
-
-
 
     <div class="col-lg-4">
         <div class="panel panel-default themeable">

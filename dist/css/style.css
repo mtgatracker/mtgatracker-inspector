@@ -27,6 +27,18 @@ body {
     border-left: 1px solid #e7e7e7;
   }
 }
+.common {
+  color: black;
+}
+.uncommon {
+  color: #828A8F;
+}
+.rare {
+  color: #AC7F27;
+}
+.mythic {
+  color: #DB5133;
+}
 .header-toggle {
   float: right;
 }
