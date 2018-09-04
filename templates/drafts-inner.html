@@ -18,6 +18,7 @@
                     <div rv-each-draft="data.homeDraftList" rv-draftid="draft.draftID">
                         <a rv-href="draft.link" rv-fixhref="" class="list-group-item">
                             <i class="fa fa-leanpub fa-fw"></i>{ draft.draftName }
+                            <span class="pull-right text-muted small"> { draft.timeago }</span>
                         </a>
                     </div>
                 </div>

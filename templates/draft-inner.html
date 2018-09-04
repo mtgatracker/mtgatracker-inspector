@@ -12,19 +12,19 @@
           <div class="panel-heading">Pack { pick.packNumber }, Pick { pick.pickNumber }</div>
           <div class="panel-body">
             <div class="col-lg-6 col-md-6 col-sm-12">
+              <h5><b>Picked</b></h5>
               <div>
                   <i rv-rarity="pick.pick.rarity" class="fa fa-circle fa-fw"></i><b><i>{ pick.pick.name }</i></b> <span rv-multimana="pick.pick.cost"></span>
               </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12">
+              <h5><b>Pack</b></h5>
               <div rv-each-pass="pick.pack">
                 <i rv-rarity="pass.rarity" class="fa fa-circle fa-fw"></i>{ pass.name } <span rv-multimana="pass.cost"></span>
               </div>
             </div>
           </div>
         </div>
-
-
     </div>
     <!-- /.col-lg-8 -->
 
@@ -40,6 +40,7 @@
                     <div rv-each-draft="data.homeDraftList" rv-draftid="draft.draftID">
                         <a rv-href="draft.link" rv-fixhref="" class="list-group-item">
                             <i class="fa fa-leanpub fa-fw"></i> { draft.draftName }
+                            <span class="pull-right text-muted small"> { draft.timeago }</span>
                         </a>
                     </div>
                 </div>

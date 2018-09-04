@@ -14,10 +14,7 @@ let draftsRoute = (c, n) => {
     $("#page-wrapper").load(`${pagePrefix}/templates/drafts-inner.html?v=1.3.0`, loaded => {
       rivets.bind($('#app'), {data: appData})
       appData.homeDraftsListPage = 1
-
-      getDrafts()
-
-
+      getDrafts(-1)
     })
   })
 }

@@ -1,4 +1,4 @@
-const { getGames, getDecks } = require('./api')
+const { getGames, getDecks, getDrafts } = require('./api')
 const cookies = require('browser-cookies')
 const { pagePrefix, loginCheck } = require('./conf')
 
@@ -20,6 +20,7 @@ let homeRoute = () => {
       $("#more-games-button").click(() => {getGames(appData.homeGameListPage)})
       appData.homeGameListPage = 1
       getDecks()
+      getDrafts(10)
       getGames(1, {removeOld: true})
 
       $("#edit-decks").change((e) => {

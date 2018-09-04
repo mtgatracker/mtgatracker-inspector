@@ -74,6 +74,31 @@
         </div>
         <!-- /.panel .chat-panel -->
     </div>
+
+    <div class="col-lg-4">
+        <div class="panel panel-default themeable">
+            <div class="panel-heading">
+                <i class="fa fa-bell fa-fw"></i> My drafts
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <img id="drafts-loading" src="../loading.gif">
+                <div class="list-group themeable">
+                    <div rv-each-draft="data.homeDraftList" rv-draftid="draft.draftID">
+                        <a rv-href="draft.link" rv-fixhref="" class="list-group-item">
+                            <i class="fa fa-leanpub fa-fw"></i> { draft.draftName }
+                            <span class="pull-right text-muted small"> { draft.timeago }</span>
+                        </a>
+                    </div>
+                </div>
+                <!-- /.list-group -->
+                <a href="/drafts" rv-fixhref="" class="btn btn-default btn-block themeable">View All Drafts</a>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel .chat-panel -->
+    </div>
+    <!-- /.col-lg-4 -->
     <!--
     <div class="col-lg-4">
         <div class="panel panel-default themeable">

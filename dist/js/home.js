@@ -2,7 +2,8 @@
 
 var _require = require('./api'),
     getGames = _require.getGames,
-    getDecks = _require.getDecks;
+    getDecks = _require.getDecks,
+    getDrafts = _require.getDrafts;
 
 var cookies = require('browser-cookies');
 
@@ -29,6 +30,7 @@ var homeRoute = function homeRoute() {
       });
       appData.homeGameListPage = 1;
       getDecks();
+      getDrafts(10);
       getGames(1, { removeOld: true });
 
       $("#edit-decks").change(function (e) {

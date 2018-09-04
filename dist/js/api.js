@@ -91,10 +91,117 @@ var getDeckWinLossByColor = function getDeckWinLossByColor(deckID) {
   });
 };
 
-var getDrafts = function getDrafts() {
-  $("#decks-loading").css("display", "block");
+var getPlayerEventHistory = function getPlayerEventHistory() {
+  return new Promise(function (resolve, reject) {
+    if (appData.playerEventHistoryChart) {
+      appData.playerEventHistoryChart.data.datasets = [];
+      appData.playerEventHistoryChart.data.labels = [];
+      appData.playerEventHistoryChart.update();
+    }
+    $("#event-usage-loading").css("display", "block");
+    var token = loginCheck();
+    $.ajax({
+      url: API_URL + '/api/event-history',
+      headers: { token: token },
+      success: function success(data) {
+        $("#event-usage-loading").css("display", "none");
+        appData.playerEventHistoryData = data;
+        resolve(appData.playerEventHistoryData);
+      },
+      error: function error(err) {
+        if (err.status == 401) {
+          cookies.erase("token");
+          document.location.href = "/login";
+        } else if (err.responseJSON.error && err.responseJSON.error == "your account has been locked") {
+          // nothing to do
+        }
+        $("#event-usage-loading").css("display", "none");
+        reject(err);
+      }
+    });
+  });
+};
+
+var getDeckCount = function getDeckCount() {
   var token = loginCheck();
-  var url = API_URL + '/api/drafts';
+  var url = API_URL + '/api/decks/count';
+
+  $.ajax({
+    url: url,
+    headers: { token: token },
+    success: function success(data) {
+      appData.totalDecks = data.numDecks;
+    },
+    error: function error(err) {
+      if (err.status == 401) {
+        cookies.erase("token");
+        document.location.href = "/login";
+      }
+    }
+  });
+};
+
+var getTimeStats = function getTimeStats() {
+  var token = loginCheck();
+  var url = API_URL + '/api/time-stats';
+
+  $.ajax({
+    url: url,
+    headers: { token: token },
+    success: function success(data) {
+      $("#player-stats-loading").css("display", "none");
+      appData.totalTimeSeconds = data.timeStats.totalTimeSeconds;
+      appData.longestGameLengthSeconds = data.timeStats.maxTimeSeconds;
+      appData.averageGameLengthSeconds = data.timeStats.avgTimeSeconds;
+    },
+    error: function error(err) {
+      if (err.status == 401) {
+        cookies.erase("token");
+        document.location.href = "/login";
+      }
+    }
+  });
+};
+
+var getOverallWinLoss = function getOverallWinLoss() {
+  return new Promise(function (resolve, reject) {
+    if (appData.overallWinLossChart) {
+      appData.overallWinLossChart.data.datasets[0].data = [0, 0];
+      appData.overallWinLossChart.update();
+    }
+    $("#overall-wl-loading").css("display", "block");
+    var token = loginCheck();
+    $.ajax({
+      url: API_URL + '/api/win-loss',
+      headers: { token: token },
+      success: function success(data) {
+        console.log(data);
+        $("#overall-wl-loading").css("display", "none");
+        appData.overallWinLoss = [data.wins, data.losses];
+        appData.totalGamesPlayed = data.wins + data.losses;
+        resolve(appData.overallWinLoss);
+      },
+      error: function error(err) {
+        if (err.status == 401) {
+          cookies.erase("token");
+          document.location.href = "/login";
+        } else if (err.responseJSON.error && err.responseJSON.error == "your account has been locked") {
+          // nothing to do
+        }
+        $("#overall-wl-loading").css("display", "none");
+        reject(err);
+      }
+    });
+  });
+};
+
+var getDrafts = function getDrafts(perPage) {
+  if (perPage === undefined) {
+    perPage = 10;
+  }
+  $("#drafts-loading").css("display", "block");
+  var token = loginCheck();
+  var url = API_URL + '/api/drafts?per_page=' + perPage;
   $.ajax({
     url: url,
     headers: { token: token },
@@ -104,7 +211,13 @@ var getDrafts = function getDrafts() {
       $.each(data.docs, function (key, value) {
         value.link = '/draft/?draftID=' + value._id;
         value.draftName = value.draftID.split(':')[1];
-        appData.homeDraftList.unshift(value);
+        var draftNameSplit = value.draftName.split("_");
+        if (draftNameSplit.length == 3) {
+          // for drafts like QuickDraft_M19_08262018 => M19
+          value.draftName = draftNameSplit[1] + " " + draftNameSplit[0];
+        }
+        value.timeago = timeago().format(value.date);
+        appData.homeDraftList.push(value);
       });
     },
     error: function error(err) {
@@ -322,5 +435,9 @@ module.exports = {
   unHideDeck: unHideDeck,
   getDraft: getDraft,
   getDrafts: getDrafts,
+  getOverallWinLoss: getOverallWinLoss,
+  getPlayerEventHistory: getPlayerEventHistory,
+  getDeckCount: getDeckCount,
+  getTimeStats: getTimeStats,
   API_URL: API_URL
 };

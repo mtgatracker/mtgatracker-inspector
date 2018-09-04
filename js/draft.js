@@ -11,8 +11,7 @@ let draftRoute = (c, n) => {
   $(function() {
     $("#page-wrapper").load(`${pagePrefix}/templates/draft-inner.html?v=1.3.0`, loaded => {
       rivets.bind($('#app'), {data: appData})
-      getDrafts()
-
+      getDrafts(10)
       getDraft(c.params.draftID).then(draft => {
           appData.picks = []
           appData.eventName = draft.draftID.split(":")[1]
