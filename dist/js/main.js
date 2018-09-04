@@ -36,7 +36,7 @@ var appData = (_appData = {
   currentGameHero: "",
   currentGameHeroDeck: [],
   currentGameHeroDeckName: "loading ..."
-}, _defineProperty(_appData, "currentGameHeroDeck", "loading ..."), _defineProperty(_appData, "currentGameOpponent", ""), _defineProperty(_appData, "currentGameOpponentDeck", []), _defineProperty(_appData, "currentGameOpponentDeckName", "loading ..."), _defineProperty(_appData, "currentGameOpponentRank", "loading ..."), _defineProperty(_appData, "homeDeckList", []), _defineProperty(_appData, "homeGameList", []), _defineProperty(_appData, "homeGameListPage", 1), _defineProperty(_appData, "winLossColors", [0, 0, 0, 0, 0]), _defineProperty(_appData, "winLossColorChart", null), _defineProperty(_appData, "bound", null), _defineProperty(_appData, "pagePrefix", pagePrefix), _appData);
+}, _defineProperty(_appData, "currentGameHeroDeck", "loading ..."), _defineProperty(_appData, "currentGameOpponent", ""), _defineProperty(_appData, "currentGameOpponentDeck", []), _defineProperty(_appData, "currentGameOpponentDeckName", "loading ..."), _defineProperty(_appData, "currentGameOpponentRank", "loading ..."), _defineProperty(_appData, "homeDeckList", []), _defineProperty(_appData, "homeGameList", []), _defineProperty(_appData, "homeGameListPage", 1), _defineProperty(_appData, "winLossColors", [0, 0, 0, 0, 0]), _defineProperty(_appData, "winLossColorChart", null), _defineProperty(_appData, "bound", null), _defineProperty(_appData, "pagePrefix", pagePrefix), _defineProperty(_appData, "overallWinLoss", [0, 0]), _defineProperty(_appData, "overallWinLossChart", null), _defineProperty(_appData, "playerEventHistoryChart", null), _defineProperty(_appData, "totalGamesPlayed", "loading..."), _defineProperty(_appData, "totalDecks", "loading..."), _defineProperty(_appData, "totalTimeSeconds", "loading..."), _defineProperty(_appData, "longestGameLengthSeconds", "loading..."), _defineProperty(_appData, "averageGameLengthSeconds", "loading..."), _appData);
 
 // do this very first to try to avoid FouC
 var darkModeEnabled = localStorage.getItem("dark-mode") == "true" || false;
@@ -53,6 +53,18 @@ var enableDarkMode = function enableDarkMode(noTransition) {
     appData.winLossColorChart.options.title.fontColor = "#dedede";
     appData.winLossColorChart.data.datasets[0].backgroundColor = ["#005429", "#004ba5", "#940400", "#8c8c51", "#6d6d6d"];
     appData.winLossColorChart.update();
+  }
+  if (appData.overallWinLossChart) {
+    appData.overallWinLossChart.options.title.fontColor = "#dedede";
+    appData.overallWinLossChart.options.legend.labels.fontColor = "#dedede";
+    appData.overallWinLossChart.data.datasets[0].borderColor = "#333";
+    appData.overallWinLossChart.update();
+  }
+  if (appData.playerEventHistoryChart) {
+    appData.playerEventHistoryChart.options.scales.yAxes[0].gridLines.color = "#5d5d5d";
+    appData.playerEventHistoryChart.options.scales.xAxes[0].gridLines.color = "#5d5d5d";
+    appData.playerEventHistoryChart.options.legend.labels.fontColor = "#dedede";
+    appData.playerEventHistoryChart.update();
   }
   $(".themeable").removeClass("notransition");
   setTimeout(function () {
@@ -72,6 +84,18 @@ var disableDarkMode = function disableDarkMode() {
     appData.winLossColorChart.options.title.fontColor = "#696969";
     appData.winLossColorChart.data.datasets[0].backgroundColor = ["#c4d3ca", "#b3ceea", "#e47777", "#f8e7b9", "#a69f9d"];
     appData.winLossColorChart.update();
+  }
+  if (appData.overallWinLossChart) {
+    appData.overallWinLossChart.options.title.fontColor = "#474747";
+    appData.overallWinLossChart.options.legend.labels.fontColor = "#474747";
+    appData.overallWinLossChart.data.datasets[0].borderColor = "#eee";
+    appData.overallWinLossChart.update();
+  }
+  if (appData.playerEventHistoryChart) {
+    appData.playerEventHistoryChart.options.scales.yAxes[0].gridLines.color = "#d5d5d5";
+    appData.playerEventHistoryChart.options.scales.xAxes[0].gridLines.color = "#d5d5d5";
+    appData.playerEventHistoryChart.options.legend.labels.fontColor = "#696969";
+    appData.playerEventHistoryChart.update();
   }
 };
 var toggleDarkMode = function toggleDarkMode() {
@@ -133,6 +157,43 @@ var _require3 = require('./api'),
     unHideDeck = _require3.unHideDeck;
 
 window.appData = appData;
+
+rivets.formatters.humanseconds = function (value) {
+  try {
+    var days = 0;
+    var hours = 0;
+    var minutes = 0;
+    var seconds = 0;
+
+    var minute_seconds = 60;
+    var hour_seconds = minute_seconds * 60;
+    var day_seconds = hour_seconds * 24;
+
+    while (value > hour_seconds) {
+      hours += 1;
+      value -= hour_seconds;
+    }
+    while (value > minute_seconds) {
+      minutes += 1;
+      value -= minute_seconds;
+    }
+    seconds = value.toFixed(2);
+
+    value = "";
+    if (days) {
+      value += days + " days, ";
+    }if (hours) {
+      value += hours + " hours, ";
+    }if (minutes) {
+      value += minutes + " minutes, ";
+    }
+    value += seconds + " seconds";
+    return value;
+  } catch (error) {
+    console.log(error);
+    return value;
+  }
+};
 
 rivets.binders.fixhref = function (el, value) {
   if (!el.href.includes(pagePrefix)) {
@@ -254,48 +315,57 @@ rivets.binders.unhidedeck = function (el, deckid) {
 //collapses the sidebar on window resize.
 // Sets the min-height of #page-wrapper to window size
 $(function () {
-  // this will catch homepage links, but we still need to add page.js middleware in spaRouter
-  $("a").click(function (e) {
-    window.scrollTo(0, 0);
-  });
-  if (localStorage.getItem("dark-mode") == "true") enableDarkMode(true);
+  // load both menu templates
+
   $("#token-req-button").click(authRequest);
   $("#token-submit-button").click(authAttempt);
-  $("#logout-button").click(logout);
-  $('#side-menu').metisMenu();
-  var username = cookies.get("username");
-  $("#username").val(username);
-  appData.username = username;
-  $(window).bind("load resize", function () {
-    var topOffset = 50;
-    var width = this.window.innerWidth > 0 ? this.window.innerWidth : this.screen.width;
-    if (width < 768) {
-      $('div.navbar-collapse').addClass('collapse');
-      topOffset = 100; // 2-row-menu
-    } else {
-      $('div.navbar-collapse').removeClass('collapse');
-    }
 
-    var height = (this.window.innerHeight > 0 ? this.window.innerHeight : this.screen.height) - 1;
-    height = height - topOffset;
-    if (height < 1) height = 1;
-    if (height > topOffset) {
-      $("#page-wrapper").css("min-height", height + "px");
-    }
+  $("#top-menu").load(pagePrefix + "/templates/top-menu-inner.html?v=1.3.0", function (loaded) {
+    $("#side-menu").load(pagePrefix + "/templates/side-menu-inner.html?v=1.3.0", function (loaded) {
+      // this will catch homepage links, but we still need to add page.js middleware in spaRouter
+      $("a").click(function (e) {
+        window.scrollTo(0, 0);
+      });
+
+      if (localStorage.getItem("dark-mode") == "true") enableDarkMode(true);
+
+      $("#logout-button").click(logout);
+      $('#side-menu').metisMenu();
+      var username = cookies.get("username");
+      $("#username").val(username);
+      appData.username = username;
+      $(window).bind("load resize", function () {
+        var topOffset = 50;
+        var width = this.window.innerWidth > 0 ? this.window.innerWidth : this.screen.width;
+        if (width < 768) {
+          $('div.navbar-collapse').addClass('collapse');
+          topOffset = 100; // 2-row-menu
+        } else {
+          $('div.navbar-collapse').removeClass('collapse');
+        }
+
+        var height = (this.window.innerHeight > 0 ? this.window.innerHeight : this.screen.height) - 1;
+        height = height - topOffset;
+        if (height < 1) height = 1;
+        if (height > topOffset) {
+          $("#page-wrapper").css("min-height", height + "px");
+        }
+      });
+
+      var url = window.location;
+      var element = $('ul.nav a').filter(function () {
+        return this.href == url;
+      }).addClass('active').parent();
+
+      while (true) {
+        if (element.is('li')) {
+          element = element.parent().addClass('in').parent();
+        } else {
+          break;
+        }
+      }
+    });
   });
-
-  var url = window.location;
-  var element = $('ul.nav a').filter(function () {
-    return this.href == url;
-  }).addClass('active').parent();
-
-  while (true) {
-    if (element.is('li')) {
-      element = element.parent().addClass('in').parent();
-    } else {
-      break;
-    }
-  }
 });
 
 var logout = function logout() {

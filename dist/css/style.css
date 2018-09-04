@@ -27,6 +27,25 @@ body {
     border-left: 1px solid #e7e7e7;
   }
 }
+@media (min-width: 1200px) {
+  .only-small {
+    display: none;
+  }
+  .panel-tall-collapsible {
+    height: 700px;
+  }
+}
+@media (max-width: 1200px) {
+  .only-small {
+    display: block;
+  }
+  .panel-tall-collapsible {
+    height: 300px!important;
+  }
+}
+.panel-tall {
+  height: 700px;
+}
 .common {
   color: black;
 }

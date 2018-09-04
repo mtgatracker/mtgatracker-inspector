@@ -11,18 +11,24 @@ var _require2 = require("./decks"),
 var _require3 = require("./draft"),
     draftRoute = _require3.draftRoute;
 
-var _require4 = require("./game"),
-    gameRoute = _require4.gameRoute;
+var _require4 = require("./drafts"),
+    draftsRoute = _require4.draftsRoute;
 
-var _require5 = require("./home"),
-    homeRoute = _require5.homeRoute;
+var _require5 = require("./profile"),
+    profileRoute = _require5.profileRoute;
 
-var _require6 = require("./api"),
-    getDecks = _require6.getDecks,
-    getGames = _require6.getGames;
+var _require6 = require("./game"),
+    gameRoute = _require6.gameRoute;
 
-var _require7 = require('./conf.js'),
-    pagePrefix = _require7.pagePrefix;
+var _require7 = require("./home"),
+    homeRoute = _require7.homeRoute;
+
+var _require8 = require("./api"),
+    getDecks = _require8.getDecks,
+    getGames = _require8.getGames;
+
+var _require9 = require('./conf.js'),
+    pagePrefix = _require9.pagePrefix;
 
 var parseQuerystring = function parseQuerystring(ctx, next) {
   var cleanQuerystring = ctx.querystring.split("#")[0];
@@ -59,6 +65,8 @@ $(function () {
   page(pagePrefix + "/deck/", scrollTop, parseQuerystring, deckRoute);
   page(pagePrefix + "/decks/", scrollTop, parseQuerystring, decksRoute);
   page(pagePrefix + "/draft/", scrollTop, parseQuerystring, draftRoute);
+  page(pagePrefix + "/profile/", scrollTop, parseQuerystring, profileRoute);
+  page(pagePrefix + "/drafts/", scrollTop, parseQuerystring, draftsRoute);
   page(pagePrefix + "/game/", scrollTop, parseQuerystring, gameRoute);
   page();
 });

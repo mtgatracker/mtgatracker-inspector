@@ -1,4 +1,4 @@
-const API_URL = "https://gx2.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p2/mtgatracker-prod-EhDvLyq7PNb"
+const API_URL = "https://gx1.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p1/mtgatracker-prod-EhDvLyq7PNb"
 
 var cookies = require('browser-cookies');
 let { loginCheck } = require('./conf')
@@ -32,25 +32,9 @@ var getGame = function(gameID) {
 
 var getDraft = function(draftID) {
 
-  // Fake promise until endpoint is implemented
-  let data = {'picks': [{'pickNumber': 0,
-                         'packNumber': 0,
-                         'pick': 65177,
-                         'pack': [63753, 64839, 64851, 67706, 63721]},
-                        {'pickNumber': 1,
-                         'packNumber': 0,
-                         'pick': '63751',
-                         'pack': ["65011","64859","63721","64931","65063","64951","65177"]},
-              ]}
-  $(".draft-loading").css("display", "none")
-  return Promise.resolve(data);
-
-
   return new Promise((resolve, reject) => {
     $(".draft-loading").css("display", "block")
     let token = loginCheck()
-    resolve(data)
-
     $.ajax({
       url: `${API_URL}/api/draft/_id/${draftID}`,
       headers: {token: token},
@@ -108,6 +92,156 @@ var getDeckWinLossByColor = function(deckID) {
     })
   })
 }
+
+var getPlayerEventHistory = function() {
+  return new Promise((resolve, reject) => {
+    if (appData.playerEventHistoryChart) {
+      appData.playerEventHistoryChart.data.datasets = []
+      appData.playerEventHistoryChart.data.labels = []
+      appData.playerEventHistoryChart.update()
+    }
+    $("#event-usage-loading").css("display", "block")
+    let token = loginCheck()
+    $.ajax({
+      url: `${API_URL}/api/event-history`,
+      headers: {token: token},
+      success: function(data) {
+        $("#event-usage-loading").css("display", "none")
+        appData.playerEventHistoryData = data
+        resolve(appData.playerEventHistoryData)
+      },
+      error: function(err) {
+        if (err.status == 401) {
+          cookies.erase("token")
+          document.location.href = "/login"
+        } else if (err.responseJSON.error && err.responseJSON.error == "your account has been locked") {
+          // nothing to do
+        }
+        $("#event-usage-loading").css("display", "none")
+        reject(err)
+      }
+    })
+  })
+}
+
+var getDeckCount = function() {
+  let token = loginCheck()
+  let url = `${API_URL}/api/decks/count`
+
+  $.ajax({
+    url: url,
+    headers: {token: token},
+    success: function(data) {
+      appData.totalDecks = data.numDecks;
+    },
+    error: function(err) {
+      if (err.status == 401) {
+        cookies.erase("token")
+        document.location.href = "/login"
+      }
+    }
+  })
+}
+
+var getTimeStats = function() {
+  let token = loginCheck()
+  let url = `${API_URL}/api/time-stats`
+
+  $.ajax({
+    url: url,
+    headers: {token: token},
+    success: function(data) {
+      $("#player-stats-loading").css("display", "none")
+      appData.totalTimeSeconds = data.timeStats.totalTimeSeconds;
+      appData.longestGameLengthSeconds = data.timeStats.maxTimeSeconds;
+      appData.averageGameLengthSeconds = data.timeStats.avgTimeSeconds;
+    },
+    error: function(err) {
+      if (err.status == 401) {
+        cookies.erase("token")
+        document.location.href = "/login"
+      }
+    }
+  })
+}
+
+var getOverallWinLoss = function() {
+  return new Promise((resolve, reject) => {
+    if (appData.overallWinLossChart) {
+      appData.overallWinLossChart.data.datasets[0].data = [0,0]
+      appData.overallWinLossChart.update()
+    }
+    $("#overall-wl-loading").css("display", "block")
+    let token = loginCheck()
+    $.ajax({
+      url: `${API_URL}/api/win-loss`,
+      headers: {token: token},
+      success: function(data) {
+        console.log(data)
+        $("#overall-wl-loading").css("display", "none")
+        appData.overallWinLoss = [
+          data.wins,
+          data.losses
+        ]
+        appData.totalGamesPlayed = data.wins + data.losses;
+        resolve(appData.overallWinLoss)
+      },
+      error: function(err) {
+        if (err.status == 401) {
+          cookies.erase("token")
+          document.location.href = "/login"
+        } else if (err.responseJSON.error && err.responseJSON.error == "your account has been locked") {
+          // nothing to do
+        }
+        $("#overall-wl-loading").css("display", "none")
+        reject(err)
+      }
+    })
+  })
+}
+
+
+var getDrafts = function(perPage) {
+  if (perPage === undefined) {
+    perPage = 10;
+  }
+  $("#drafts-loading").css("display", "block")
+  let token = loginCheck()
+  let url = `${API_URL}/api/drafts?per_page=${perPage}`
+  $.ajax({
+    url: url,
+    headers: {token: token},
+    success: function(data) {
+      $("#drafts-loading").css("display", "none")
+      appData.homeDraftList = []
+      $.each(data.docs, function(key, value) {
+        value.link = `/draft/?draftID=${value._id}`
+        value.draftName = value.draftID.split(':')[1]
+        let draftNameSplit = value.draftName.split("_")
+        if (draftNameSplit.length == 3) {  // for drafts like QuickDraft_M19_08262018 => M19
+          value.draftName = draftNameSplit[1] + " " + draftNameSplit[0]
+        }
+        value.timeago = timeago().format(value.date)
+        appData.homeDraftList.push(value)
+      })
+    },
+    error: function(err) {
+      if (err.status == 401) {
+        cookies.erase("token")
+        document.location.href = "/login"
+      } else if (err.responseJSON.error && err.responseJSON.error == "your account has been locked") {
+        appData.homeDraftList.push({
+          draftName: "Your account has been locked!",
+          wins: "?",
+          losses: "?",
+          link: "https://github.com/shawkinsl/mtga-tracker/blob/master/logging_in.md#inspector-says-my-account-is-locked-what-gives",
+        })
+      }
+      $("#drafts-loading").css("display", "none")
+    }
+  })
+}
+
 
 var getDecks = function(includeHidden) {
   $("#decks-loading").css("display", "block")
@@ -306,5 +440,10 @@ module.exports = {
   hideDeck: hideDeck,
   unHideDeck: unHideDeck,
   getDraft: getDraft,
+  getDrafts: getDrafts,
+  getOverallWinLoss: getOverallWinLoss,
+  getPlayerEventHistory: getPlayerEventHistory,
+  getDeckCount: getDeckCount,
+  getTimeStats: getTimeStats,
   API_URL: API_URL,
 }
