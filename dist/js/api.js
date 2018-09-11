@@ -231,6 +231,13 @@ var getDrafts = function getDrafts(perPage) {
           losses: "?",
           link: "https://github.com/shawkinsl/mtga-tracker/blob/master/logging_in.md#inspector-says-my-account-is-locked-what-gives"
         });
+      } else if (err.responseJSON.error && err.responseJSON.error == "no records") {
+        appData.homeDraftList.push({
+          draftName: "No game records found :(",
+          wins: "?",
+          losses: "?",
+          link: "https://blog.mtgatracker.com/new-sign-in-requirements"
+        });
       }
       $("#drafts-loading").css("display", "none");
     }
@@ -261,12 +268,12 @@ var getDecks = function getDecks(includeHidden) {
       if (err.status == 401) {
         cookies.erase("token");
         document.location.href = "/login";
-      } else if (err.responseJSON.error && err.responseJSON.error == "your account has been locked") {
+      } else if (err.responseJSON.error && err.responseJSON.error == "no records") {
         appData.homeDeckList.push({
-          deckName: "Your account has been locked!",
+          deckName: "No game records found :( Have you authorized MTGATracker?",
           wins: "?",
           losses: "?",
-          link: "https://github.com/shawkinsl/mtga-tracker/blob/master/logging_in.md#inspector-says-my-account-is-locked-what-gives"
+          link: "https://blog.mtgatracker.com/new-sign-in-requirements"
         });
       }
       $("#decks-loading").css("display", "none");
@@ -311,6 +318,13 @@ var hideDeck = function hideDeck(deckID, button) {
           losses: "?",
           link: "https://github.com/shawkinsl/mtga-tracker/blob/master/logging_in.md#inspector-says-my-account-is-locked-what-gives"
         });
+      } else if (err.responseJSON.error && err.responseJSON.error == "no records") {
+        appData.homeDeckList.push({
+          deckName: "No game records found :(",
+          wins: "?",
+          losses: "?",
+          link: "https://blog.mtgatracker.com/new-sign-in-requirements"
+        });
       }
     }
   });
@@ -352,6 +366,13 @@ var unHideDeck = function unHideDeck(deckID, button) {
           wins: "?",
           losses: "?",
           link: "https://github.com/shawkinsl/mtga-tracker/blob/master/logging_in.md#inspector-says-my-account-is-locked-what-gives"
+        });
+      } else if (err.responseJSON.error && err.responseJSON.error == "no records") {
+        appData.homeDeckList.push({
+          deckName: "No game records found :(",
+          wins: "?",
+          losses: "?",
+          link: "https://blog.mtgatracker.com/new-sign-in-requirements"
         });
       }
     }
@@ -419,6 +440,15 @@ var getGames = function getGames(page, opts) {
           opponent: "unknown",
           winner: "unknown",
           link: "https://github.com/shawkinsl/mtga-tracker/blob/master/logging_in.md#inspector-says-my-account-is-locked-what-gives"
+        });
+      } else if (err.responseJSON.error && err.responseJSON.error == "no records") {
+        appData.homeGameList.push({
+          heroDeckName: "No game records found :( Have you authorized MTGATracker?",
+          timeago: "Click here for more info",
+          hero: "unknown",
+          opponent: "unknown",
+          winner: "unknown",
+          link: "https://blog.mtgatracker.com/new-sign-in-requirements"
         });
       }
       $("#timeline-loading").css("display", "none");
