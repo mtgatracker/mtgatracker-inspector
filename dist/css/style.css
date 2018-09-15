@@ -664,3 +664,25 @@ table.dataTable thead .sorting:after {
     border-left-width: 0;
   }
 }
+.twitch-purple {
+  background-color: #6441A4;
+  color: white;
+}
+.twitch-purple:hover,
+.twitch-purple:focus {
+  background-color: #7451B4;
+  color: white;
+}
+.discord-blue {
+  background-color: #7289DA;
+  color: white;
+}
+.discord-blue:hover,
+.discord-blue:focus {
+  background-color: #92A9FA;
+  color: white;
+}
+.login-button {
+  width: 100%;
+  margin-bottom: 15px;
+}

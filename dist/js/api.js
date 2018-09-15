@@ -1,6 +1,6 @@
 'use strict';
 
-var API_URL = "https://gx1.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p1/mtgatracker-prod-EhDvLyq7PNb";
+var API_URL = "https://gx3.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p3/mtgatracker-prod-EhDvLyq7PNb";
 
 var cookies = require('browser-cookies');
 
@@ -35,7 +35,6 @@ var getGame = function getGame(gameID) {
 };
 
 var getDraft = function getDraft(draftID) {
-
   return new Promise(function (resolve, reject) {
     $(".draft-loading").css("display", "block");
     var token = loginCheck();
