@@ -24,7 +24,8 @@ var _require7 = require("./home"),
     homeRoute = _require7.homeRoute;
 
 var _require8 = require("./extAuth"),
-    extAuthRoute = _require8.extAuthRoute;
+    extAuthRoute = _require8.extAuthRoute,
+    trackerAuthRoute = _require8.trackerAuthRoute;
 
 var _require9 = require("./api"),
     getDecks = _require9.getDecks,
@@ -73,5 +74,6 @@ $(function () {
   page(pagePrefix + "/game/", scrollTop, parseQuerystring, gameRoute);
   page(pagePrefix + "/twitchAuth/", scrollTop, parseQuerystring, extAuthRoute('twitch'));
   page(pagePrefix + "/discordAuth/", scrollTop, parseQuerystring, extAuthRoute('discord'));
+  page(pagePrefix + "/trackerAuth/", scrollTop, parseQuerystring, trackerAuthRoute);
   page();
 });
