@@ -3,6 +3,9 @@ const { pagePrefix } = require("./conf")
 const toastr = require("toastr")
 window.toastr = toastr
 
+// https://stackoverflow.com/questions/4723213/detect-http-or-https-then-force-https-in-javascript
+if (location.protocol !== "https:" && location.hostname != "localhost") location.protocol = "https:";
+
 var appData = {
   username: "unknown",
   currentDeckName: "",
