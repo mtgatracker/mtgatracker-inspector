@@ -16,7 +16,11 @@ var toastr = require("toastr");
 window.toastr = toastr;
 
 // https://stackoverflow.com/questions/4723213/detect-http-or-https-then-force-https-in-javascript
-if (location.protocol !== "https:" && location.hostname != "localhost") location.protocol = "https:";
+if (location.protocol !== "https:" && location.hostname != "localhost") {
+  location.protocol = "https:";
+  window.stop();
+  throw new Error("Forcing to https, throwing an error to prevent further JS from executing");
+}
 
 var appData = (_appData = {
   username: "unknown",
