@@ -58,7 +58,7 @@
                     <div rv-each-deck="data.homeDeckList" rv-deckid="deck.deckID" rv-class-deckhidden="deck.hidden">
                         <a rv-href="deck.link" rv-fixhref="" class="list-group-item">
                             <i class="fa fa-leanpub fa-fw"></i> { deck.deckName }
-                            <span class="pull-right text-muted small"><em> { deck.wins } <i class="fa fa-caret-up fa-fw green"></i> / { deck.losses} <i class="fa fa-caret-down fa-fw red"></i></em>
+                            <span class="pull-right text-muted small"><em> { deck.wins } <i class="fa fa-caret-up fa-fw green"></i> / { deck.losses} <i class="fa fa-caret-down fa-fw red"></i></em> (<strong>{ deck.winPercent }%</strong>)
                             </span>
                         </a>
                         <div class="hide-deck" style="display: none;">
