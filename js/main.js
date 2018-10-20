@@ -54,6 +54,10 @@ var appData = {
   totalTimeSeconds: "loading...",
   longestGameLengthSeconds: "loading...",
   averageGameLengthSeconds: "loading...",
+
+  API_URL: API_URL,
+  clientVersionData: [0,0],
+  clientVersionChart: null,
 }
 
 // do this very first to try to avoid FouC
@@ -72,12 +76,8 @@ let enableDarkMode = (noTransition) => {
         appData.winLossColorChart.data.datasets[0].backgroundColor = ["#005429", "#004ba5", "#940400", "#8c8c51", "#6d6d6d"]
         appData.winLossColorChart.update()
     }
-    if (appData.overallWinLossChart) {
-        appData.overallWinLossChart.options.title.fontColor = "#dedede"
-        appData.overallWinLossChart.options.legend.labels.fontColor = "#dedede"
-        appData.overallWinLossChart.data.datasets[0].borderColor = "#333"
-        appData.overallWinLossChart.update()
-    }
+    enableDarkModeDonutChart(appData.clientVersionChart)
+    enableDarkModeDonutChart(appData.overallWinLossChart)
     if (appData.playerEventHistoryChart) {
         appData.playerEventHistoryChart.options.scales.yAxes[0].gridLines.color = "#5d5d5d"
         appData.playerEventHistoryChart.options.scales.xAxes[0].gridLines.color = "#5d5d5d"
@@ -91,6 +91,24 @@ let enableDarkMode = (noTransition) => {
       $("#dark-mode").prop("checked", true)
     }, 300)
 }
+
+let disableDarkModeDonutChart = (chart) => {
+    if (chart) {
+        chart.options.title.fontColor = "#474747"
+        chart.options.legend.labels.fontColor = "#474747"
+        chart.data.datasets[0].borderColor = "#eee"
+        chart.update()
+    }
+}
+ let enableDarkModeDonutChart = (chart) => {
+    if (chart) {
+        chart.options.title.fontColor = "#dedede"
+        chart.options.legend.labels.fontColor = "#dedede"
+        chart.data.datasets[0].borderColor = "#333"
+        chart.update()
+    }
+}
+
 window.enableDarkMode = enableDarkMode;
 let disableDarkMode = () => {
     $(".themeable").removeClass("dark-mode")
@@ -103,12 +121,8 @@ let disableDarkMode = () => {
         appData.winLossColorChart.data.datasets[0].backgroundColor = ["#c4d3ca", "#b3ceea", "#e47777", "#f8e7b9", "#a69f9d"]
         appData.winLossColorChart.update()
     }
-    if (appData.overallWinLossChart) {
-        appData.overallWinLossChart.options.title.fontColor = "#474747"
-        appData.overallWinLossChart.options.legend.labels.fontColor = "#474747"
-        appData.overallWinLossChart.data.datasets[0].borderColor = "#eee"
-        appData.overallWinLossChart.update()
-    }
+    disableDarkModeDonutChart(appData.clientVersionChart)
+    disableDarkModeDonutChart(appData.overallWinLossChart)
     if (appData.playerEventHistoryChart) {
         appData.playerEventHistoryChart.options.scales.yAxes[0].gridLines.color = "#d5d5d5"
         appData.playerEventHistoryChart.options.scales.xAxes[0].gridLines.color = "#d5d5d5"
@@ -131,7 +145,6 @@ window.toggleDarkMode = toggleDarkMode
 function clipboardCopy(text) {
     var input = document.createElement('textarea');
     input.innerHTML = text;
-    input.id = "heyheyhey"
     document.body.appendChild(input);
     input.select();
     var result = document.execCommand('copy');
