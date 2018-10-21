@@ -34,6 +34,9 @@ var _require9 = require("./api"),
 var _require10 = require('./conf.js'),
     pagePrefix = _require10.pagePrefix;
 
+var _require11 = require("./admin"),
+    adminRoute = _require11.adminRoute;
+
 var parseQuerystring = function parseQuerystring(ctx, next) {
   var cleanQuerystring = ctx.querystring.split("#")[0];
   var args = cleanQuerystring.split("&");
@@ -58,6 +61,14 @@ var scrollTop = function scrollTop(ctx, next) {
 };
 
 $(function () {
+  // all API requests might return a new token. If we get one, set it.
+  $(document).ajaxComplete(function (evt, req, options) {
+    console.log("completed call");
+    var newToken = req.getResponseHeader("set-token");
+    if (newToken) {
+      cookies.set("token", newToken);
+    }
+  });
   page(pagePrefix + "/", scrollTop, homeRoute);
   page(pagePrefix + "/login/", scrollTop, function (c, n) {
     console.log("CALLED FROM /login/");
@@ -72,6 +83,7 @@ $(function () {
   page(pagePrefix + "/profile/", scrollTop, parseQuerystring, profileRoute);
   page(pagePrefix + "/drafts/", scrollTop, parseQuerystring, draftsRoute);
   page(pagePrefix + "/game/", scrollTop, parseQuerystring, gameRoute);
+  page(pagePrefix + "/admin/", scrollTop, parseQuerystring, adminRoute);
   page(pagePrefix + "/twitchAuth/", scrollTop, parseQuerystring, extAuthRoute('twitch'));
   page(pagePrefix + "/discordAuth/", scrollTop, parseQuerystring, extAuthRoute('discord'));
   page(pagePrefix + "/trackerAuth/", scrollTop, parseQuerystring, trackerAuthRoute);

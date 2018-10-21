@@ -11,6 +11,8 @@ const { extAuthRoute, trackerAuthRoute } = require("./extAuth")
 const { getDecks, getGames } = require("./api")
 const { pagePrefix } = require('./conf.js')
 
+const { adminRoute } = require("./admin")
+
 let parseQuerystring = (ctx, next) => {
   let cleanQuerystring = ctx.querystring.split("#")[0]
   let args = cleanQuerystring.split("&")
@@ -35,6 +37,14 @@ let scrollTop = (ctx, next) => {
 }
 
 $(function() {
+    // all API requests might return a new token. If we get one, set it.
+    $(document).ajaxComplete(function(evt, req, options) {
+      console.log("completed call")
+      let newToken = req.getResponseHeader("set-token")
+      if (newToken) {
+        cookies.set("token", newToken)
+      }
+    })
     page(`${pagePrefix}/`, scrollTop, homeRoute)
     page(`${pagePrefix}/login/`, scrollTop, (c, n) => {
       console.log("CALLED FROM /login/")
@@ -49,6 +59,7 @@ $(function() {
     page(`${pagePrefix}/profile/`, scrollTop, parseQuerystring, profileRoute)
     page(`${pagePrefix}/drafts/`, scrollTop, parseQuerystring, draftsRoute)
     page(`${pagePrefix}/game/`, scrollTop, parseQuerystring, gameRoute)
+    page(`${pagePrefix}/admin/`, scrollTop, parseQuerystring, adminRoute)
     page(`${pagePrefix}/twitchAuth/`, scrollTop, parseQuerystring, extAuthRoute('twitch'))
     page(`${pagePrefix}/discordAuth/`, scrollTop, parseQuerystring, extAuthRoute('discord'))
     page(`${pagePrefix}/trackerAuth/`, scrollTop, parseQuerystring, trackerAuthRoute)
