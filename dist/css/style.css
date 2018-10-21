@@ -337,7 +337,7 @@ a.dark-mode:hover {
 .btn-outline {
   color: inherit;
   background-color: transparent;
-  transition: all .5s;
+  transition: all 0.5s;
 }
 .btn-primary.btn-outline {
   color: #428bca;
@@ -429,7 +429,7 @@ table.dataTable thead .sorting:after {
   border-radius: 15px;
   text-align: center;
   font-size: 12px;
-  line-height: 1.428571429;
+  line-height: 1.42857143;
 }
 .btn-circle.btn-lg {
   width: 50px;
