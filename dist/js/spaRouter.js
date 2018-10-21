@@ -61,6 +61,14 @@ var scrollTop = function scrollTop(ctx, next) {
 };
 
 $(function () {
+  // all API requests might return a new token. If we get one, set it.
+  $(document).ajaxComplete(function (evt, req, options) {
+    console.log("completed call");
+    var newToken = req.getResponseHeader("set-token");
+    if (newToken) {
+      cookies.set("token", newToken);
+    }
+  });
   page(pagePrefix + "/", scrollTop, homeRoute);
   page(pagePrefix + "/login/", scrollTop, function (c, n) {
     console.log("CALLED FROM /login/");
