@@ -50,6 +50,71 @@ var gameRoute = function gameRoute(c, n) {
           appData.currentGameHasRankInfo = true;
         }
 
+        var turn = 0;
+        var players = game.onThePlay == game.hero ? [game.hero, game.opponent] : [game.opponent, game.hero];
+
+        appData.currentGameActionLog = [];
+
+        if (game.gameHistory && game.historyKey) {
+          var _iteratorNormalCompletion = true;
+          var _didIteratorError = false;
+          var _iteratorError = undefined;
+
+          try {
+            for (var _iterator = game.gameHistory[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+              var event = _step.value;
+
+              var eventTexts = [];
+              var _iteratorNormalCompletion2 = true;
+              var _didIteratorError2 = false;
+              var _iteratorError2 = undefined;
+
+              try {
+                for (var _iterator2 = event[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                  var key = _step2.value;
+
+                  var thisText = game.historyKey[key];
+                  if (thisText == "turn++") {
+                    var playerTurn = turn / 2 + 1;
+                    thisText = { text: turn + 1 + ' / ' + players[turn++ % 2] + ' turn ' + Math.floor(playerTurn), type: "turn" };
+                  }
+                  eventTexts.push(thisText);
+                }
+              } catch (err) {
+                _didIteratorError2 = true;
+                _iteratorError2 = err;
+              } finally {
+                try {
+                  if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                    _iterator2.return();
+                  }
+                } finally {
+                  if (_didIteratorError2) {
+                    throw _iteratorError2;
+                  }
+                }
+              }
+
+              appData.currentGameActionLog.push(eventTexts);
+            }
+          } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+              }
+            } finally {
+              if (_didIteratorError) {
+                throw _iteratorError;
+              }
+            }
+          }
+        } else {
+          appData.currentGameActionLog.push(["No history to show :("]);
+        }
+
         appData.currentGameName = game.hero + ' vs ' + game.opponent;
         appData.currentGameHero = game.hero;
         appData.currentGameWinner = game.winner;
@@ -91,6 +156,8 @@ var gameRoute = function gameRoute(c, n) {
             appData.currentGameOpponentDeck.push(cardObj);
           }
         });
+
+        if (localStorage.getItem("dark-mode") == "true") enableDarkMode(true);
       });
 
       $("#edit-decks").change(function (e) {

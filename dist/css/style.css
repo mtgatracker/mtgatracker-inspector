@@ -43,6 +43,43 @@ body {
     height: 300px!important;
   }
 }
+.hero.dark-mode {
+  color: #74e1ff;
+}
+.hero {
+  color: #0097c1;
+}
+.opponent.dark-mode {
+  color: #e980ff;
+}
+.opponent {
+  color: #ae35c7;
+}
+.ability.dark-mode {
+  border-bottom: 1px dotted white;
+}
+.ability {
+  border-bottom: 1px dotted black;
+}
+.turn.dark-mode,
+.game.dark-mode {
+  color: orange;
+}
+.turn {
+  color: #d0901c;
+  font-weight: bold;
+  margin-top: 15px;
+  display: block;
+}
+.game {
+  color: #d0901c;
+  font-weight: bold;
+  margin-top: 15px;
+  display: block;
+}
+.event {
+  margin-bottom: 3px;
+}
 .panel-tall {
   height: 700px;
 }
