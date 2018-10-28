@@ -1,6 +1,6 @@
 'use strict';
 
-var API_URL = "https://gx4.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p4/mtgatracker-prod-EhDvLyq7PNb";
+var API_URL = "https://gx3.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p3/mtgatracker-prod-EhDvLyq7PNb";
 
 var cookies = require('browser-cookies');
 
@@ -230,9 +230,16 @@ var getDrafts = function getDrafts(perPage) {
           losses: "?",
           link: "https://github.com/shawkinsl/mtga-tracker/blob/master/logging_in.md#inspector-says-my-account-is-locked-what-gives"
         });
-      } else if (err.responseJSON.error && err.responseJSON.error == "no records") {
+      } else if (err.responseJSON.error && err.responseJSON.error == " no records") {
         appData.homeDraftList.push({
-          draftName: "No game records found :(",
+          deckName: "No game records found (but you've authorized at least one tracker). Go play some MTGA!",
+          wins: "?",
+          losses: "?",
+          link: ""
+        });
+      } else if (err.responseJSON.error && err.responseJSON.error == "no authed trackers") {
+        appData.homeDraftList.push({
+          draftName: "No authorized trackers found :(",
           wins: "?",
           losses: "?",
           link: "https://blog.mtgatracker.com/new-sign-in-requirements"
@@ -269,7 +276,14 @@ var getDecks = function getDecks(includeHidden) {
         document.location.href = "/login";
       } else if (err.responseJSON.error && err.responseJSON.error == "no records") {
         appData.homeDeckList.push({
-          deckName: "No game records found :( Have you authorized MTGATracker?",
+          deckName: "No game records found (but you've authorized at least one tracker). Go play some MTGA!",
+          wins: "?",
+          losses: "?",
+          link: ""
+        });
+      } else if (err.responseJSON.error && err.responseJSON.error == "no authed trackers") {
+        appData.homeDeckList.push({
+          deckName: "No authorized trackers found :( Have you authorized MTGATracker?",
           wins: "?",
           losses: "?",
           link: "https://blog.mtgatracker.com/new-sign-in-requirements"
@@ -319,7 +333,14 @@ var hideDeck = function hideDeck(deckID, button) {
         });
       } else if (err.responseJSON.error && err.responseJSON.error == "no records") {
         appData.homeDeckList.push({
-          deckName: "No game records found :(",
+          deckName: "No game records found (but you've authorized at least one tracker). Go play some MTGA!",
+          wins: "?",
+          losses: "?",
+          link: ""
+        });
+      } else if (err.responseJSON.error && err.responseJSON.error == "no authed trackers") {
+        appData.homeDeckList.push({
+          deckName: "No authorized trackers found :(",
           wins: "?",
           losses: "?",
           link: "https://blog.mtgatracker.com/new-sign-in-requirements"
@@ -367,6 +388,13 @@ var unHideDeck = function unHideDeck(deckID, button) {
           link: "https://github.com/shawkinsl/mtga-tracker/blob/master/logging_in.md#inspector-says-my-account-is-locked-what-gives"
         });
       } else if (err.responseJSON.error && err.responseJSON.error == "no records") {
+        appData.homeDeckList.push({
+          deckName: "No game records found (but you've authorized at least one tracker). Go play some MTGA!",
+          wins: "?",
+          losses: "?",
+          link: ""
+        });
+      } else if (err.responseJSON.error && err.responseJSON.error == "no authed trackers") {
         appData.homeDeckList.push({
           deckName: "No game records found :(",
           wins: "?",
@@ -442,7 +470,16 @@ var getGames = function getGames(page, opts) {
         });
       } else if (err.responseJSON.error && err.responseJSON.error == "no records") {
         appData.homeGameList.push({
-          heroDeckName: "No game records found :( Have you authorized MTGATracker?",
+          heroDeckName: "No game records found (but you've authorized at least one tracker). Go play some MTGA!",
+          timeago: "No data",
+          hero: "unknown",
+          opponent: "unknown",
+          winner: "unknown",
+          link: ""
+        });
+      } else if (err.responseJSON.error && err.responseJSON.error == "no authed trackers") {
+        appData.homeGameList.push({
+          heroDeckName: "No authorized trackers found  :( Have you authorized MTGATracker?",
           timeago: "Click here for more info",
           hero: "unknown",
           opponent: "unknown",

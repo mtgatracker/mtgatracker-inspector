@@ -51,6 +51,28 @@ let gameRoute = (c, n) => {
           appData.currentGameHasRankInfo = true;
         }
 
+        let turn = 0;
+        let players = game.onThePlay == game.hero ? [game.hero, game.opponent] : [game.opponent, game.hero];
+
+        appData.currentGameActionLog = []
+
+        if (game.gameHistory && game.historyKey) {
+          for (let event of game.gameHistory) {
+            let eventTexts = []
+            for (let key of event) {
+              let thisText = game.historyKey[key];
+              if (thisText == "turn++") {
+                let playerTurn = turn / 2 + 1;
+                thisText = {text: `${turn+1} / ${players[turn++ % 2]} turn ${Math.floor(playerTurn)}`, type: "turn"}
+              }
+              eventTexts.push(thisText)
+            }
+            appData.currentGameActionLog.push(eventTexts)
+          }
+        } else {
+          appData.currentGameActionLog.push(["No history to show :("])
+        }
+
         appData.currentGameName = `${game.hero} vs ${game.opponent}`
         appData.currentGameHero = game.hero
         appData.currentGameWinner = game.winner
@@ -92,6 +114,8 @@ let gameRoute = (c, n) => {
             appData.currentGameOpponentDeck.push(cardObj)
           }
         })
+
+        if (localStorage.getItem("dark-mode") == "true") enableDarkMode(true)
       })
 
       $("#edit-decks").change((e) => {

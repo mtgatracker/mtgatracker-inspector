@@ -146,7 +146,19 @@
             <!-- /.panel-body -->
         </div>
         <!-- /.panel -->
+
+         <div class="panel panel-default themeable">
+            <div class="panel-heading">
+                Game Action Log
+            </div>
+            <div class="panel-body">
+                <p rv-each-event="data.currentGameActionLog" rv-expandevent="event"></p>
+                <p class="themeable game">{ data.currentGameWinner} won!</p>
+            </div>
+         </div>
     </div>
+
+
     <!-- /.col-lg-8 -->
     <div class="col-lg-4">
         <div class="panel panel-default themeable">

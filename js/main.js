@@ -26,6 +26,8 @@ var appData = {
   currentGameHeroRankAfter: "",
   currentGameHeroRankChange: 0.0,
 
+  currentGameActionLog: [],
+
   currentGameName: "",
   currentGameHero: "",
   currentGameHeroDeck: [],
@@ -220,6 +222,27 @@ rivets.formatters.humanseconds = (value) => {
   } catch (error) {
     console.log(error)
     return value;
+  }
+}
+
+rivets.binders.expandevent = function(el, value) {
+  for (let eventText of value) {
+    if (typeof eventText == "string") {
+      eventText = {"text": eventText, "type": "text"}
+    }
+    let span = document.createElement('span')
+    span.innerHTML = eventText.text;
+    span.classList.add(eventText.type)
+    span.classList.add("themeable")
+    if (eventText.hover) {
+     span.setAttribute("data-toggle", "tooltip")
+     span.setAttribute("title", eventText.hover)
+    }
+    el.appendChild(span)
+    if (eventText.type == "game") {
+      let hr = document.createElement("hr")
+      el.appendChild(hr)
+    }
   }
 }
 
