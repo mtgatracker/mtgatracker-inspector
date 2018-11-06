@@ -44,7 +44,7 @@ var appData = (_appData = {
   currentGameHero: "",
   currentGameHeroDeck: [],
   currentGameHeroDeckName: "loading ..."
-}, _defineProperty(_appData, "currentGameHeroDeck", "loading ..."), _defineProperty(_appData, "currentGameOpponent", ""), _defineProperty(_appData, "currentGameOpponentDeck", []), _defineProperty(_appData, "currentGameOpponentDeckName", "loading ..."), _defineProperty(_appData, "currentGameOpponentRank", "loading ..."), _defineProperty(_appData, "homeDeckList", []), _defineProperty(_appData, "homeGameList", []), _defineProperty(_appData, "homeGameListPage", 1), _defineProperty(_appData, "winLossColors", [0, 0, 0, 0, 0]), _defineProperty(_appData, "winLossColorChart", null), _defineProperty(_appData, "bound", null), _defineProperty(_appData, "pagePrefix", pagePrefix), _defineProperty(_appData, "overallWinLoss", [0, 0]), _defineProperty(_appData, "overallWinLossChart", null), _defineProperty(_appData, "playerEventHistoryChart", null), _defineProperty(_appData, "totalGamesPlayed", "loading..."), _defineProperty(_appData, "totalDecks", "loading..."), _defineProperty(_appData, "totalTimeSeconds", "loading..."), _defineProperty(_appData, "longestGameLengthSeconds", "loading..."), _defineProperty(_appData, "averageGameLengthSeconds", "loading..."), _defineProperty(_appData, "API_URL", API_URL), _defineProperty(_appData, "clientVersionData", [0, 0]), _defineProperty(_appData, "clientVersionChart", null), _appData);
+}, _defineProperty(_appData, "currentGameHeroDeck", "loading ..."), _defineProperty(_appData, "currentGameOpponent", ""), _defineProperty(_appData, "currentGameOpponentDeck", []), _defineProperty(_appData, "currentGameOpponentDeckName", "loading ..."), _defineProperty(_appData, "currentGameOpponentRank", "loading ..."), _defineProperty(_appData, "homeDeckList", []), _defineProperty(_appData, "homeGameList", []), _defineProperty(_appData, "homeGameListPage", 1), _defineProperty(_appData, "winLossColors", [0, 0, 0, 0, 0]), _defineProperty(_appData, "winLossColorChart", null), _defineProperty(_appData, "bound", null), _defineProperty(_appData, "pagePrefix", pagePrefix), _defineProperty(_appData, "overallWinLoss", [0, 0]), _defineProperty(_appData, "overallWinLossChart", null), _defineProperty(_appData, "overallWinLossByEvent", []), _defineProperty(_appData, "overallWinLossByEventChart", null), _defineProperty(_appData, "playerEventHistoryChart", null), _defineProperty(_appData, "totalGamesPlayed", "loading..."), _defineProperty(_appData, "totalDecks", "loading..."), _defineProperty(_appData, "totalTimeSeconds", "loading..."), _defineProperty(_appData, "longestGameLengthSeconds", "loading..."), _defineProperty(_appData, "averageGameLengthSeconds", "loading..."), _defineProperty(_appData, "API_URL", API_URL), _defineProperty(_appData, "clientVersionData", [0, 0]), _defineProperty(_appData, "clientVersionChart", null), _appData);
 
 // do this very first to try to avoid FouC
 var darkModeEnabled = localStorage.getItem("dark-mode") == "true" || false;
@@ -64,6 +64,7 @@ var enableDarkMode = function enableDarkMode(noTransition) {
   }
   enableDarkModeDonutChart(appData.clientVersionChart);
   enableDarkModeDonutChart(appData.overallWinLossChart);
+  enableDarkModeBarChart(appData.overallWinLossByEventChart);
   if (appData.playerEventHistoryChart) {
     appData.playerEventHistoryChart.options.scales.yAxes[0].gridLines.color = "#5d5d5d";
     appData.playerEventHistoryChart.options.scales.xAxes[0].gridLines.color = "#5d5d5d";
@@ -86,11 +87,36 @@ var disableDarkModeDonutChart = function disableDarkModeDonutChart(chart) {
     chart.update();
   }
 };
+
 var enableDarkModeDonutChart = function enableDarkModeDonutChart(chart) {
   if (chart) {
     chart.options.title.fontColor = "#dedede";
     chart.options.legend.labels.fontColor = "#dedede";
     chart.data.datasets[0].borderColor = "#333";
+    chart.update();
+  }
+};
+
+var disableDarkModeBarChart = function disableDarkModeBarChart(chart) {
+  if (chart) {
+    chart.options.title.fontColor = "#474747";
+    chart.options.legend.labels.fontColor = "#474747";
+    chart.data.datasets.forEach(function (dataset) {
+      return dataset.borderColor = "#eee";
+    });
+    chart.options.scales.xAxes[0].ticks.fontColor = "#474747";
+    chart.update();
+  }
+};
+
+var enableDarkModeBarChart = function enableDarkModeBarChart(chart) {
+  if (chart) {
+    chart.options.title.fontColor = "#dedede";
+    chart.options.legend.labels.fontColor = "#dedede";
+    chart.data.datasets.forEach(function (dataset) {
+      return dataset.borderColor = "#333";
+    });
+    chart.options.scales.xAxes[0].ticks.fontColor = "#dedede";
     chart.update();
   }
 };
@@ -109,6 +135,7 @@ var disableDarkMode = function disableDarkMode() {
   }
   disableDarkModeDonutChart(appData.clientVersionChart);
   disableDarkModeDonutChart(appData.overallWinLossChart);
+  disableDarkModeBarChart(appData.overallWinLossByEventChart);
   if (appData.playerEventHistoryChart) {
     appData.playerEventHistoryChart.options.scales.yAxes[0].gridLines.color = "#d5d5d5";
     appData.playerEventHistoryChart.options.scales.xAxes[0].gridLines.color = "#d5d5d5";

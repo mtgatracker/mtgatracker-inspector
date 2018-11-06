@@ -49,6 +49,9 @@ var appData = {
   overallWinLoss: [0,0],
   overallWinLossChart: null,
 
+  overallWinLossByEvent: [],
+  overallWinLossByEventChart: null,
+
   playerEventHistoryChart: null,
 
   totalGamesPlayed: "loading...",
@@ -80,6 +83,7 @@ let enableDarkMode = (noTransition) => {
     }
     enableDarkModeDonutChart(appData.clientVersionChart)
     enableDarkModeDonutChart(appData.overallWinLossChart)
+    enableDarkModeBarChart(appData.overallWinLossByEventChart)
     if (appData.playerEventHistoryChart) {
         appData.playerEventHistoryChart.options.scales.yAxes[0].gridLines.color = "#5d5d5d"
         appData.playerEventHistoryChart.options.scales.xAxes[0].gridLines.color = "#5d5d5d"
@@ -102,11 +106,32 @@ let disableDarkModeDonutChart = (chart) => {
         chart.update()
     }
 }
- let enableDarkModeDonutChart = (chart) => {
+
+let enableDarkModeDonutChart = (chart) => {
     if (chart) {
         chart.options.title.fontColor = "#dedede"
         chart.options.legend.labels.fontColor = "#dedede"
         chart.data.datasets[0].borderColor = "#333"
+        chart.update()
+    }
+}
+
+let disableDarkModeBarChart = (chart) => {
+    if (chart) {
+        chart.options.title.fontColor = "#474747"
+        chart.options.legend.labels.fontColor = "#474747"
+        chart.data.datasets.forEach(dataset => dataset.borderColor = "#eee")
+        chart.options.scales.xAxes[0].ticks.fontColor = "#474747"
+        chart.update()
+    }
+}
+
+let enableDarkModeBarChart = (chart) => {
+    if (chart) {
+        chart.options.title.fontColor = "#dedede"
+        chart.options.legend.labels.fontColor = "#dedede"
+        chart.data.datasets.forEach(dataset => dataset.borderColor = "#333")
+        chart.options.scales.xAxes[0].ticks.fontColor = "#dedede"
         chart.update()
     }
 }
@@ -125,6 +150,7 @@ let disableDarkMode = () => {
     }
     disableDarkModeDonutChart(appData.clientVersionChart)
     disableDarkModeDonutChart(appData.overallWinLossChart)
+    disableDarkModeBarChart(appData.overallWinLossByEventChart)
     if (appData.playerEventHistoryChart) {
         appData.playerEventHistoryChart.options.scales.yAxes[0].gridLines.color = "#d5d5d5"
         appData.playerEventHistoryChart.options.scales.xAxes[0].gridLines.color = "#d5d5d5"
