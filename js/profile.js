@@ -1,4 +1,4 @@
-const { getOverallWinLoss, getPlayerEventHistory, getDeckCount, getTimeStats } = require('./api')
+const { getOverallWinLoss, getOverallWinLossByEvent, getPlayerEventHistory, getDeckCount, getTimeStats } = require('./api')
 const { pagePrefix } = require("./conf")
 /* TODO: DRY @ admin.js*/
 
@@ -55,6 +55,19 @@ let donutOptions = {
         return precentage + "%" + " (" + currentValue + ")";
       }
     }
+  }
+}
+
+let stackedBarOptions = {
+  maintainAspectRatio: false,
+  scales: {
+    xAxes: [{
+      stacked: true,
+      ticks: {
+        autoSkip: false,
+      }
+    }],
+    yAxes: [{ stacked: true }]
   }
 }
 
@@ -127,6 +140,38 @@ let profileRoute = (c, n) => {
       getOverallWinLoss().then(overallWinLoss => {
           appData.overallWinLossChart.data.datasets[0].data = appData.overallWinLoss
           appData.overallWinLossChart.update()
+      })
+
+      var ctx = document.getElementById('overall-wl-by-event-plot').getContext('2d');
+      appData.overallWinLossByEventChart = new Chart(ctx, {
+        type: 'bar',
+            data: {   // "#c4d3ca", "#b3ceea", "#e47777", "#f8e7b9", "#a69f9d"
+              labels: ["Event"],
+              datasets: [
+                {
+                  label: "wins",
+                  backgroundColor: "#3f903f",
+                  data: [0],
+                  borderColor: "#eee",
+                  borderWidth: 3
+                }, {
+                  label: "losses",
+                  backgroundColor: "#d9534f",
+                  data: [0],
+                  borderColor: "#eee",
+                  borderWidth: 3
+                }
+              ]
+            },
+            options: stackedBarOptions
+        })
+
+      getOverallWinLossByEvent().then(overallWinLossByEvent => {
+        console.log(overallWinLossByEvent)
+        appData.overallWinLossByEventChart.data.datasets[0].data = overallWinLossByEvent.map(event => event.wins)
+        appData.overallWinLossByEventChart.data.datasets[1].data = overallWinLossByEvent.map(event => event.losses)
+        appData.overallWinLossByEventChart.data.labels = overallWinLossByEvent.map(event => event.eventID)
+        appData.overallWinLossByEventChart.update()
       })
       var eventCtx = document.getElementById('event-usage-plot').getContext('2d');
       appData.playerEventHistoryChart = new Chart(eventCtx, {

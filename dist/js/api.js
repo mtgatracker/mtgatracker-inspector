@@ -1,6 +1,6 @@
 'use strict';
 
-var API_URL = "https://gx3.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p3/mtgatracker-prod-EhDvLyq7PNb";
+var API_URL = "https://gx4.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p4/mtgatracker-prod-EhDvLyq7PNb";
 
 var cookies = require('browser-cookies');
 
@@ -179,6 +179,38 @@ var getOverallWinLoss = function getOverallWinLoss() {
         appData.overallWinLoss = [data.wins, data.losses];
         appData.totalGamesPlayed = data.wins + data.losses;
         resolve(appData.overallWinLoss);
+      },
+      error: function error(err) {
+        if (err.status == 401) {
+          cookies.erase("token");
+          document.location.href = "/login";
+        } else if (err.responseJSON.error && err.responseJSON.error == "your account has been locked") {
+          // nothing to do
+        }
+        $("#overall-wl-loading").css("display", "none");
+        reject(err);
+      }
+    });
+  });
+};
+
+var getOverallWinLossByEvent = function getOverallWinLossByEvent() {
+  return new Promise(function (resolve, reject) {
+    if (appData.overallWinLossChart) {
+      appData.overallWinLossByEventChart.data.datasets[0].data = [0];
+      appData.overallWinLossByEventChart.data.datasets[1].data = [0];
+      appData.overallWinLossByEventChart.update();
+    }
+    $("#overall-wl-by-event-loading").css("display", "block");
+    var token = loginCheck();
+    $.ajax({
+      url: API_URL + '/api/win-loss/by-event',
+      headers: { token: token },
+      success: function success(data) {
+        console.log(data);
+        $("#overall-wl-by-event-loading").css("display", "none");
+        appData.overallWinLossByEvent = data.eventCounts;
+        resolve(appData.overallWinLossByEvent);
       },
       error: function error(err) {
         if (err.status == 401) {
@@ -502,6 +534,7 @@ module.exports = {
   getDraft: getDraft,
   getDrafts: getDrafts,
   getOverallWinLoss: getOverallWinLoss,
+  getOverallWinLossByEvent: getOverallWinLossByEvent,
   getPlayerEventHistory: getPlayerEventHistory,
   getDeckCount: getDeckCount,
   getTimeStats: getTimeStats,
