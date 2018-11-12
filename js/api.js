@@ -1,4 +1,4 @@
-const API_URL = "https://gx4.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p4/mtgatracker-prod-EhDvLyq7PNb"
+const API_URL = "https://gx3.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p3/mtgatracker-prod-EhDvLyq7PNb"
 
 var cookies = require('browser-cookies');
 let { loginCheck } = require('./conf')
@@ -27,6 +27,68 @@ var getGame = function(gameID) {
         reject(err)
       }
     })
+  })
+}
+
+var makeRecordPermanent = function(recordID, button) {
+  if (button) {
+    $(button).prop('disabled', true);
+  }
+  console.log("makeRecordPermanent called")
+  let token = loginCheck()
+  let url = `${API_URL}/api/game/_id/${recordID}/make_permanent`
+  $.ajax({
+    url: url,
+    method: "POST",
+    headers: {token: token},
+    success: function(data) {
+      if (button) {
+        $(button).prop('disabled', false);
+      }
+      console.log("success, permanent")
+      appData.currentGameIsPermanent = true
+    },
+    error: function(err) {
+      if (button) {
+        $(button).prop('disabled', false);
+      }
+      console.log("err didn't perm :(")
+      if (err.status == 401) {
+        cookies.erase("token")
+        document.location.href = "/login"
+      }
+    }
+  })
+}
+
+var makeRecordImpermanent = function(recordID, button) {
+  if (button) {
+    $(button).prop('disabled', true);
+  }
+  console.log("makeRecordPermanent called")
+  let token = loginCheck()
+  let url = `${API_URL}/api/game/_id/${recordID}/make_impermanent`
+  $.ajax({
+    url: url,
+    method: "POST",
+    headers: {token: token},
+    success: function(data) {
+      if (button) {
+        $(button).prop('disabled', false);
+      }
+      console.log("success, impermanent")
+      appData.currentGameIsPermanent = false
+    },
+    error: function(err) {
+      if (button) {
+        $(button).prop('disabled', false);
+      }
+      console.log("err didn't perm :(")
+      if (err.status == 401) {
+        cookies.erase("token")
+        document.location.href = "/login"
+      }
+    }
   })
 }
 
@@ -538,6 +600,8 @@ module.exports = {
   getGame: getGame,
   hideDeck: hideDeck,
   unHideDeck: unHideDeck,
+  makeRecordPermanent: makeRecordPermanent,
+  makeRecordImpermanent: makeRecordImpermanent,
   getDraft: getDraft,
   getDrafts: getDrafts,
   getOverallWinLoss: getOverallWinLoss,

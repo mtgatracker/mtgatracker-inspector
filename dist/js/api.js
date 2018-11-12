@@ -1,6 +1,6 @@
 'use strict';
 
-var API_URL = "https://gx4.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p4/mtgatracker-prod-EhDvLyq7PNb";
+var API_URL = "https://gx3.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p3/mtgatracker-prod-EhDvLyq7PNb";
 
 var cookies = require('browser-cookies');
 
@@ -31,6 +31,68 @@ var getGame = function getGame(gameID) {
         reject(err);
       }
     });
+  });
+};
+
+var makeRecordPermanent = function makeRecordPermanent(recordID, button) {
+  if (button) {
+    $(button).prop('disabled', true);
+  }
+  console.log("makeRecordPermanent called");
+  var token = loginCheck();
+  var url = API_URL + '/api/game/_id/' + recordID + '/make_permanent';
+  $.ajax({
+    url: url,
+    method: "POST",
+    headers: { token: token },
+    success: function success(data) {
+      if (button) {
+        $(button).prop('disabled', false);
+      }
+      console.log("success, permanent");
+      appData.currentGameIsPermanent = true;
+    },
+    error: function error(err) {
+      if (button) {
+        $(button).prop('disabled', false);
+      }
+      console.log("err didn't perm :(");
+      if (err.status == 401) {
+        cookies.erase("token");
+        document.location.href = "/login";
+      }
+    }
+  });
+};
+
+var makeRecordImpermanent = function makeRecordImpermanent(recordID, button) {
+  if (button) {
+    $(button).prop('disabled', true);
+  }
+  console.log("makeRecordPermanent called");
+  var token = loginCheck();
+  var url = API_URL + '/api/game/_id/' + recordID + '/make_impermanent';
+  $.ajax({
+    url: url,
+    method: "POST",
+    headers: { token: token },
+    success: function success(data) {
+      if (button) {
+        $(button).prop('disabled', false);
+      }
+      console.log("success, impermanent");
+      appData.currentGameIsPermanent = false;
+    },
+    error: function error(err) {
+      if (button) {
+        $(button).prop('disabled', false);
+      }
+      console.log("err didn't perm :(");
+      if (err.status == 401) {
+        cookies.erase("token");
+        document.location.href = "/login";
+      }
+    }
   });
 };
 
@@ -531,6 +593,8 @@ module.exports = {
   getGame: getGame,
   hideDeck: hideDeck,
   unHideDeck: unHideDeck,
+  makeRecordPermanent: makeRecordPermanent,
+  makeRecordImpermanent: makeRecordImpermanent,
   getDraft: getDraft,
   getDrafts: getDrafts,
   getOverallWinLoss: getOverallWinLoss,
