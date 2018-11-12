@@ -7,7 +7,10 @@
 <!-- /.row -->
 <div class="row">
     <div class="col-lg-8">
-        <h3>Winner: { data.currentGameWinner}</h3>
+        <h3>Winner: { data.currentGameWinner}
+            <button rv-hide="data.currentGameIsPermanent" class="btn btn-xs btn-info themeable export-button perm-button dark-mode" onclick="makePermanent(appData.currentGameID)">Keep this record forever</button>
+            <button rv-show="data.currentGameIsPermanent" class="btn btn-xs btn-danger themeable export-button perm-button dark-mode" onclick="makeImpermanent(appData.currentGameID)">Allow this record to go to cold storage</button>
+        </h3>
         <!-- /.panel -->
         <div rv-show="data.currentGameHasInfo" class="panel panel-default themeable">
             <div class="panel-heading">

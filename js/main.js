@@ -13,6 +13,8 @@ var appData = {
   username: "unknown",
   currentDeckName: "",
 
+  currentGameID: "loading ...",
+  currentGameIsPermanent: true,
   currentGameWinner: "loading ...",
   currentGameHasInfo: false,
   currentGameHasRankInfo: false,
@@ -196,7 +198,19 @@ function exportDeck(deck) {
     toastr.info("Deck Exported to Clipboard")
 }
 
+function makePermanent(recordID) {
+  console.log(`making ${recordID} permanent`)
+  makeRecordPermanent(recordID, ".perm-button")
+}
+
+function makeImpermanent(recordID) {
+  console.log(`making ${recordID} IMpermanent`)
+  makeRecordImpermanent(recordID, ".perm-button")
+}
+
 window.exportDeck = exportDeck
+window.makeImpermanent = makeImpermanent
+window.makePermanent = makePermanent
 
 if (localStorage.getItem("dark-mode") == "true") enableDarkMode(true)
 
@@ -210,7 +224,7 @@ var page = require('page')
 window.page = page
 var spaRouter = require('./spaRouter')
 
-const { getGames, hideDeck, unHideDeck } = require('./api')
+const { getGames, hideDeck, unHideDeck, makeRecordPermanent, makeRecordImpermanent } = require('./api')
 
 window.appData = appData
 
