@@ -1,4 +1,9 @@
 var cookies = require('browser-cookies');
+var localDB = require('./localDB')
+
+localDB.init().then(db => {
+  window.db = db;
+})
 
 let pagePrefix = ''
 if (window.location.hostname == "mtgatracker.github.io") {

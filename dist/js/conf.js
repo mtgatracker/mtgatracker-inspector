@@ -1,6 +1,11 @@
 'use strict';
 
 var cookies = require('browser-cookies');
+var localDB = require('./localDB');
+
+localDB.init().then(function (db) {
+  window.db = db;
+});
 
 var pagePrefix = '';
 if (window.location.hostname == "mtgatracker.github.io") {

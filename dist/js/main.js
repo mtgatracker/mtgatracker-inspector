@@ -27,6 +27,7 @@ var appData = (_appData = {
 
   currentGameID: "loading ...",
   currentGameIsPermanent: true,
+  currentGameInColdStorage: false,
   currentGameWinner: "loading ...",
   currentGameHasInfo: false,
   currentGameHasRankInfo: false,

@@ -76,6 +76,7 @@ let gameRoute = (c, n) => {
         appData.currentGameName = `${game.hero} vs ${game.opponent}`
         appData.currentGameID = game._id
         appData.currentGameIsPermanent = game.permanent || false;
+        appData.currentGameInColdStorage = game.inColdStorage || false;
         appData.currentGameHero = game.hero
         appData.currentGameWinner = game.winner
         appData.currentGameOpponent = game.opponent
