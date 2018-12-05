@@ -214,6 +214,8 @@ let profileRoute = (c, n) => {
       })
       getDeckCount()
       getTimeStats()
+
+
       /* // TODO: fix this
       $("#matchup-style").change((e) => {
         let text = (e.target.checked ? "Multiple colors" : "Single color");

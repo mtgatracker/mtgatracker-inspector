@@ -41,6 +41,7 @@ var appData = {
   currentGameOpponentDeckName: "loading ...",
   currentGameOpponentRank: "loading ...",
 
+  moreDecksToRender: false,
   homeDeckList: [],
   homeGameList: [],
   homeGameListPage: 1,

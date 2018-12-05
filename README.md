@@ -1,3 +1,8 @@
+# NOTICE: MTGATracker Inspector has moved!
+
+MTGATracker: Inspector data is now stored 100% locally on user machines. The code for this project has relocated into
+the [mtgatracker/mtgatracker](https://github.com/mtgatracker/mtgatracker/tree/master/electron/inspector) project.
+
 # MTGATracker: Inspector
 
 MTGATracker: Inspector is a web-based companion app for [MTGATracker](https://github.com/mtgatracker/mtgatracker).

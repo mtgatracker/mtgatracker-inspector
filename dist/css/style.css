@@ -153,9 +153,6 @@ body {
 }
 body.dark-mode {
   background-color: #23272A;
-}
-#page-wrapper.dark-mode {
-  background-color: #36393E;
   color: #dedede;
   border-left: 1px solid #5d5d5d;
 }
