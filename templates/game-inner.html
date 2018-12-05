@@ -155,6 +155,7 @@
                 Game Action Log
             </div>
             <div class="panel-body">
+                <button rv-show="data.currentGameInColdStorage" class="btn btn-xs btn-info themeable get-cs-button perm-button dark-mode" onclick="getFromColdStorage(appData.currentGameID)">Fetch action log from Cold Storage</button>
                 <p rv-each-event="data.currentGameActionLog" rv-expandevent="event"></p>
                 <p class="themeable game">{ data.currentGameWinner} won!</p>
             </div>

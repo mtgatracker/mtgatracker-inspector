@@ -1,20 +1,96 @@
-const API_URL = "https://gx3.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p3/mtgatracker-prod-EhDvLyq7PNb"
+const API_URL = "https://gx4.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p4/mtgatracker-prod-EhDvLyq7PNb"
 
 var cookies = require('browser-cookies');
 let { loginCheck } = require('./conf')
+var localDB = require('./localDB')
 
 var getGame = function(gameID) {
+  console.log(`getting: ${gameID}`)
   return new Promise((resolve, reject) => {
     $(".game-loading").css("display", "block")
     $(".export-button").prop('disabled', true);
     let token = loginCheck()
-    $.ajax({
-      url: `${API_URL}/api/game/_id/${gameID}`,
-      headers: {token: token},
-      success: function(data) {
+
+    localDB.getGame(gameID).then(game => {
+      if (game) {
         $(".game-loading").css("display", "none")
         $(".export-button").prop('disabled', false);
-        resolve(data)
+        resolve(game)
+      } else {
+        $.ajax({
+          url: `${API_URL}/api/game/_id/${gameID}`,
+          headers: {token: token},
+          success: function(data) {
+            $(".game-loading").css("display", "none")
+            $(".export-button").prop('disabled', false);
+            localDB.putGame(data)
+            resolve(data)
+          },
+          error: function(err) {
+            if (err.status == 401) {
+              cookies.erase("token")
+              document.location.href = "/login"
+            } else if (err.responseJSON.error && err.responseJSON.error == "your account has been locked") {
+              // nothing to do
+            }
+            $(".game-loading").css("display", "none")
+            reject(err)
+          }
+        })
+      }
+    })
+  })
+}
+
+var getFromColdStorage = function(gameID) {
+  console.log(`getting from CS: ${gameID}`)
+  return new Promise((resolve, reject) => {
+    $(".cs-loading").css("display", "block")
+    $(".get-cs-button").prop('disabled', true);
+    let token = loginCheck()
+    $.ajax({
+      url: `${API_URL}/api/game/_id/${gameID}/from_cold_storage`,
+      headers: {token: token},
+      success: function(data) {
+        let game = null;
+        console.log(data.records[0])
+        for (let record of data.records) {
+          localDB.putGame(record)
+          if (record._id == gameID) {
+            game = record;
+            console.log("found the game: ")
+            console.log(game)
+          }
+        }
+
+        $(".cs-loading").css("display", "none")
+        $(".get-cs-button").prop('disabled', false);
+
+        appData.currentGameInColdStorage = false;
+        appData.currentGameActionLog = []
+
+        // TODO: DRY at game.js / gameRoute
+        let turn = 0;
+        let players = game.onThePlay == game.hero ? [game.hero, game.opponent] : [game.opponent, game.hero];
+
+        if (game.gameHistory && game.historyKey) {
+          for (let event of game.gameHistory) {
+            let eventTexts = []
+            for (let key of event) {
+              let thisText = game.historyKey[key];
+              if (thisText == "turn++") {
+                let playerTurn = turn / 2 + 1;
+                thisText = {text: `${turn+1} / ${players[turn++ % 2]} turn ${Math.floor(playerTurn)}`, type: "turn"}
+              }
+              eventTexts.push(thisText)
+            }
+            appData.currentGameActionLog.push(eventTexts)
+          }
+        } else {
+          appData.currentGameActionLog.push(["No history to show :("])
+        }
+
+        resolve(game)
       },
       error: function(err) {
         if (err.status == 401) {
@@ -29,6 +105,7 @@ var getGame = function(gameID) {
     })
   })
 }
+window.getFromColdStorage = getFromColdStorage
 
 var makeRecordPermanent = function(recordID, button) {
   if (button) {

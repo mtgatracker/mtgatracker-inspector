@@ -34,16 +34,23 @@
     <link href="vendor/metisMenu/metisMenu.min.css?v=bb3f6f86f3feb94b2ba7b43c9d315c54" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="dist/css/sb-admin-2.css?v=4c9a99d83c4e35fa6326b8ac5d769223" rel="stylesheet">
+    <link href="dist/css/style.css?v=3c856fac3828e7c599f0266ccee9dfeb" rel="stylesheet">
 
     <!-- Morris Charts CSS -->
     <link href="vendor/morrisjs/morris.css?v=36e70bf949fcdb7d0fe55fc16ce86445" rel="stylesheet">
+
+    <!-- toggle -->
+    <link href="vendor/toggle/toggle.css?v=388c597e7d94cc8eabd7444a4ed59ce9" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href="vendor/font-awesome/css/font-awesome.min.css?v=4083f5d376eb849a458cc790b53ba080" rel="stylesheet" type="text/css">
 
     <script src="vendor/rivets/rivets.bundled.min.js?v=c332075e18fc593c56f89bc89a8407d3"></script>
     <script src="vendor/timeago.js/timeago.min.js?v=a6895bd606a0bb6523c326f6d953b5b6"></script>
+
+    <!-- toastr -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" type="text/css">
+
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -55,10 +62,10 @@
 
 </head>
 
-<body id="app">
+<body id="app" class="themeable">
     <div id="wrapper">
         <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <nav class="navbar themeable navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -66,52 +73,17 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">MTGATracker Inspector</a>
+                <a class="navbar-brand themeable" href="/" rv-fixhref="">MTGATracker Inspector</a>
             </div>
             <!-- /.navbar-header -->
 
-            <ul class="nav navbar-top-links navbar-right">
-                <li>
-                    <a href="/">Home</a>
-                </li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="">
-                         <i class="fa fa-user fa-fw"></i> Hello, { data.username } <i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-user">
-                        <li><a href=""><i class="fa fa-user fa-fw"></i> User Profile</a>
-                        </li>
-                        <li><a href=""><i class="fa fa-gear fa-fw"></i> Settings</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li><a href="" id="logout-button"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-                        </li>
-                    </ul>
-                    <!-- /.dropdown-user -->
-                </li>
-                <!-- /.dropdown -->
+            <ul id="top-menu" class="nav navbar-top-links navbar-right">
             </ul>
             <!-- /.navbar-top-links -->
 
-            <div class="navbar-default sidebar" role="navigation">
-                <div class="sidebar-nav navbar-collapse">
+            <div class="navbar-default sidebar themeable" role="navigation">
+                <div class="sidebar-nav navbar-collapse themeable">
                     <ul class="nav" id="side-menu">
-                        <li>
-                            <a href="/"><i class="fa fa-dashboard fa-fw"></i> Inspector</a>
-                        </li>
-                        <!--
-                        <li>
-                            <a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="blank.html">Blank Page</a>
-                                </li>
-                                <li>
-                                    <a href="login.html">Login Page</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        <!-- </li> -->
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->
@@ -119,7 +91,7 @@
             <!-- /.navbar-static-side -->
         </nav>
 
-        <div id="page-wrapper">
+        <div id="page-wrapper" class="themeable">
         </div>
         <!-- /#page-wrapper -->
 
@@ -140,7 +112,7 @@
     <script src="vendor/morrisjs/morris.min.js?v=fadac462637afd6cdc0cb0a0137629af"></script>
 
     <!-- Custom Theme JavaScript -->
-    <script src="dist/js/bundle.min.js?v=a2a4af5bd19d38b068af5489d20b8679"></script>
+    <script src="dist/js/bundle.min.js?v=dceac043e6d1b1aaa55dd6303f9d1a64"></script>
 </body>
 
 </html>

@@ -15,6 +15,7 @@ var appData = {
 
   currentGameID: "loading ...",
   currentGameIsPermanent: true,
+  currentGameInColdStorage: false,
   currentGameWinner: "loading ...",
   currentGameHasInfo: false,
   currentGameHasRankInfo: false,
@@ -40,6 +41,7 @@ var appData = {
   currentGameOpponentDeckName: "loading ...",
   currentGameOpponentRank: "loading ...",
 
+  moreDecksToRender: false,
   homeDeckList: [],
   homeGameList: [],
   homeGameListPage: 1,

@@ -1,24 +1,165 @@
 'use strict';
 
-var API_URL = "https://gx3.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p3/mtgatracker-prod-EhDvLyq7PNb";
+var API_URL = "https://gx4.mtgatracker.com/str-85b6a06b2d213fac515a8ba7b582387a-p4/mtgatracker-prod-EhDvLyq7PNb";
 
 var cookies = require('browser-cookies');
 
 var _require = require('./conf'),
     loginCheck = _require.loginCheck;
 
+var localDB = require('./localDB');
+
 var getGame = function getGame(gameID) {
+  console.log('getting: ' + gameID);
   return new Promise(function (resolve, reject) {
     $(".game-loading").css("display", "block");
     $(".export-button").prop('disabled', true);
     var token = loginCheck();
-    $.ajax({
-      url: API_URL + '/api/game/_id/' + gameID,
-      headers: { token: token },
-      success: function success(data) {
+
+    localDB.getGame(gameID).then(function (game) {
+      if (game) {
         $(".game-loading").css("display", "none");
         $(".export-button").prop('disabled', false);
-        resolve(data);
+        resolve(game);
+      } else {
+        $.ajax({
+          url: API_URL + '/api/game/_id/' + gameID,
+          headers: { token: token },
+          success: function success(data) {
+            $(".game-loading").css("display", "none");
+            $(".export-button").prop('disabled', false);
+            localDB.putGame(data);
+            resolve(data);
+          },
+          error: function error(err) {
+            if (err.status == 401) {
+              cookies.erase("token");
+              document.location.href = "/login";
+            } else if (err.responseJSON.error && err.responseJSON.error == "your account has been locked") {
+              // nothing to do
+            }
+            $(".game-loading").css("display", "none");
+            reject(err);
+          }
+        });
+      }
+    });
+  });
+};
+
+var getFromColdStorage = function getFromColdStorage(gameID) {
+  console.log('getting from CS: ' + gameID);
+  return new Promise(function (resolve, reject) {
+    $(".cs-loading").css("display", "block");
+    $(".get-cs-button").prop('disabled', true);
+    var token = loginCheck();
+    $.ajax({
+      url: API_URL + '/api/game/_id/' + gameID + '/from_cold_storage',
+      headers: { token: token },
+      success: function success(data) {
+        var game = null;
+        console.log(data.records[0]);
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = data.records[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var record = _step.value;
+
+            localDB.putGame(record);
+            if (record._id == gameID) {
+              game = record;
+              console.log("found the game: ");
+              console.log(game);
+            }
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+              _iterator.return();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
+
+        $(".cs-loading").css("display", "none");
+        $(".get-cs-button").prop('disabled', false);
+
+        appData.currentGameInColdStorage = false;
+        appData.currentGameActionLog = [];
+
+        // TODO: DRY at game.js / gameRoute
+        var turn = 0;
+        var players = game.onThePlay == game.hero ? [game.hero, game.opponent] : [game.opponent, game.hero];
+
+        if (game.gameHistory && game.historyKey) {
+          var _iteratorNormalCompletion2 = true;
+          var _didIteratorError2 = false;
+          var _iteratorError2 = undefined;
+
+          try {
+            for (var _iterator2 = game.gameHistory[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+              var event = _step2.value;
+
+              var eventTexts = [];
+              var _iteratorNormalCompletion3 = true;
+              var _didIteratorError3 = false;
+              var _iteratorError3 = undefined;
+
+              try {
+                for (var _iterator3 = event[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                  var key = _step3.value;
+
+                  var thisText = game.historyKey[key];
+                  if (thisText == "turn++") {
+                    var playerTurn = turn / 2 + 1;
+                    thisText = { text: turn + 1 + ' / ' + players[turn++ % 2] + ' turn ' + Math.floor(playerTurn), type: "turn" };
+                  }
+                  eventTexts.push(thisText);
+                }
+              } catch (err) {
+                _didIteratorError3 = true;
+                _iteratorError3 = err;
+              } finally {
+                try {
+                  if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                    _iterator3.return();
+                  }
+                } finally {
+                  if (_didIteratorError3) {
+                    throw _iteratorError3;
+                  }
+                }
+              }
+
+              appData.currentGameActionLog.push(eventTexts);
+            }
+          } catch (err) {
+            _didIteratorError2 = true;
+            _iteratorError2 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                _iterator2.return();
+              }
+            } finally {
+              if (_didIteratorError2) {
+                throw _iteratorError2;
+              }
+            }
+          }
+        } else {
+          appData.currentGameActionLog.push(["No history to show :("]);
+        }
+
+        resolve(game);
       },
       error: function error(err) {
         if (err.status == 401) {
@@ -33,6 +174,7 @@ var getGame = function getGame(gameID) {
     });
   });
 };
+window.getFromColdStorage = getFromColdStorage;
 
 var makeRecordPermanent = function makeRecordPermanent(recordID, button) {
   if (button) {
@@ -95,6 +237,8 @@ var makeRecordImpermanent = function makeRecordImpermanent(recordID, button) {
     }
   });
 };
+
+// TODO: use 5bd4bfdac1b84a0005824dda to implement & test cold storate retrieval
 
 var getDraft = function getDraft(draftID) {
   return new Promise(function (resolve, reject) {
