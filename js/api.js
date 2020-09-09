@@ -444,6 +444,7 @@ var getDecks = function(includeHidden) {
         value.link = `/deck/?deckID=${value.deckID}`
         value.wins = value.wins.length
         value.losses = value.losses.length
+        value.winPercent = Math.round((value.wins / (value.wins + value.losses)) * 100)
         appData.homeDeckList.unshift(value)
       })
     },
